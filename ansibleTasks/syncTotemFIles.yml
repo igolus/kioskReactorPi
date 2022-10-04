@@ -1,0 +1,69 @@
+- name: Create rocketKiosk dir if not exists
+  ansible.builtin.command: mkdir -p /home/{{ user }}/rocketKiosk
+
+- name: Copy script files killSystem.sh
+  ansible.builtin.command: cp totem/killSystem.sh /home/{{ user }}/rocketKiosk
+  
+- name: make killSystem.sh executable 
+  ansible.builtin.file:
+    path: /home/{{ user }}/rocketKiosk/killSystem.sh  
+    state: touch
+    mode: u+x,g+x,o+x
+
+- name: Copy script files launchSystem.sh
+  ansible.builtin.command: cp totem/launchSystem.sh /home/{{ user }}/rocketKiosk
+  
+- name: make launchSystem.sh executable
+  ansible.builtin.file:
+    path: /home/{{ user }}/rocketKiosk/launchSystem.sh  
+    state: touch
+    mode: u+x,g+x,o+x
+  
+- name: Copy script files killSystemNoChrome.sh
+  ansible.builtin.command: cp totem/killSystemNoChrome.sh /home/{{ user }}/rocketKiosk
+
+- name: make killSystemNoChrome.sh executable 
+  ansible.builtin.file:
+    path: /home/{{ user }}/rocketKiosk/killSystemNoChrome.sh
+    state: touch
+    mode: u+x,g+x,o+x
+    
+- name: Copy script files killSystemNoChrome.sh
+  ansible.builtin.command: cp totem/killSystemNoChrome.sh /home/{{ user }}/rocketKiosk
+
+- name: Copy open box autostart
+  ansible.builtin.command: cp totem/openbox/autostart /etc/xdg/openbox/
+
+- name: create local autostart openbox
+  ansible.builtin.command: mkdir -p /home/{{ user }}/.config/openbox
+
+- name: copy autostart local script
+  ansible.builtin.command: cp totem/openbox/autostartlocal /home/{{ user }}/.config/openbox/autostart
+
+- name: copy startOpenBox local script
+  ansible.builtin.command: cp totem/openbox/startOpenBox.sh /home/{{ user }}/rocketKiosk
+
+- name: make killChrome.sh executable
+  ansible.builtin.file:
+    path: /home/{{ user }}/rocketKiosk/killChrome.sh
+    state: touch
+    mode: u+x,g+x,o+x
+
+- name: rsync programs file
+  ansible.builtin.command: rsync -avz ./totem/programs /home/{{ user }}/rocketKiosk
+
+- name: change owner  
+  ansible.builtin.command: sudo chown -R pi:pi /home/{{ user }}/rocketKiosk
+
+- name: change owner auto start
+  ansible.builtin.command: sudo chown -R pi:pi /home/{{ user }}/.config
+
+- name: make startOpenBox.sh executable
+  ansible.builtin.file:
+    path: /home/{{ user }}/rocketKiosk/startOpenBox.sh
+    state: touch
+    mode: u+x,g+x,o+x
+
+- name: install node.js package.
+  community.general.npm:
+    path: /home/{{ user }}/rocketKiosk/programs/jsScripts

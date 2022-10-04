@@ -1,0 +1,32 @@
+{
+  "name": "jsScripts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "bumpMajor": "node bumpVersion.js major",
+    "bumpMinor": "node bumpVersion.js minor",
+    "bumpPatch": "node bumpVersion.js patch"
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^6.3.0",
+    "@google-cloud/logging": "^10.1.8",
+    "@google-cloud/logging-winston": "^5.1.5",
+    "@google-cloud/storage": "^6.5.0",
+    "@google-cloud/text-to-speech": "^4.0.2",
+    "axios": "^0.27.2",
+    "base-64": "^1.0.0",
+    "dotenv": "^16.0.2",
+    "esprima": "^4.0.1",
+    "firebase": "^8.6.8",
+    "firebase-admin": "^11.0.0",
+    "moment": "^2.29.4",
+    "node-thermal-printer": "^4.1.2",
+    "play-sound": "^1.1.5",
+    "shortid": "^2.2.16",
+    "uuid": "^9.0.0",
+    "winston": "^3.8.1",
+    "winston-daily-rotate-file": "^4.7.1",
+    "ws": "^8.2.3"
+  }
+}

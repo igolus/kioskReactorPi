@@ -1,0 +1,14 @@
+- name: Create rocketKiosk dir if not exists
+  ansible.builtin.command: mkdir -p /home/{{ user }}/rocketKiosk
+  
+- name: Copy script files killSystem.sh
+  ansible.builtin.command: cp -u totem/killSystem.sh /home/{{ user }}/rocketKiosk/ && chmod +x /home/{{ user }}/rocketKiosk/killSystem.sh
+  
+- name: Copy script files launchSystem.sh
+  ansible.builtin.command: cp -u totem/launchSystem.sh /home/{{ user }}/rocketKiosk/ && chmod +x /home/{{ user }}/rocketKiosk/launchSystem.sh
+  
+- name: Copy script files killSystemNoChrome.sh
+  ansible.builtin.command: cp -u totem/killSystemNoChrome.sh /home/{{ user }}/rocketKiosk/ && chmod +x /home/{{ user }}/rocketKiosk/killSystemNoChrome.sh
+  
+- name: rsync programs file
+  ansible.builtin.command: rsync -avz ./totem/programs /home/{{ user }}/rocketKiosk

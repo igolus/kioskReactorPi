@@ -1,0 +1,33 @@
+Close kiosk service
+
+sudo systemctl disable kiosk.service
+
+
+evdev
+
+/usr/local/lib/python3.7/dist-packages/evdev/evtest.py
+
+edit service
+
+totemPyUsbScanner.service
+totemJsChromiumChangeUrl.service
+totemJsWsServer.service
+totemJsWebServer.service
+
+
+sudo nano /lib/systemd/system/kiosk.service
+
+start service
+
+sudo systemctl start totemJsWsServer.service
+sudo systemctl start kiosk.service
+
+enable service
+
+sudo systemctl enable kiosk.service
+
+status 
+
+sudo systemctl status totemJsWsServer.service
+
+sudo nano etc/xdg/lxsession/LXDE-pi/autostart

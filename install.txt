@@ -1,0 +1,32 @@
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install --no-install-recommends xserver-xorg x11-xserver-utils xinit openbox
+sudo apt-get install --no-install-recommends chromium-browser
+sudo nano /etc/xdg/openbox/autostart
+
+-- 
+# Disable any form of screen saver / screen blanking / power management
+xset s off
+xset s noblank
+xset -dpms
+# Allow quitting the X server with CTRL-ATL-Backspace
+setxkbmap -option terminate:ctrl_alt_bksp
+
+cd /home/pi/rocketKiosk/programs/jsScripts/init
+
+
+
+chromium-browser 'https://google.com'
+--
+
+sudo nano .bash_profile
+--
+[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && startx -- -nocursor
+--
+
+--sound 
+aplay /usr/share/sounds/alsa/Front_Center.wav
+cat /usr/share/alsa/alsa.conf
+https://jackaudio.org/faq/routing_alsa.html
+sudo apt install qjackctl
+https://raspberrypi.stackexchange.com/questions/112195/jack-audio-server-can-start-on-cli-but-not-as-a-systemd-service

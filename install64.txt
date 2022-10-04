@@ -1,0 +1,87 @@
+sudo apt-get update && sudo apt-get upgrade
+sudo apt-get install openbox
+sudo nano /etc/xdg/openbox/autostart
+sudo apt-get install samba samba-common-bin
+mkdir /home/pi/rocketKiosk
+sudo nano /etc/samba/smb.conf
+sudo apt install git-secret
+
+--screen
+/boot/cmdline.txt
+console=serial0,115200 console=tty1 root=PARTUUID=9e7ae996-02 rootfstype=ext4 fsck.repair=yes rootwait quiet splash plymouth.ignore-serial-consoles logo.nologo vt.global_cursor_default=0 usbhid.mousepoll=0
+
+
+-- git secret 
+https://git-secret.io/installation
+https://asciinema.org/a/41811
+
+
+-- ansible
+
+ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+https://docs.github.com/en/authentication/connecting-to-github-with-ssh/testing-your-ssh-connection
+sudo -s
+mkdir .ssh
+cp /home/pi/.ssh/* /root/.ssh
+
+sudo ansible-pull --extra-vars "user=pi" -U ssh://git@github.com:/igolus/totemSystemWeb.git
+
+
+-- SPI
+git clone https://github.com/Freenove/SPI-Py
+cd SPI-Py
+sudo python3 setup.py install
+
+--
+[rocketKiosk]
+path = /home/pi/rocketKiosk
+writeable=Yes
+create mask=0777
+directory mask=0777
+public=no
+--
+sudo smbpasswd -a pi
+sudo apt-get install --no-install-recommends openbox
+
+wget https://nodejs.org/dist/v16.17.0/node-v16.17.0-linux-x64.tar.xz
+tar -xf node-v16.17.0-linux-x64.tar.xz
+sudo cp -R * /usr/local
+sudo apt-get install jq
+pip install evdev
+pip install --user --upgrade google-cloud-texttospeech
+
+chmod +X launchSystem.sh
+chmod +X killSystem.sh
+
+sudo nano /etc/xdg/openbox/autostart
+
+
+----------------------------------------------------
+xset s off
+xset s noblank
+xset -dpms
+
+setxkbmap -option terminate:ctrl_alt_bksp
+
+cd /home/pi/rocketKiosk/programs/jsScripts/init
+sudo node startupInit.js
+
+url=`jq '.deviceId' /home/pi/rocketKiosk/conf/config.json | tr -d '"'`
+echo $url
+
+#chromium
+sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' ~/.config/chromium/'Local State'
+sed -i 's/"exited_cleanly":false/"exited_cleanly":true/; s/"exit_type":"[^"]\+"/"exit_type":"Normal"/' ~/.config/chromium/Default/Preferences
+chromium-browser --window-size=1360,768 --noerrdialogs --incognito --disable-pinch --overscroll-history-navigation=0 --disable-infobars --remote-debugging-port=9222 https://us-central1-totemsystem-5889b.cloudfunctions.net/homePage/$url &
+
+cd /home/pi/rocketKiosk
+/home/pi/rocketKiosk/launchSystem.sh
+---------------------------------------------------
+
+sudo nano .bash_profile
+--
+[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && startx -- -nocursor
+--
+
+screen
+--window-size=1360,768
