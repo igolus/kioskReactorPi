@@ -98,12 +98,8 @@ function updateDevice(device) {
     loggerCommand.info(`reboot !!`);
     chromeNavigate(updatingUrl)
     //ws.send(buildCommandJson(commandTypeOpenUrl, updatingUrl), {binary: true});
-    let command = "sudo ansible-pull --extra-vars \"user=pi\" -U ssh://git@github.com:/igolus/totemSystemWeb.git"
+    let command = "sudo ansible-pull --extra-vars \"user=pi\" -U https://github.com/igolus/rocketKioskPi.git"
     let commandReboot = "sudo reboot"
-
-    // let command = "dir"
-    // let commandReboot = "dir"
-
     execCommand(command, () => {
         versionUtil.getVersion().then(versionItem => {
             console.log("versionItem " + JSON.stringify(versionItem))
