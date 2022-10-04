@@ -2,7 +2,7 @@
   ansible.builtin.command: mkdir -p /home/{{ user }}/rocketKiosk
 
 - name: Copy script files killSystem.sh
-  ansible.builtin.command: cp totem/killSystem.sh /home/{{ user }}/rocketKiosk
+  ansible.builtin.command: cp killSystem.sh /home/{{ user }}/rocketKiosk
   
 - name: make killSystem.sh executable 
   ansible.builtin.file:
@@ -11,7 +11,7 @@
     mode: u+x,g+x,o+x
 
 - name: Copy script files launchSystem.sh
-  ansible.builtin.command: cp totem/launchSystem.sh /home/{{ user }}/rocketKiosk
+  ansible.builtin.command: cp launchSystem.sh /home/{{ user }}/rocketKiosk
   
 - name: make launchSystem.sh executable
   ansible.builtin.file:
@@ -20,7 +20,7 @@
     mode: u+x,g+x,o+x
   
 - name: Copy script files killSystemNoChrome.sh
-  ansible.builtin.command: cp totem/killSystemNoChrome.sh /home/{{ user }}/rocketKiosk
+  ansible.builtin.command: cp killSystemNoChrome.sh /home/{{ user }}/rocketKiosk
 
 - name: make killSystemNoChrome.sh executable 
   ansible.builtin.file:
@@ -29,19 +29,19 @@
     mode: u+x,g+x,o+x
     
 - name: Copy script files killSystemNoChrome.sh
-  ansible.builtin.command: cp totem/killSystemNoChrome.sh /home/{{ user }}/rocketKiosk
+  ansible.builtin.command: cp killSystemNoChrome.sh /home/{{ user }}/rocketKiosk
 
 - name: Copy open box autostart
-  ansible.builtin.command: cp totem/openbox/autostart /etc/xdg/openbox/
+  ansible.builtin.command: cp openbox/autostart /etc/xdg/openbox/
 
 - name: create local autostart openbox
   ansible.builtin.command: mkdir -p /home/{{ user }}/.config/openbox
 
 - name: copy autostart local script
-  ansible.builtin.command: cp totem/openbox/autostartlocal /home/{{ user }}/.config/openbox/autostart
+  ansible.builtin.command: cp openbox/autostartlocal /home/{{ user }}/.config/openbox/autostart
 
 - name: copy startOpenBox local script
-  ansible.builtin.command: cp totem/openbox/startOpenBox.sh /home/{{ user }}/rocketKiosk
+  ansible.builtin.command: cp openbox/startOpenBox.sh /home/{{ user }}/rocketKiosk
 
 - name: make killChrome.sh executable
   ansible.builtin.file:
@@ -50,7 +50,7 @@
     mode: u+x,g+x,o+x
 
 - name: rsync programs file
-  ansible.builtin.command: rsync -avz ./totem/programs /home/{{ user }}/rocketKiosk
+  ansible.builtin.command: rsync -avz ./programs /home/{{ user }}/rocketKiosk
 
 - name: change owner  
   ansible.builtin.command: sudo chown -R pi:pi /home/{{ user }}/rocketKiosk

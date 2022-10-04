@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  pre_tasks:
+    - name: upade repository
+      apt:
+        update_cache: yes
+    
+  
+  tasks:
+    - include: ansibleTasks/packages.yml
+    - include: ansibleTasks/syncTotemFIles.yml
