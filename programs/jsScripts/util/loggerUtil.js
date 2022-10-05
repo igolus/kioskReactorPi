@@ -1,8 +1,7 @@
 const { createLogger, format, transports } = require('winston');
 const { combine, splat, timestamp, printf } = format;
-const env=require('dotenv').config()
+require('dotenv').config()
 const conf=require('../../../conf/config.json');
-console.log(process.env.GOOGLE_APPLICATION_CREDENTIALS)
 
 require('winston-daily-rotate-file');
 
