@@ -54,12 +54,12 @@
 
 - name: Ansible conf check directory.
   ansible.builtin.stat:
-    path: home/{{ user }}/kioskReactor/conf
-  register: confFolder
+    path: home/{{ user }}/kioskReactor
+  register: rootFolder
 
 - name: rsync conf file
   ansible.builtin.command: rsync -avz ./conf /home/{{ user }}/kioskReactor
-  when: confFolder.stat.exists == false
+  when: rootFolder.stat.conf is not defined
 
 - name: change owner  
   ansible.builtin.command: sudo chown -R pi:pi /home/{{ user }}/kioskReactor
