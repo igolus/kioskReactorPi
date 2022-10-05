@@ -1,7 +1,7 @@
 #!/bin/bash
 export DISPLAY=:0.0
 
-url=`jq '.deviceId' /home/pi/rocketKiosk/conf/config.json | tr -d '"'`
+url=`jq '.deviceId' /home/pi/kioskReactor/conf/config.json | tr -d '"'`
 echo $url
 
 set -x #echo on
@@ -17,14 +17,11 @@ wait-for-url() {
     curl -I $1
 }
 
-#wait-for-url http://127.0.0.1:9222/json
-#cd /home/pi/rocketKiosk/programs/jsScripts
-#sudo node startupInit.js
-cd /home/pi/rocketKiosk/programs/jsScripts/webSocket
+cd /home/pi/kioskReactor/programs/jsScripts/webSocket
 sudo node wsServer.js &
-cd /home/pi/rocketKiosk/programs/jsScripts/commandsListener
+cd /home/pi/kioskReactor/programs/jsScripts/commandsListener
 sudo node commandLauncher.js &
-cd /home/pi/rocketKiosk/programs/PyScripts
+cd /home/pi/kioskReactor/programs/PyScripts
 sudo python3 usb-serial-reader.py &
 sudo python3 takeASnap.py &
 python3 playSound.py &

@@ -1,19 +1,6 @@
 const {loggerCommand} = require("../util/loggerUtil");
 const config = require("../../../conf/config.json");
 const WebSocket = require("ws");
-const firebase = require('firebase')
-const serviceAccount = require('../../../conf/totemsystem-5889b-firebase-adminsdk-p2mja-f9bb68a5da.json');
-const admin = require('firebase-admin');
-const firebaseConfig = require('../../../conf/firebaseconfig.json')
-firebase.initializeApp(firebaseConfig)
-
-function initializeFirebase() {
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-        databaseURL: firebaseConfig.databaseURL,
-        storageBucket: firebaseConfig.storageBucket
-    });
-}
 
 
 function delay(time) {
@@ -62,5 +49,4 @@ async function startSeverAndConfigureListening(callBackData, device, project) {
 module.exports = {
     startSeverAndConfigureListening: startSeverAndConfigureListening,
     delay: delay,
-    initializeFirebase: initializeFirebase
 }

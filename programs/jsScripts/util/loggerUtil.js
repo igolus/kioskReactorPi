@@ -2,6 +2,7 @@ const { createLogger, format, transports } = require('winston');
 const { combine, splat, timestamp, printf } = format;
 const env=require('dotenv').config()
 const conf=require('../../../conf/config.json');
+console.log(process.env.GOOGLE_APPLICATION_CREDENTIALS)
 
 require('winston-daily-rotate-file');
 
@@ -50,6 +51,8 @@ const loggingWinstonCommandReboot = new LoggingWinston({
     logName: conf.deviceId + "commandreboot.log"
 });
 
+
+
 const loggerWs = createLogger({
     level: 'info',
     format: combine(
@@ -58,14 +61,31 @@ const loggerWs = createLogger({
         timestamp(),
         kioskFormat
     ),
-    transports: [
-        transportWs,
-        new transports.Console(),
-        loggingWinstonWs
-    ],
+    transports: getTransportsWs(),
     projectId: 'testDevice',
-    //keyFilename: '../../../conf/totemsystem-5889b-firebase-adminsdk-p2mja-f9bb68a5da.json',
 });
+
+function getTransportsWs() {
+    let transportsData = [
+        transportWs,
+        new transports.Console()
+    ];
+    if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+        transportsData.push(loggingWinstonWs)
+    }
+    return transportsData;
+}
+
+function getTransportsCommand() {
+    let transportsData = [
+        transportCommandChrome,
+        new transports.Console()
+    ];
+    if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+        transportsData.push(loggingWinstonCommand)
+    }
+    return transportsData;
+}
 
 const loggerCommand = createLogger({
     level: 'info',
@@ -75,11 +95,7 @@ const loggerCommand = createLogger({
         timestamp(),
         kioskFormat
     ),
-    transports: [
-        transportCommandChrome,
-        new transports.Console(),
-        loggingWinstonCommand
-    ]
+    transports: getTransportsCommand()
 });
 
 const loggerCommandReboot = createLogger({

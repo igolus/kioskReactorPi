@@ -1,35 +1,35 @@
-- name: Create rocketKiosk dir if not exists
-  ansible.builtin.command: mkdir -p /home/{{ user }}/rocketKiosk
+- name: Create kioskReactor dir if not exists
+  ansible.builtin.command: mkdir -p /home/{{ user }}/kioskReactor
 
 - name: Copy script files killSystem.sh
-  ansible.builtin.command: cp killSystem.sh /home/{{ user }}/rocketKiosk
+  ansible.builtin.command: cp killSystem.sh /home/{{ user }}/kioskReactor
   
 - name: make killSystem.sh executable 
   ansible.builtin.file:
-    path: /home/{{ user }}/rocketKiosk/killSystem.sh  
+    path: /home/{{ user }}/kioskReactor/killSystem.sh  
     state: touch
     mode: u+x,g+x,o+x
 
 - name: Copy script files launchSystem.sh
-  ansible.builtin.command: cp launchSystem.sh /home/{{ user }}/rocketKiosk
+  ansible.builtin.command: cp launchSystem.sh /home/{{ user }}/kioskReactor
   
 - name: make launchSystem.sh executable
   ansible.builtin.file:
-    path: /home/{{ user }}/rocketKiosk/launchSystem.sh  
+    path: /home/{{ user }}/kioskReactor/launchSystem.sh  
     state: touch
     mode: u+x,g+x,o+x
   
 - name: Copy script files killSystemNoChrome.sh
-  ansible.builtin.command: cp killSystemNoChrome.sh /home/{{ user }}/rocketKiosk
+  ansible.builtin.command: cp killSystemNoChrome.sh /home/{{ user }}/kioskReactor
 
 - name: make killSystemNoChrome.sh executable 
   ansible.builtin.file:
-    path: /home/{{ user }}/rocketKiosk/killSystemNoChrome.sh
+    path: /home/{{ user }}/kioskReactor/killSystemNoChrome.sh
     state: touch
     mode: u+x,g+x,o+x
     
 - name: Copy script files killSystemNoChrome.sh
-  ansible.builtin.command: cp killSystemNoChrome.sh /home/{{ user }}/rocketKiosk
+  ansible.builtin.command: cp killSystemNoChrome.sh /home/{{ user }}/kioskReactor
 
 - name: Copy open box autostart
   ansible.builtin.command: cp openbox/autostart /etc/xdg/openbox/
@@ -41,29 +41,29 @@
   ansible.builtin.command: cp openbox/autostartlocal /home/{{ user }}/.config/openbox/autostart
 
 - name: copy startOpenBox local script
-  ansible.builtin.command: cp openbox/startOpenBox.sh /home/{{ user }}/rocketKiosk
+  ansible.builtin.command: cp openbox/startOpenBox.sh /home/{{ user }}/kioskReactor
 
 - name: make killChrome.sh executable
   ansible.builtin.file:
-    path: /home/{{ user }}/rocketKiosk/killChrome.sh
+    path: /home/{{ user }}/kioskReactor/killChrome.sh
     state: touch
     mode: u+x,g+x,o+x
 
 - name: rsync programs file
-  ansible.builtin.command: rsync -avz ./programs /home/{{ user }}/rocketKiosk
+  ansible.builtin.command: rsync -avz ./programs /home/{{ user }}/kioskReactor
 
 - name: change owner  
-  ansible.builtin.command: sudo chown -R pi:pi /home/{{ user }}/rocketKiosk
+  ansible.builtin.command: sudo chown -R pi:pi /home/{{ user }}/kioskReactor
 
 - name: change owner auto start
   ansible.builtin.command: sudo chown -R pi:pi /home/{{ user }}/.config
 
 - name: make startOpenBox.sh executable
   ansible.builtin.file:
-    path: /home/{{ user }}/rocketKiosk/startOpenBox.sh
+    path: /home/{{ user }}/kioskReactor/startOpenBox.sh
     state: touch
     mode: u+x,g+x,o+x
 
 - name: install node.js package.
   community.general.npm:
-    path: /home/{{ user }}/rocketKiosk/programs/jsScripts
+    path: /home/{{ user }}/kioskReactor/programs/jsScripts

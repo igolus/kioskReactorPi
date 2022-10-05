@@ -1,12 +1,11 @@
-const admin = require('firebase-admin');
-const fireBaseDb = admin.firestore();
-const fireBaseStorage = admin.storage();
-//const getStorage = require('firebase/storage');
-const { getStorage, ref } = require("firebase/storage");
+const firebase = require('firebase')
+require("firebase/firestore");
+const firebaseConfig = require('../../../conf/firebaseconfig.json')
+if (firebase.apps.length === 0) {
+    firebase.initializeApp(firebaseConfig)
+}
+const db = firebase.firestore();
 
 module.exports = {
-    fireBaseDb: fireBaseDb,
-    fireBaseStorage: fireBaseStorage,
-    getStorage: getStorage,
-    storageRef: ref,
+    fireBaseDb: db
 }

@@ -1,5 +1,3 @@
-const {initializeFirebase} = require("../commandsListener/commandUtil");
-initializeFirebase();
 const { readConfig, writeConfig, writeDeviceAndProjectConfig} = require("../util/configFileUtil");
 const shortid = require('shortid');
 const {createDeviceIdDb} = require("../dbUtil/deviceUtil");

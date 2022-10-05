@@ -1,7 +1,4 @@
-const {initializeFirebase} = require("./commandsListener/commandUtil");
-initializeFirebase();
 const versionUtil = require("./dbUtil/versionUtil");
-const {PATCH, MINOR, MAJOR} = require("./dbUtil/versionUtil");
 
 
 (async () => {
