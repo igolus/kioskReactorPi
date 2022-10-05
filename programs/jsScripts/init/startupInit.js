@@ -9,5 +9,6 @@ let conf = readConfig();
         writeConfig(conf);
         await createDeviceIdDb(conf.deviceId);
     }
-    await writeDeviceAndProjectConfig(conf.deviceId)
+    await writeDeviceAndProjectConfig(conf.deviceId);
+    process.exit()
 })();
