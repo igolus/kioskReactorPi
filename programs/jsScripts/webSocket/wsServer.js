@@ -13,7 +13,6 @@ const {commandTypeReboot, commandTypeOpenUrl, commandTypeUpdate,
 } = require("./commandTypes");
 const {listenToEvents, listenToCommands} = require("../dbUtil/eventsUtil");
 require('../util/healthLogger')
-require('../util/billingTrace')
 
 const wsSocket =new WebSocket({
     server: server,
@@ -23,9 +22,7 @@ getCurrentDevice().then(device => {
         //checkData(dataJson)
         if (checkData(event)) {
             triggerWebHook(wsSocket, event, currentProject.webHookEventUrl)
-            //triggerWebHook(wsSocket)
         }
-        //broadCastAction(wsSocket, event);
     })
     listenToCommands(device.id, (event) => {
         broadCastAction(wsSocket, event);

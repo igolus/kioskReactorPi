@@ -22,41 +22,6 @@ const getCurrentDevice = async () => {
     return doc.exists && doc.data();
 }
 
-const addBilling = async (deviceId) => {
-    const device = await getDevice(deviceId)
-    const currentDay = moment().format("YYYYMMDD");
-
-    if (!device) {
-        return false;
-    }
-    const doc = await fireBaseDb
-        .collection(brandsCollection)
-        .doc(device.brandId)
-        .collection(billingCollection)
-        .doc(currentDay)
-
-    const item = await doc.get();
-    if (!item.exists) {
-        await doc.set({
-            devices: [{
-                deviceId: deviceId
-            }],
-            billed: false
-        });
-    }
-
-    else {
-        billingData = item.data();
-        if (!billingData.devices.find(d=> d.deviceId === deviceId)) {
-            await doc.set({
-                devices: [...billingData.devices, {
-                    deviceId: deviceId
-                }]
-            });
-        }
-    }
-}
-
 const getDevice = async (deviceId) => {
     const doc = await fireBaseDb
         .collection(devicesCollection)
@@ -80,6 +45,5 @@ module.exports = {
     getCurrentDevice: getCurrentDevice,
     getDevice: getDevice,
     updateDevice: updateDevice,
-    addBilling: addBilling
 }
 
