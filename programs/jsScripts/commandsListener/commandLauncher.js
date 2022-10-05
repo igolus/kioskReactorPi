@@ -63,7 +63,7 @@ function chromeNavigate(openUrl) {
                 url: openUrl
             }
         }
-        console.log("Change utl openUrl")
+        loggerCommand.infor("Change url " + openUrl);
         wsChromeSocket.send(JSON.stringify(dataChangeUrl))
     }
 }

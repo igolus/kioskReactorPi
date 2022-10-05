@@ -1,11 +1,10 @@
 const { Storage } = require("@google-cloud/storage");
 const firebaseConfig = require('../../../conf/firebaseconfig.json')
 const { v4: uuidv4 } = require('uuid');
-const {buildCommandJson, internalCommandTypePlayMp3, commandTypeSnapReady} = require("../webSocket/commandTypes");
-const {buildEventJson, eventTypeQrCode, eventTypeSnapReady} = require("../webSocket/eventTypes");
+const {buildEventJson, eventTypeSnapReady} = require("../webSocket/eventTypes");
 
 const storage = new Storage({
-    keyFilename: "../../../conf/totemsystem-5889b-firebase-adminsdk-p2mja-f9bb68a5da.json",
+    keyFilename: "../../../conf/totemsystem-pi-key.json",
 });
 
 const storageBucket = storage.bucket(firebaseConfig.storageBucket);

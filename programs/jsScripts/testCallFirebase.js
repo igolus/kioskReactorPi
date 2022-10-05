@@ -4,7 +4,7 @@ const admin = require('firebase-admin');
 //firebase.initializeApp(firebaseConfig)
 
 //const serviceAccount = require('../../conf/totemsystem-5889b-a39ccea0194c.json');
-// const serviceAccount = require('../../conf/totemsystem-5889b-firebase-adminsdk-p2mja-94ef50a2a7.json');
+// const serviceAccount = require('../../conf/totemsystem-key.json');
 // const firebaseConfig = require('../../conf/firebaseconfig.json')
 // firebase.initializeApp(firebaseConfig)
 //
