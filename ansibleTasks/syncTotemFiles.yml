@@ -59,7 +59,7 @@
 
 - name: rsync conf file
   ansible.builtin.command: rsync -avz ./conf /home/{{ user }}/kioskReactor
-  when: confFolder.stat.isdir is not defined
+  when: confFolder.stat.exists == False
 
 - name: change owner  
   ansible.builtin.command: sudo chown -R pi:pi /home/{{ user }}/kioskReactor
