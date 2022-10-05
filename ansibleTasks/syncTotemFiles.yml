@@ -52,8 +52,14 @@
 - name: rsync programs file
   ansible.builtin.command: rsync -avz ./programs /home/{{ user }}/kioskReactor
 
+- name: Ansible conf check directory.
+  stat:
+  path: home/{{ user }}/kioskReactor/conf
+  register: confFolder
+
 - name: rsync conf file
-  ansible.builtin.command: [ ! -d /home/{{ user }}/kioskReactor/conf ] || rsync -avz ./conf /home/{{ user }}/kioskReactor
+  ansible.builtin.command: rsync -avz ./conf /home/{{ user }}/kioskReactor
+  when: confFolder.stat.exists == false
 
 - name: change owner  
   ansible.builtin.command: sudo chown -R pi:pi /home/{{ user }}/kioskReactor
