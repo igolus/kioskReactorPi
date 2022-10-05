@@ -59,7 +59,7 @@
 
 - name: rsync conf file
   ansible.builtin.command: rsync -avz ./conf /home/{{ user }}/kioskReactor
-  when: $(! -d /home/{{ user }}/kioskReactor/conf)
+  when: ! -d /home/{{ user }}/kioskReactor/conf
 
 - name: change owner  
   ansible.builtin.command: sudo chown -R pi:pi /home/{{ user }}/kioskReactor
