@@ -58,13 +58,13 @@
   register: confFolder
 
 - name: rsync conf file
-  ansible.builtin.command: rsync --ignore-existing -avz ./conf /home/pi/kioskReactor
+  ansible.builtin.command: rsync --ignore-existing -avz ./conf /home/{{ user }}/kioskReactor
 
 - name: change owner  
-  ansible.builtin.command: sudo chown -R pi:pi /home/{{ user }}/kioskReactor
+  ansible.builtin.command: sudo chown -R {{ user }}:{{ user }} /home/{{ user }}/kioskReactor
 
 - name: change owner auto start
-  ansible.builtin.command: sudo chown -R pi:pi /home/{{ user }}/.config
+  ansible.builtin.command: sudo chown -R {{ user }}:{{ user }} /home/{{ user }}/.config
 
 - name: make startOpenBox.sh executable
   ansible.builtin.file:
