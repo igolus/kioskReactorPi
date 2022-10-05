@@ -19,7 +19,6 @@ const healthLogger = createLogger({
         kioskFormat
     ),
     transports: [
-        new transports.Console(),
         loggingHealth
     ],
     //keyFilename: '../../../conf/totemsystem-5889b-firebase-adminsdk-p2mja-f9bb68a5da.json',
@@ -30,5 +29,8 @@ function intervalFunc() {
     healthLogger.info(conf.deviceId);
 }
 
-setInterval(intervalFunc,timeout);
+if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    setInterval(intervalFunc,timeout);
+}
+
 

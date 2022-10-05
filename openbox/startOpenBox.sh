@@ -1,10 +1,10 @@
 #!/bin/bash
-cd /home/pi/rocketKiosk/programs/jsScripts/init
+cd /home/pi/kioskReactor/programs/jsScripts/init
 sudo node startupInit.js
 
-deviceId=`jq '.deviceId' /home/pi/rocketKiosk/conf/config.json | tr -d '"'`
-minimalCreditToLock=`jq '.minimalCreditToLock' /home/pi/rocketKiosk/conf/brand.json | tr -d '"'`
-credit=`jq '.credit' /home/pi/rocketKiosk/conf/brand.json | tr -d '"'`
+deviceId=`jq '.deviceId' /home/pi/kioskReactor/conf/config.json | tr -d '"'`
+minimalCreditToLock=`jq '.minimalCreditToLock' /home/pi/kioskReactor/conf/brand.json | tr -d '"'`
+credit=`jq '.credit' /home/pi/kioskReactor/conf/brand.json | tr -d '"'`
 echo $url
 echo $minimalCreditToLock
 echo $credit
@@ -19,8 +19,8 @@ launchBrowser() {
 
 launchSystem() {
 	#chromium
-	cd /home/pi/rocketKiosk
-	/home/pi/rocketKiosk/launchSystem.sh
+	cd /home/pi/kioskReactor
+	/home/pi/kioskReactor/launchSystem.sh
 }
 
 
@@ -30,7 +30,7 @@ if [ $credit == "null" ]; then
 	launchSystem
 else
 	if (( $credit < $minimalCreditToLock )); then
-		url=file:///home/pi/rocketKiosk/programs/pages/nocredit.html
+		url=file:///home/pi/kioskReactor/programs/pages/nocredit.html
 		launchBrowser
 	else
 		url=https://us-central1-totemsystem-5889b.cloudfunctions.net/homePage/$deviceId

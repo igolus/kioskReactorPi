@@ -1,5 +1,3 @@
-const {initializeFirebase} = require("../commandsListener/commandUtil");
-initializeFirebase();
 const WebSocket = require("ws").Server;
 const HttpsServer = require('http').createServer;
 const server = HttpsServer()

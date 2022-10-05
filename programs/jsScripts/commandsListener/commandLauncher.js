@@ -1,5 +1,4 @@
-const {startSeverAndConfigureListening, delay, initializeFirebase} = require("./commandUtil");
-initializeFirebase()
+const {startSeverAndConfigureListening, delay} = require("./commandUtil");
 const WebSocket = require("ws");
 const config = require('../../../conf/config.json');
 const axios = require('axios')
