@@ -8,4 +8,4 @@
   
   tasks:
     - include: ansibleTasks/packages.yml
-    - include: ansibleTasks/syncTotemFIles.yml
+    - include: ansibleTasks/syncTotemFiles.yml
