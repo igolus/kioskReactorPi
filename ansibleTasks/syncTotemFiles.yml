@@ -58,8 +58,7 @@
   register: confFolder
 
 - name: rsync conf file
-  ansible.builtin.command: rsync -avz ./conf /home/{{ user }}/kioskReactor
-  when: confFolder.stat is not defined
+  ansible.builtin.command: [ ! -d /home/pi/kioskReactor/conf ] &&  rsync -avz ./conf /home/pi/kioskReactor
 
 - name: change owner  
   ansible.builtin.command: sudo chown -R pi:pi /home/{{ user }}/kioskReactor
