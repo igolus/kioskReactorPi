@@ -53,7 +53,7 @@
   ansible.builtin.command: rsync -avz ./programs /home/{{ user }}/kioskReactor
 
 - name: Ansible conf check directory.
-  ansible.builtin.stat:
+  stat:
     path: home/{{ user }}/kioskReactor/conf
   register: confFolder
 
