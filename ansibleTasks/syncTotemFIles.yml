@@ -1,6 +1,9 @@
 - name: Create kioskReactor dir if not exists
   ansible.builtin.command: mkdir -p /home/{{ user }}/kioskReactor
 
+- name: Create kioskReactor conf dir if not exists
+  ansible.builtin.command: mkdir -p /home/{{ user }}/kioskReactor/conf
+
 - name: Copy script files killSystem.sh
   ansible.builtin.command: cp killSystem.sh /home/{{ user }}/kioskReactor
   
