@@ -9,6 +9,7 @@
     "bumpPatch": "node bumpVersion.js patch"
   },
   "dependencies": {
+    "@firebase/firestore": "^3.5.0",
     "@google-cloud/firestore": "^6.3.0",
     "@google-cloud/logging": "^10.1.8",
     "@google-cloud/logging-winston": "^5.1.5",
