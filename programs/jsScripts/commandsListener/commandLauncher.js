@@ -1,6 +1,5 @@
 const {startSeverAndConfigureListening, delay} = require("./commandUtil");
 const WebSocket = require("ws");
-const config = require('../../../conf/config.json');
 const axios = require('axios')
 const {loggerCommand} = require("../util/loggerUtil");
 const {getOpenUrlCommand, geRebootCommand,
@@ -13,8 +12,6 @@ const {getCurrentProject} = require("../dbUtil/projectUtil");
 const {execPrintTicket} = require("./printUtil");
 const {speak} = require("./textToSpeech");
 const {uploadSnap} = require("./snapUtil");
-const {constants} = require("../constants/constants");
-const {buildEventJson, eventTypeSnapReady} = require("../webSocket/eventTypes");
 const {inactivityCommand} = require("./inactivityCommand");
 const {deployWebSiteCommand} = require("./deployWebSiteCommand");
 const localChromeDebuggerServerJsonCheck = 'http://127.0.0.1:9222/json';
@@ -63,7 +60,7 @@ function chromeNavigate(openUrl) {
                 url: openUrl
             }
         }
-        loggerCommand.infor("Change url " + openUrl);
+        loggerCommand.info("Change url " + openUrl);
         wsChromeSocket.send(JSON.stringify(dataChangeUrl))
     }
 }
