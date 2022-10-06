@@ -1,5 +1,14 @@
-- name: Add node to repo
-  ansible.builtin.command: curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
+#- name: Add node to repo
+#  ansible.builtin.command: curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
+
+- name: Download node set up
+  ansible.builtin.get_url:
+    url: https://deb.nodesource.com/setup_14.x
+    dest: ./setup_14.x
+    mode: '0440'
+
+- name: Run node bash
+  ansible.builtin.command: bash setup_14.x
 
 - name: Install package node
   apt:
