@@ -54,7 +54,7 @@
 
 - name: Ansible conf check directory.
   ansible.builtin.slurp:
-    src: home/{{ user }}/kioskReactor/conf
+    src: /home/{{ user }}/kioskReactor/conf
   register: confFolder
 
 - name: rsync conf file
