@@ -1,16 +1,22 @@
 #- name: Add node to repo
 #  ansible.builtin.command: curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
+- name: Check if node is installed
+  command: dpkg-query -l node
+  register: node_deb_check
 
 - name: Download node set up
   ansible.builtin.get_url:
     url: https://deb.nodesource.com/setup_14.x
     dest: ./setup_14.x
     mode: '0440'
+  when: node_deb_check.stdout.find('no packages found') != -1
 
 - name: Run node bash
   ansible.builtin.command: bash setup_14.x
+  when: node_deb_check.stdout.find('no packages found') != -1
 
 - name: Install package node
   apt:
     name:
       - node
+  when: node_deb_check.stdout.find('no packages found') != -1
