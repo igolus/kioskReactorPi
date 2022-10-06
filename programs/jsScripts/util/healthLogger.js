@@ -21,7 +21,6 @@ const healthLogger = createLogger({
     transports: [
         loggingHealth
     ],
-    //keyFilename: '../../../conf/totemsystem-5889b-firebase-adminsdk-p2mja-f9bb68a5da.json',
 });
 
 

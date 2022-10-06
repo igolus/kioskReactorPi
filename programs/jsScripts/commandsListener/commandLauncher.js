@@ -18,11 +18,10 @@ const localChromeDebuggerServerJsonCheck = 'http://127.0.0.1:9222/json';
 const versionUtil = require('../dbUtil/versionUtil')
 const deviceUtil = require('../dbUtil/deviceUtil')
 
-const updatingUrl = "file:///home/pi/rocketKiosk/programs/pages/updating.html";
-const deploySiteUrl = "file:///home/pi/rocketKiosk/programs/pages/deploySite.html";
-const defaultUrl = "file:///home/pi/rocketKiosk/programs/pages/default.html";
+const updatingUrl = "https://totemsystem-5889b.web.app/static/updating.html";
+const deploySiteUrl = "https://totemsystem-5889b.web.app/static/deploySite.html";
+const defaultUrl = "https://totemsystem-5889b.web.app/static/default.html";
 
-// TEST ANSIBLE2
 let wsChromeSocket;
 let device;
 let project;
@@ -93,17 +92,25 @@ function execCommand(command, callBackDone) {
 function updateDevice(device) {
     loggerCommand.info(`reboot !!`);
     chromeNavigate(updatingUrl)
-    //ws.send(buildCommandJson(commandTypeOpenUrl, updatingUrl), {binary: true});
     let command = "sudo ansible-pull --extra-vars \"user=pi\" -U https://github.com/igolus/rocketKioskPi.git"
     let commandReboot = "sudo reboot"
     execCommand(command, () => {
-        versionUtil.getVersion().then(versionItem => {
-            console.log("versionItem " + JSON.stringify(versionItem))
-            device.version =  versionItem.version;
-            deviceUtil.updateDevice(device).then(data => {
-                execCommand(commandReboot);
+        try {
+            versionUtil.getVersion().then(versionItem => {
+                console.log("versionItem " + JSON.stringify(versionItem))
+                device.version = versionItem.version;
+                deviceUtil.updateDevice(device).then(data => {
+                    try {
+                        execCommand(commandReboot);
+                    } catch (err) {
+                        loggerCommand.error("unable to update device version")
+                    }
+                })
             })
-        })
+        }
+        catch (err) {
+            loggerCommand.error("unable to get version")
+        }
     });
 }
 
