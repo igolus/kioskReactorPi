@@ -53,12 +53,13 @@
   ansible.builtin.command: rsync -avz ./programs /home/{{ user }}/kioskReactor
 
 - name: Ansible conf check directory.
-  stat:
-    path: home/pi/kioskReactor/conf
+  ansible.builtin.slurp:
+    src: home/{{ user }}/kioskReactor/conf
   register: confFolder
 
 - name: rsync conf file
   ansible.builtin.command: rsync --ignore-existing -avz ./conf /home/{{ user }}/kioskReactor
+  when: not stat_result.stat.exists
 
 - name: change owner  
   ansible.builtin.command: sudo chown -R {{ user }}:{{ user }} /home/{{ user }}/kioskReactor
