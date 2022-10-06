@@ -25,4 +25,4 @@ cd /home/pi/kioskReactor/programs/PyScripts
 sudo python3 usb-serial-reader.py &
 sudo python3 takeASnap.py &
 python3 playSound.py &
-#sudo python3 evtestmouse.py &
+sudo python3 inactivityMouseCheck.py &
