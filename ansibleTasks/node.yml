@@ -1,0 +1,7 @@
+- name: Add node to repo
+  ansible.builtin.command: curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
+
+- name: Install package node
+  apt:
+    name:
+      - node
