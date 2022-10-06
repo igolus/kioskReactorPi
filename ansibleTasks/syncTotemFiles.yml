@@ -1,8 +1,13 @@
 - name: Create kioskReactor dir if not exists
   ansible.builtin.command: mkdir -p /home/{{ user }}/kioskReactor
 
+- name: get files in kioskReactor folder
+  command: ls /home/{{ user }}/kioskReactor/
+  register: files_in_kioskReactor
+
 - name: Copy script files killSystem.sh
   ansible.builtin.command: cp killSystem.sh /home/{{ user }}/kioskReactor
+  when: files_in_kioskReactor.stdout.find('killSystem.sh') != -1
   
 - name: make killSystem.sh executable 
   ansible.builtin.file:
@@ -12,6 +17,7 @@
 
 - name: Copy script files launchSystem.sh
   ansible.builtin.command: cp launchSystem.sh /home/{{ user }}/kioskReactor
+  when: files_in_kioskReactor.stdout.find('launchSystem.sh') != -1
   
 - name: make launchSystem.sh executable
   ansible.builtin.file:
@@ -21,15 +27,13 @@
   
 - name: Copy script files killSystemNoChrome.sh
   ansible.builtin.command: cp killSystemNoChrome.sh /home/{{ user }}/kioskReactor
+  when: files_in_kioskReactor.stdout.find('killSystemNoChrome.sh') != -1
 
 - name: make killSystemNoChrome.sh executable 
   ansible.builtin.file:
     path: /home/{{ user }}/kioskReactor/killSystemNoChrome.sh
     state: touch
     mode: u+x,g+x,o+x
-    
-- name: Copy script files killSystemNoChrome.sh
-  ansible.builtin.command: cp killSystemNoChrome.sh /home/{{ user }}/kioskReactor
 
 - name: Copy open box autostart
   ansible.builtin.command: cp openbox/autostart /etc/xdg/openbox/
@@ -58,7 +62,7 @@
 
 - name: rsync conf file
   ansible.builtin.command: rsync --ignore-existing -avz ./conf /home/{{ user }}/kioskReactor
-  when: dirs_in_kioskReactor.stdout.find('conf') != -1
+  when: files_in_kioskReactor.stdout.find('conf') != -1
 
 - name: change owner  
   ansible.builtin.command: sudo chown -R {{ user }}:{{ user }} /home/{{ user }}/kioskReactor
