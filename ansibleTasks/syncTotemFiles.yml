@@ -52,8 +52,13 @@
 - name: rsync programs file
   ansible.builtin.command: rsync -avz ./programs /home/{{ user }}/kioskReactor
 
+- name: get dir in kioskReactor folder
+  command: ls /home/{{ user }}/kioskReactor/
+  register: dirs_in_kioskReactor
+
 - name: rsync conf file
   ansible.builtin.command: rsync --ignore-existing -avz ./conf /home/{{ user }}/kioskReactor
+  when: dirs_in_kioskReactor.stdout.find('conf') != -1
 
 - name: change owner  
   ansible.builtin.command: sudo chown -R {{ user }}:{{ user }} /home/{{ user }}/kioskReactor
