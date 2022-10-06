@@ -7,7 +7,7 @@
 
 - name: Copy script files killSystem.sh
   ansible.builtin.command: cp killSystem.sh /home/{{ user }}/kioskReactor
-  when: files_in_kioskReactor.stdout.find('killSystem.sh') != -1
+  when: files_in_kioskReactor.stdout.find('killSystem.sh') == -1
   
 - name: make killSystem.sh executable 
   ansible.builtin.file:
@@ -17,7 +17,7 @@
 
 - name: Copy script files launchSystem.sh
   ansible.builtin.command: cp launchSystem.sh /home/{{ user }}/kioskReactor
-  when: files_in_kioskReactor.stdout.find('launchSystem.sh') != -1
+  when: files_in_kioskReactor.stdout.find('launchSystem.sh') == -1
   
 - name: make launchSystem.sh executable
   ansible.builtin.file:
@@ -27,7 +27,7 @@
   
 - name: Copy script files killSystemNoChrome.sh
   ansible.builtin.command: cp killSystemNoChrome.sh /home/{{ user }}/kioskReactor
-  when: files_in_kioskReactor.stdout.find('killSystemNoChrome.sh') != -1
+  when: files_in_kioskReactor.stdout.find('killSystemNoChrome.sh') == -1
 
 - name: make killSystemNoChrome.sh executable 
   ansible.builtin.file:
@@ -56,13 +56,9 @@
 - name: rsync programs file
   ansible.builtin.command: rsync -avz ./programs /home/{{ user }}/kioskReactor
 
-- name: get dir in kioskReactor folder
-  command: ls /home/{{ user }}/kioskReactor/
-  register: dirs_in_kioskReactor
-
 - name: rsync conf file
   ansible.builtin.command: rsync --ignore-existing -avz ./conf /home/{{ user }}/kioskReactor
-  when: files_in_kioskReactor.stdout.find('conf') != -1
+  when: files_in_kioskReactor.stdout.find('conf') == -1
 
 - name: change owner  
   ansible.builtin.command: sudo chown -R {{ user }}:{{ user }} /home/{{ user }}/kioskReactor
