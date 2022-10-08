@@ -3,11 +3,6 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "scripts": {
-    "bumpMajor": "node bumpVersion.js major",
-    "bumpMinor": "node bumpVersion.js minor",
-    "bumpPatch": "node bumpVersion.js patch"
-  },
   "dependencies": {
     "@firebase/firestore": "^3.5.0",
     "@google-cloud/firestore": "^6.3.0",
