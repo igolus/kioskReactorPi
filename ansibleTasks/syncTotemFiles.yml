@@ -87,3 +87,11 @@
 - name: change .bash_profile owner
   ansible.builtin.command: sudo chown {{ user }}:{{ user }} /home/{{ user }}/.bash_profile
   when: files_in_homeFolder.stdout.find('.bash_profile') == -1
+
+- name: add .xinitrc to start X with open box
+  ansible.builtin.command: cp xinit/.xinitrc /home/{{ user }}
+  when: files_in_homeFolder.stdout.find('.xinitrc') == -1
+
+- name: change .xinitrc owner
+  ansible.builtin.command: sudo chown {{ user }}:{{ user }} /home/{{ user }}/.xinitrc
+  when: files_in_homeFolder.stdout.find('.xinitrc') == -1
