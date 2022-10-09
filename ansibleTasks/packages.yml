@@ -11,6 +11,7 @@
       - xinit
       - nginx
       - evtest
+      - jq
 
 - name: Install python package
   ansible.builtin.pip:
