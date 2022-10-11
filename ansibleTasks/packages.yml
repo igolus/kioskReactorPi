@@ -17,6 +17,7 @@
   ansible.builtin.pip:
     name:
       - evdev
+      - websockets
 
 - name: Install python google-cloud-texttospeech
   ansible.builtin.command: pip install --user --upgrade google-cloud-texttospeech
