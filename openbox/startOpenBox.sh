@@ -5,6 +5,11 @@ sudo node startupInit.js
 deviceId=`jq '.deviceId' /home/pi/kioskReactor/conf/config.json | tr -d '"'`
 minimalCreditToLock=`jq '.minimalCreditToLock' /home/pi/kioskReactor/conf/brand.json | tr -d '"'`
 credit=`jq '.credit' /home/pi/kioskReactor/conf/brand.json | tr -d '"'`
+screenSize=`jq '.screenSize' /home/pi/kioskReactor/conf/devive.json | tr -d '"'`
+if [ screenSize == "null" ]; then
+  screenSize="1360,768"
+fi
+
 echo $url
 echo $minimalCreditToLock
 echo $credit
@@ -13,7 +18,7 @@ launchBrowser() {
 	echo $url
 	sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' ~/.config/chromium/'Local State'
 	sed -i 's/"exited_cleanly":false/"exited_cleanly":true/; s/"exit_type":"[^"]\+"/"exit_type":"Normal"/' ~/.config/chromium/Default/Preferences
-	chromium-browser --no-sandbox --kiosk --window-size=1360,768 --no-first-run --fast --fast-start --password-store=basic --disable-features=TouchpadOverscrollHistoryNavigation --disable-features=TranslateUI --noerrdialogs --incognito --disable-pinch --overscroll-history-navigation=0 --disable-infobars --remote-debugging-port=9222 $url &
+	chromium-browser --no-sandbox --kiosk --window-size=$screenSize --no-first-run --fast --fast-start --password-store=basic --disable-features=TouchpadOverscrollHistoryNavigation --disable-features=TranslateUI --noerrdialogs --incognito --disable-pinch --overscroll-history-navigation=0 --disable-infobars --remote-debugging-port=9222 $url &
 }
 
 
