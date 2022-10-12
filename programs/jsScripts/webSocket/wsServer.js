@@ -12,7 +12,7 @@ const {commandTypeReboot, commandTypeOpenUrl, commandTypeUpdate,
     internalCommandTypeCancelSnap, internalCommandTypeInactivity, commandTypeDeployWebSite
 } = require("./commandTypes");
 const {listenToEvents, listenToCommands} = require("../dbUtil/eventsUtil");
-require('../util/healthLogger')
+require('../util/healthChecker')
 
 const wsSocket =new WebSocket({
     server: server,

@@ -46,11 +46,6 @@ const loggingWinstonCommand = new LoggingWinston({
     logName: conf.deviceId + "_command.log"
 });
 
-const loggingWinstonCommandReboot = new LoggingWinston({
-    logName: conf.deviceId + "commandreboot.log"
-});
-
-
 
 const loggerWs = createLogger({
     level: 'info',
