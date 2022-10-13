@@ -1,13 +1,12 @@
 const { Storage } = require("@google-cloud/storage");
-const firebaseConfig = require('../../../conf/firebaseconfig.json')
 const { v4: uuidv4 } = require('uuid');
-const {buildEventJson, eventTypeSnapReady} = require("../webSocket/eventTypes");
+const config = require('../../../conf/config.json')
 
 const storage = new Storage({
-    keyFilename: "../../../conf/totemsystem-pi-key.json",
+    keyFilename: "../../../conf/myReactorKioskUser.json",
 });
 
-const storageBucket = storage.bucket(firebaseConfig.storageBucket);
+const storageBucket = storage.bucket(config.bucketName);
 
 const uploadSnap = (ws, device, dataJSON) => {
     let destination = "devices/" + device.id + "/photos/" + uuidv4() + ".jpg";
@@ -22,11 +21,12 @@ const uploadSnap = (ws, device, dataJSON) => {
             action: 'read',
             expires: '03-09-2491'
         }).then(signedUrls => {
-            ws.send(buildEventJson(eventTypeSnapReady, signedUrls[0], dataJSON.commandParam), {binary: true});
-            console.log(signedUrls[0]);
+            // ws.send(buildEventJson(eventTypeSnapReady, signedUrls[0], dataJSON.commandParam), {binary: true});
+            // console.log(signedUrls[0]);
         });
     })
 }
+
 module.exports = {
     uploadSnap: uploadSnap
 }
