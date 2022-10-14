@@ -6,7 +6,7 @@ do
    ONLINE=$?
    if [ $ONLINE -ne 0 ]
      then
-       sleep 60
+       sleep 2
    fi
 done
 echo "We are on line!"
