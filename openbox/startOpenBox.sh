@@ -1,11 +1,23 @@
 #!/bin/bash
+
+while [ $ONLINE -ne 0 ]
+do
+   ping -q -c 1 -w 1 www.google.com >/dev/null 2>&1
+   ONLINE=$?
+   if [ $ONLINE -ne 0 ]
+     then
+       sleep 60
+   fi
+done
+echo "We are on line!"
+
 cd /home/pi/kioskReactor/programs/jsScripts/init
 sudo node startupInit.js
 
 deviceId=`jq '.deviceId' /home/pi/kioskReactor/conf/config.json | tr -d '"'`
 minimalCreditToLock=`jq '.minimalCreditToLock' /home/pi/kioskReactor/conf/brand.json | tr -d '"'`
 credit=`jq '.credit' /home/pi/kioskReactor/conf/brand.json | tr -d '"'`
-screenSize=`jq '.screenSize' /home/pi/kioskReactor/conf/devive.json | tr -d '"'`
+screenSize=`jq '.screenSize' /home/pi/kioskReactor/conf/device.json | tr -d '"'`
 if [ screenSize == "null" ]; then
   screenSize="1360,768"
 fi
@@ -13,6 +25,8 @@ fi
 echo $url
 echo $minimalCreditToLock
 echo $credit
+echo $minimalCreditToLock
+echo $screenSize
 
 launchBrowser() {
 	echo $url
