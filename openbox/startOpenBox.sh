@@ -1,5 +1,5 @@
 #!/bin/bash
-
+ONLINE=1
 while [ $ONLINE -ne 0 ]
 do
    ping -q -c 1 -w 1 www.google.com >/dev/null 2>&1
