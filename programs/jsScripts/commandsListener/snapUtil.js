@@ -21,8 +21,8 @@ const uploadSnap = (ws, device, dataJSON) => {
             action: 'read',
             expires: '03-09-2491'
         }).then(signedUrls => {
-            // ws.send(buildEventJson(eventTypeSnapReady, signedUrls[0], dataJSON.commandParam), {binary: true});
-            // console.log(signedUrls[0]);
+            ws.send(buildEventJson(eventTypeSnapReady, signedUrls[0], dataJSON.commandParam), {binary: true});
+            console.log(signedUrls[0]);
         });
     })
 }

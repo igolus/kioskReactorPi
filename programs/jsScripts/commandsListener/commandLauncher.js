@@ -174,13 +174,6 @@ function onEvent(dataJSON, ws, device, project) {
     }
 }
 
-
-// (async () => {
-//     device = await getCurrentDevice();
-//     project = await getCurrentProject(device)
-//     await startSeverAndConfigureListening(onEvent, device, project);
-// })();
-
 if (process.argv.length > 2 && process.argv[2] === "local") {
     (async () => {
         device = await getCurrentDevice();

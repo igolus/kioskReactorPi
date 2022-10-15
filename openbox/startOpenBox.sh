@@ -51,7 +51,6 @@ else
 	if (( $credit < $minimalCreditToLock )); then
 		url=file:///home/pi/kioskReactor/programs/pages/nocredit.html
 		launchBrowser
-		launchSystem
 	else
 		url=https://us-central1-totemsystem-5889b.cloudfunctions.net/homePage/$deviceId
 		launchBrowser

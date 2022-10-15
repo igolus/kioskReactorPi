@@ -1,0 +1,24 @@
+@startuml
+actor User as User
+participant "QR Code Device" as QR
+participant Raspberry as PI
+participant "Kiosk Reactor Python" as KRP
+participant "Kiosk Reactor Node JS" as KRJ
+participant "Web hook" as WH
+
+
+User -> QR: Scan QR Code
+QR -> PI: Send QR Code
+PI -> KRP: Detect scanned Code
+KRP -> KRJ: Send Web Socket Message
+KRJ -> KRJ: Check for project associated
+KRJ -> KRJ: Get The web hook configured
+KRJ -> WH: Send post Message
+note over WH: body : {"eventType":"qrcode","eventParam":"123456..."}
+WH -> WH: analyse the message
+WH -> KRJ: Send JSON Response
+note over WH: example : [{"commandType":"speak","commandParam":"Hello .."}]
+KRJ-> KRP: Send Web Socket Message
+KRP -> KRP: Execute the command ..
+
+@enduml
