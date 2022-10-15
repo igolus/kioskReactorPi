@@ -1,6 +1,7 @@
 const { Storage } = require("@google-cloud/storage");
 const { v4: uuidv4 } = require('uuid');
 const config = require('../../../conf/config.json')
+const {eventTypeSnapReady, buildEventJson} = require("../webSocket/eventTypes");
 
 const storage = new Storage({
     keyFilename: "../../../conf/myReactorKioskUser.json",
