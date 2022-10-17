@@ -1,11 +1,23 @@
-from evdev import InputDevice, ecodes, list_devices, categorize
-import signal, sys
-import asyncio
+from __future__ import print_function
+
+import re
+import sys
+import select
+import atexit
+import termios
+import optparse
 import json
 import time
 import threading
 import commod
 import asyncio
+
+try:
+    input = raw_input
+except NameError:
+    pass
+
+from evdev import ecodes, list_devices, AbsInfo, InputDevice
 
 lastCheck = time.time()
 
@@ -25,16 +37,6 @@ if durationInactivityTouchScreen is None:
 if mouseDevice is None:
     mouseDevice = "/dev/input/event3"
 
-print(durationInactivityTouchScreen)
-print(mouseDevice)
-
-
-def signal_handler(signal, frame):
-    print('Stopping')
-    dev.ungrab()
-    sys.exit(0)
-
-
 def triggerInactivity():
     global lastCheck
     global loop
@@ -47,44 +49,50 @@ def triggerInactivity():
 def checkInactivity():
     now = time.time()
     diff = now - lastCheck
-    # print(diff)
+    #print(diff)
     if diff >= durationInactivityTouchScreen:
         triggerInactivity()
     threading.Timer(3, checkInactivity).start()
 
 
-async def main():
-    print("starting inactity check")
+def main():
     global lastCheck
-    if not projectConf['useInactivityTouchScreen']:
-        print("InactivityTouchScreen not active")
-        sys.exit()
-
     checkInactivity()
-    dev = None
-    # find usb hid device
-    devices = map(InputDevice, list_devices())
-    for device in devices:
-        print(device.name, device.fn)
-        if mouseDevice in device.fn:
-            dev = InputDevice(device.fn)
+    devices = [InputDevice(mouseDevice)]
 
-    if dev is None:
-        print('No mouse')
-        sys.exit()
+    print(str(devices))
+    if not devices:
+        devices = select_devices()
+    else:
+        devices = [InputDevice(path) for path in devices]
 
-    signal.signal(signal.SIGINT, signal_handler)
-    dev.grab()
+    if sys.stdin.isatty():
+        toggle_tty_echo(sys.stdin, enable=False)
+        atexit.register(toggle_tty_echo, sys.stdin, enable=True)
 
-    # process usb hid events and format barcode data
-    barcode = ""
+    print('Listening for events (press ctrl-c to exit) ...')
+    fd_to_device = {dev.fd: dev for dev in devices}
+    while True:
+        r, w, e = select.select(fd_to_device, [], [])
+
+        for fd in r:
+            for event in fd_to_device[fd].read():
+                lastCheck = time.time()
+                #print(event)
+
+
+def toggle_tty_echo(fh, enable=True):
+    flags = termios.tcgetattr(fh.fileno())
+    if enable:
+        flags[3] |= termios.ECHO
+    else:
+        flags[3] &= ~termios.ECHO
+    termios.tcsetattr(fh.fileno(), termios.TCSANOW, flags)
+
+
+if __name__ == '__main__':
     try:
-        for event in dev.read_loop():
-            lastCheck = time.time()
-            # print(event)
-
-    except KeyboardInterrupt:
-        dev.close()
-
-
-asyncio.run(main())
+        ret = main()
+    except (KeyboardInterrupt, EOFError):
+        ret = 0
+    sys.exit(ret)
