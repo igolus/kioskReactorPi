@@ -25,7 +25,7 @@ getCurrentDevice().then(device => {
         }
     })
     listenToCommands(device.id, (event) => {
-        broadCastAction(wsSocket, event);
+        broadCastMessage(wsSocket, event);
     })
 })
 
@@ -68,12 +68,12 @@ function checkData(data) {
 
 loggerWs.info("WS Server running on 8080 ")
 
-function broadCastAction(ws, commandJson) {
+function broadCastMessage(ws, message) {
     wsSocket.clients.forEach(function each(client) {
         //console.log("client.readyState " + client.readyState)
         if (client.readyState === 1) {
-            loggerWs.info("sending to client " + client + " DATA:" + JSON.stringify(commandJson));
-            client.send(JSON.stringify(commandJson), {binary: true});
+            loggerWs.info("sending to client " + client + " DATA:" + JSON.stringify(message));
+            client.send(JSON.stringify(message), {binary: true});
         }
     });
 }
@@ -94,7 +94,7 @@ function triggerWebHook(ws, dataJson, webHookUrl) {
                 loggerWs.info("Reponse webhook " + JSON.stringify(response.data));
                 let dataResp = response.data;
                 if (dataResp && Array.isArray(response.data)) {
-                    dataResp.forEach(item => broadCastAction(ws, item))
+                    dataResp.forEach(item => broadCastMessage(ws, item))
                 }
             })
             .catch(error => {
@@ -131,10 +131,11 @@ wsSocket.on('connection', function connection(ws) {
 
             if (typeCommand) {
                 loggerWs.info("BroadCast event ")
-                broadCastAction(ws, dataJson, isBinary);
+                broadCastMessage(ws, dataJson, isBinary);
             }
             else if(typeEvent) {
                 loggerWs.info("Trigger webhook")
+                broadCastMessage(ws, dataJson, isBinary)
                 triggerWebHook(ws, dataJson, currentProject.webHookEventUrl)
             }
         }
