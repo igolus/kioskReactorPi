@@ -2,9 +2,10 @@ wsInit=false;
 var ws;
 
 async function initWs() {
+
     while(!wsInit) {
         try {
-            var ws = new WebSocket('ws://localhost:8080')
+            ws = new WebSocket('ws://localhost:8080')
             wsInit = true;
             console.log("WebSocket initialized")
             ws.onmessage = async (event) => {
@@ -78,6 +79,7 @@ function speak(message) {
     if (ws) {
         ws.send(JSON.stringify(command));
     }
+
 }
 
 function navigateTo(url) {

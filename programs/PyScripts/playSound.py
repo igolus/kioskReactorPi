@@ -9,8 +9,9 @@ import time
 def on_message(ws, message):
 	print(message)
 	event = json.loads(message)
-	commandType = event['commandType']
-	if commandType == "playmp3":
+	commandType = event.get('commandType')
+
+	if commandType is not None and commandType == "playmp3":
 		print(event['commandParam'])
 		file = event['commandParam']
 		pygame.mixer.init()
