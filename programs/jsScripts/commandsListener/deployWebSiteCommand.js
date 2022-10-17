@@ -26,10 +26,10 @@ function execDeploy(url, callBack) {
 
 function deployWebSiteCommand (project, chromeNavigate) {
     try {
-        if (!project.webSiteZipUrl) {
+        if (!project.webSiteZipPubliUrl) {
             return;
         }
-        execDeploy(project.webSiteZipUrl,() => chromeNavigate(project));
+        execDeploy(project.webSiteZipPubliUrl,() => chromeNavigate(project));
     }
     catch (err) {
         loggerCommand.error(err);
