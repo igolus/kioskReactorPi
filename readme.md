@@ -2,9 +2,9 @@
 
 Raspberry pi project to coonect your kiosk to Kiosk Reactor system.
 
-See all the details [here](https://doc.kioskreactor.com/kioskd/).
+See all the details [here](https://kioskreactor.com). 
 
-![https://kioskreactor.com/](https://doc.kioskreactor.com/kioskd/163979/kioskreactorLogo.png)
+![](https://doc.kioskreactor.com/kioskd/163979/kioskreactorLogo.png)
 
 
 
