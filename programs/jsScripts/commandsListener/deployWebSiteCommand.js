@@ -13,7 +13,7 @@ function execDeploy(url, callBack) {
                 return;
             }
             if (stderr) {
-                loggerCommand.error(stderr)
+                loggerCommand.info(stderr)
                 return;
             }
             loggerCommand.info(`command Done`);
