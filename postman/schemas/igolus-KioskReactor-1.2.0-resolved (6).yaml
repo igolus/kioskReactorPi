@@ -1,0 +1,635 @@
+---
+openapi: 3.0.0
+info:
+  title: Client API Kiosk Reactor
+  description: The API for Kiosk Reactor project
+  version: 1.2.0
+servers:
+- url: https://virtserver.swaggerhub.com/igolus/KioskReactor/1.2.0
+  description: SwaggerHub API Auto Mocking
+- url: https://us-central1-totemsystem-5889b.cloudfunctions.net
+  description: Firebase hosted function
+paths:
+  /board/displayMessage/{brandId}:
+    get:
+      tags:
+      - Board messages
+      description: get all existing board messages
+      operationId: getAllMessages
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Brand Authorization key
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: all messages
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisplayMessageWithIdList'
+        "401":
+          description: Authorization not provided
+    post:
+      tags:
+      - Board messages
+      description: Create a board message
+      operationId: createMessage
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Brand Authorization key
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Message created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisplayMessageCreate'
+        required: true
+      responses:
+        "200":
+          description: test
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisplayMessageWithIdList'
+        "401":
+          description: Authorization not provided
+        "400":
+          description: Bad input format
+  /board/displayMessage/{brandId}/{messageId}:
+    get:
+      tags:
+      - Board messages
+      description: get a single message with id
+      operationId: getMessage
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: messageId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Brand Authorization key
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: single message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisplayMessageWithId'
+        "401":
+          description: Authorization not provided
+    delete:
+      tags:
+      - Board messages
+      description: delete a single message with id
+      operationId: deleteMessage
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: messageId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Brand Authorization key
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: no content answer
+        "401":
+          description: Authorization not provided
+    patch:
+      tags:
+      - Board messages
+      description: update a single message with id
+      operationId: updateMessage
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: messageId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Brand Authorization key
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Message
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisplayMessageCreate'
+        required: true
+      responses:
+        "200":
+          description: modified message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisplayMessageWithId'
+        "401":
+          description: Authorization not provided
+        "400":
+          description: Bad input format
+  /board/displayEvent/{brandId}:
+    get:
+      tags:
+      - Board events
+      description: get all existing board events
+      operationId: getAllEvents
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Brand Authorization key
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: All the events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventWithIdList'
+        "401":
+          description: Authorization not provided
+    post:
+      tags:
+      - Board events
+      description: Create a board event
+      operationId: createEvent
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Brand Authorization key
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Event
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventCreate'
+        required: true
+      responses:
+        "200":
+          description: event created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventWithId'
+        "401":
+          description: Authorization not provided
+        "400":
+          description: Bad input format
+    delete:
+      tags:
+      - Board events
+      description: delete all events
+      operationId: deleteAllEvents
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Brand Authorization key
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: no content answer
+        "401":
+          description: Authorization not provided
+  /board/displayEvent/{brandId}/{displayEventId}:
+    get:
+      tags:
+      - Board events
+      description: get a single event with id
+      operationId: getEvent
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: displayEventId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Brand Authorization key
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: test
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventWithId'
+        "401":
+          description: Authorization not provided
+    delete:
+      tags:
+      - Board events
+      description: delete a single event with id
+      operationId: deleteEvent
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: displayEventId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Brand Authorization key
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: no content answer
+        "401":
+          description: Authorization not provided
+    patch:
+      tags:
+      - Board events
+      description: update a single event with id
+      operationId: updateEvent
+      parameters:
+      - name: brandId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: displayEventId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Brand Authorization key
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Message
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventCreate'
+        required: true
+      responses:
+        "200":
+          description: test
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventWithId'
+        "401":
+          description: Authorization not provided
+        "400":
+          description: Bad input format
+  /triggerEvent/changeChromeAddressUrl/{deviceId}:
+    post:
+      tags:
+      - TriggerEvent
+      description: Change url on the device
+      operationId: changeChromeAddress
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Project Authorization key
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Url target definition
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TargetUrlModel'
+        required: true
+      responses:
+        "200":
+          description: successfully changed adress
+        "401":
+          description: Authorization not provided
+  /triggerEvent/speak/{deviceId}:
+    post:
+      tags:
+      - TriggerEvent
+      description: Make you kisok saying something
+      operationId: speak
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Project Authorization key
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Url target definition
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Speak'
+        required: true
+      responses:
+        "200":
+          description: successfully changed adress
+        "401":
+          description: Authorization not provided
+  /triggerEvent/printTicket/{deviceId}:
+    post:
+      tags:
+      - TriggerEvent
+      description: Print a ticket on your configured thermal printer
+      operationId: printTicket
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Project Authorization key
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: The printer code see https://www.npmjs.com/package/node-thermal-printer
+        content:
+          text/plain:
+            schema:
+              type: string
+            example: printer.println('hello world')
+        required: true
+      responses:
+        "200":
+          description: successfully printed ticket
+        "401":
+          description: Authorization not provided
+  /triggerEvent/reboot/{deviceId}:
+    post:
+      tags:
+      - TriggerEvent
+      description: Reboot your device
+      operationId: reboot
+      parameters:
+      - name: deviceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Project Authorization key
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Rebooted
+        "401":
+          description: Authorization not provided
+components:
+  schemas:
+    DisplayMessageCreate:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The message to display
+        hide:
+          type: boolean
+          description: hide the message
+        targetBoards:
+          type: array
+          description: list of boards to target
+          items:
+            type: string
+    DisplayMessageWithId:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the message in kiosk reactor system
+        message:
+          type: string
+          description: The message to display
+        hide:
+          type: boolean
+          description: hide the message
+        targetBoards:
+          type: array
+          description: list of boards to target
+          items:
+            type: string
+    DisplayMessageWithIdList:
+      type: array
+      items:
+        $ref: '#/components/schemas/DisplayMessageWithId'
+    EventCreate:
+      type: object
+      properties:
+        idDisplay:
+          type: string
+          description: A custom id for display can be duplicate
+        status:
+          type: string
+          description: The status of the event
+        contentDisplay:
+          type: string
+          description: additional info to display in the event
+        targetBoards:
+          type: array
+          description: list of boards to target
+          items:
+            type: string
+    EventWithId:
+      required:
+      - idDisplay
+      - status
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the message in kiosk reactor system
+        idDisplay:
+          type: string
+          description: A custom id for display can be duplicate
+        status:
+          type: string
+          description: The status of the event
+        contentDisplay:
+          type: string
+          description: additional info to display in the event
+        targetBoards:
+          type: array
+          description: list of boards to target
+          items:
+            type: string
+    EventWithIdList:
+      type: array
+      items:
+        $ref: '#/components/schemas/EventWithId'
+    TargetUrlModel:
+      type: object
+      properties:
+        targetUrl:
+          type: string
+          example: https://google.com
+    Speak:
+      type: object
+      properties:
+        speakText:
+          type: string
+          example: Hello world

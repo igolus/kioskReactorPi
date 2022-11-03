@@ -1,0 +1,2239 @@
+{
+	"info": {
+		"_postman_id": "271382a8-4eee-48ce-8d62-6ac2af3c37ad",
+		"name": "Client API Kiosk Reactor",
+		"description": "The API for Kiosk Reactor project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "1613408-271382a8-4eee-48ce-8d62-6ac2af3c37ad"
+	},
+	"item": [
+		{
+			"name": "Board messages",
+			"item": [
+				{
+					"name": "getAllMessages",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "955f96bc-0dd4-4647-81f1-074aa4417783",
+								"exec": [
+									"var responseJson = pm.response.json()\r",
+									"pm.environment.set(\"messageId\", responseJson[0].id)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "ff7f296a-09d6-4066-a134-de3fe74cb7f4",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AuthorizationBrand}}",
+								"description": "Brand Authorization key"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{kioskServer}}/board/displayMessage/{{brandId}}",
+							"host": [
+								"{{kioskServer}}"
+							],
+							"path": [
+								"board",
+								"displayMessage",
+								"{{brandId}}"
+							]
+						},
+						"description": "get all existing board messages"
+					},
+					"response": [
+						{
+							"id": "b9f7b447-24b5-4d04-ab99-faa87f50cc66",
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{kioskServer}}/board/displayMessage/{{brandId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayMessage",
+										"{{brandId}}"
+									]
+								},
+								"description": "get all existing board messages"
+							},
+							"status": "all messages",
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"disabled": false
+								}
+							],
+							"cookie": [],
+							"body": "[\r\n  {\r\n    \"id\": \"id32\",\r\n    \"message\": \"message18\",\r\n    \"hide\": false,\r\n    \"targetBoards\": [\r\n      \"targetBoards82\"\r\n    ]\r\n  }\r\n]"
+						},
+						{
+							"id": "36caea9a-a05b-4a92-aea2-fb3b0e127158",
+							"name": "Response_401",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{kioskServer}}/board/displayMessage/{{brandId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayMessage",
+										"{{brandId}}"
+									]
+								},
+								"description": "get all existing board messages"
+							},
+							"status": "Authorization not provided",
+							"code": 401,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "createMessage",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c16e7183-50cd-4d8e-bb8d-6d3cb04eaddc",
+								"exec": [
+									"var responseJson = pm.response.json()\r",
+									"pm.environment.set(\"messageId\", responseJson.id)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "95538419-c0c3-4269-8d6c-801861074257",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AuthorizationBrand}}",
+								"description": "Brand Authorization key"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"message\": \"message32\",\r\n  \"hide\": true,\r\n  \"targetBoards\": [\r\n    \"targetBoards13\"\r\n  ]\r\n}"
+						},
+						"url": {
+							"raw": "{{kioskServer}}/board/displayMessage/{{brandId}}",
+							"host": [
+								"{{kioskServer}}"
+							],
+							"path": [
+								"board",
+								"displayMessage",
+								"{{brandId}}"
+							]
+						},
+						"description": "Create a board message"
+					},
+					"response": [
+						{
+							"id": "93ab0cd6-05f4-4afc-81e5-8852f3edc5fc",
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"message\": \"message32\",\r\n  \"hide\": true,\r\n  \"targetBoards\": [\r\n    \"targetBoards13\"\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "{{kioskServer}}/board/displayMessage/{{brandId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayMessage",
+										"{{brandId}}"
+									]
+								},
+								"description": "Create a board message"
+							},
+							"status": "test",
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"disabled": false
+								}
+							],
+							"cookie": [],
+							"body": "[\r\n  {\r\n    \"id\": \"id32\",\r\n    \"message\": \"message18\",\r\n    \"hide\": false,\r\n    \"targetBoards\": [\r\n      \"targetBoards82\"\r\n    ]\r\n  }\r\n]"
+						},
+						{
+							"id": "680b5a02-ceb2-4a9c-9240-06f3047db671",
+							"name": "Response_401",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"message\": \"message32\",\r\n  \"hide\": true,\r\n  \"targetBoards\": [\r\n    \"targetBoards13\"\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "{{kioskServer}}/board/displayMessage/{{brandId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayMessage",
+										"{{brandId}}"
+									]
+								},
+								"description": "Create a board message"
+							},
+							"status": "Authorization not provided",
+							"code": 401,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"id": "a3a4fa2f-2e7b-41bb-9108-564f389b274d",
+							"name": "Response_400",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"message\": \"message32\",\r\n  \"hide\": true,\r\n  \"targetBoards\": [\r\n    \"targetBoards13\"\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "{{kioskServer}}/board/displayMessage/{{brandId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayMessage",
+										"{{brandId}}"
+									]
+								},
+								"description": "Create a board message"
+							},
+							"status": "Bad input format",
+							"code": 400,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getMessage",
+					"id": "568f5e81-c14c-4170-a316-b533263a1cff",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AuthorizationBrand}}",
+								"description": "Brand Authorization key"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{kioskServer}}/board/displayMessage/{{brandId}}/{{messageId}}",
+							"host": [
+								"{{kioskServer}}"
+							],
+							"path": [
+								"board",
+								"displayMessage",
+								"{{brandId}}",
+								"{{messageId}}"
+							]
+						},
+						"description": "get a single message with id"
+					},
+					"response": [
+						{
+							"id": "87690284-5a0e-4747-b352-75ea854512e8",
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{kioskServer}}/board/displayMessage/{{brandId}}/{{messageId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayMessage",
+										"{{brandId}}",
+										"{{messageId}}"
+									]
+								},
+								"description": "get a single message with id"
+							},
+							"status": "single message",
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"disabled": false
+								}
+							],
+							"cookie": [],
+							"body": "{\r\n  \"id\": \"id32\",\r\n  \"message\": \"message18\",\r\n  \"hide\": false,\r\n  \"targetBoards\": [\r\n    \"targetBoards82\"\r\n  ]\r\n}"
+						},
+						{
+							"id": "009efddc-0fc4-4329-aa08-4c369b43d992",
+							"name": "Response_401",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{kioskServer}}/board/displayMessage/{{brandId}}/{{messageId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayMessage",
+										"{{brandId}}",
+										"{{messageId}}"
+									]
+								},
+								"description": "get a single message with id"
+							},
+							"status": "Authorization not provided",
+							"code": 401,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "deleteSingleMessage",
+					"id": "bf317b2d-67c5-4176-9f5d-f2b0881b43df",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AuthorizationBrand}}",
+								"description": "Brand Authorization key"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{kioskServer}}/board/displayMessage/{{brandId}}/{{messageId}}",
+							"host": [
+								"{{kioskServer}}"
+							],
+							"path": [
+								"board",
+								"displayMessage",
+								"{{brandId}}",
+								"{{messageId}}"
+							]
+						},
+						"description": "delete a single message with id"
+					},
+					"response": [
+						{
+							"id": "609fc6bd-474d-4207-8a9e-af67f1640f1e",
+							"name": "Response_204",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{kioskServer}}/board/displayMessage/{{brandId}}/{{messageId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayMessage",
+										"{{brandId}}",
+										"{{messageId}}"
+									]
+								},
+								"description": "delete a single message with id"
+							},
+							"status": "no content answer",
+							"code": 204,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"id": "f071dd5f-41d0-4708-a1a9-1ffe2326d7b0",
+							"name": "Response_401",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{kioskServer}}/board/displayMessage/{{brandId}}/{{messageId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayMessage",
+										"{{brandId}}",
+										"{{messageId}}"
+									]
+								},
+								"description": "delete a single message with id"
+							},
+							"status": "Authorization not provided",
+							"code": 401,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "updateMessage",
+					"id": "0fc28cb0-5863-4b83-8a5c-8291d4ff9ebe",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AuthorizationBrand}}",
+								"description": "Brand Authorization key"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"message\": \"message32\",\r\n  \"hide\": true,\r\n  \"targetBoards\": [\r\n    \"targetBoards13\"\r\n  ]\r\n}"
+						},
+						"url": {
+							"raw": "{{kioskServer}}/board/displayMessage/{{brandId}}/{{messageId}}",
+							"host": [
+								"{{kioskServer}}"
+							],
+							"path": [
+								"board",
+								"displayMessage",
+								"{{brandId}}",
+								"{{messageId}}"
+							]
+						},
+						"description": "update a single message with id"
+					},
+					"response": [
+						{
+							"id": "8789efb8-04d0-49a5-8319-03202e0cc398",
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"message\": \"message32\",\r\n  \"hide\": true,\r\n  \"targetBoards\": [\r\n    \"targetBoards13\"\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "{{kioskServer}}/board/displayMessage/{{brandId}}/{{messageId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayMessage",
+										"{{brandId}}",
+										"{{messageId}}"
+									]
+								},
+								"description": "update a single message with id"
+							},
+							"status": "modified message",
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"disabled": false
+								}
+							],
+							"cookie": [],
+							"body": "{\r\n  \"id\": \"id32\",\r\n  \"message\": \"message18\",\r\n  \"hide\": false,\r\n  \"targetBoards\": [\r\n    \"targetBoards82\"\r\n  ]\r\n}"
+						},
+						{
+							"id": "d1294549-5fc6-4dc3-887f-84881b9a266a",
+							"name": "Response_401",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"message\": \"message32\",\r\n  \"hide\": true,\r\n  \"targetBoards\": [\r\n    \"targetBoards13\"\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "{{kioskServer}}/board/displayMessage/{{brandId}}/{{messageId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayMessage",
+										"{{brandId}}",
+										"{{messageId}}"
+									]
+								},
+								"description": "update a single message with id"
+							},
+							"status": "Authorization not provided",
+							"code": 401,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"id": "db2ef45a-ec76-49f6-960c-2ea7b607ab7a",
+							"name": "Response_400",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"message\": \"message32\",\r\n  \"hide\": true,\r\n  \"targetBoards\": [\r\n    \"targetBoards13\"\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "{{kioskServer}}/board/displayMessage/{{brandId}}/{{messageId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayMessage",
+										"{{brandId}}",
+										"{{messageId}}"
+									]
+								},
+								"description": "update a single message with id"
+							},
+							"status": "Bad input format",
+							"code": 400,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			],
+			"id": "6fe0eb3d-6944-4546-92f8-9f9582fadfd1"
+		},
+		{
+			"name": "Board events",
+			"item": [
+				{
+					"name": "getAllEvents",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e11f3d2c-c0a4-4a9e-8298-e247d26faf23",
+								"exec": [
+									"var responseJson = pm.response.json()\r",
+									"pm.environment.set(\"displayEventId\", responseJson[0].id)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "14831f1e-c8eb-440d-afe9-7bb138cfa61f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AuthorizationBrand}}",
+								"description": "Brand Authorization key"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{kioskServer}}/board/displayEvent/{{brandId}}",
+							"host": [
+								"{{kioskServer}}"
+							],
+							"path": [
+								"board",
+								"displayEvent",
+								"{{brandId}}"
+							]
+						},
+						"description": "get all existing board events"
+					},
+					"response": [
+						{
+							"id": "2a40e205-2d32-4ce2-992c-7ee37730f4fa",
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{kioskServer}}/board/displayEvent/{{brandId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayEvent",
+										"{{brandId}}"
+									]
+								},
+								"description": "get all existing board events"
+							},
+							"status": "All the events",
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"disabled": false
+								}
+							],
+							"cookie": [],
+							"body": "[\r\n  {\r\n    \"idDisplay\": \"idDisplay32\",\r\n    \"status\": \"status18\",\r\n    \"id\": \"id65\",\r\n    \"contentDisplay\": \"contentDisplay33\",\r\n    \"targetBoards\": [\r\n      \"targetBoards11\"\r\n    ]\r\n  }\r\n]"
+						},
+						{
+							"id": "5b1217e2-e773-4525-8423-c79837ece989",
+							"name": "Response_401",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{kioskServer}}/board/displayEvent/{{brandId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayEvent",
+										"{{brandId}}"
+									]
+								},
+								"description": "get all existing board events"
+							},
+							"status": "Authorization not provided",
+							"code": 401,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "createEvent",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6024e2f0-db59-4c4b-8a8e-c66a358f5792",
+								"exec": [
+									"var responseJson = pm.response.json()\r",
+									"pm.environment.set(\"displayEventId\", responseJson.id)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "d346442e-c5ef-4b94-83c1-8ee46a466e39",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AuthorizationBrand}}",
+								"description": "Brand Authorization key"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idDisplay\": \"Patient 028\",\r\n    \"status\": \"arrived\",\r\n    \"contentDisplay\": \"Attendu en salle Echo 1C\",\r\n    \"targetBoards\": [\"123465\"]\r\n}"
+						},
+						"url": {
+							"raw": "{{kioskServer}}/board/displayEvent/{{brandId}}",
+							"host": [
+								"{{kioskServer}}"
+							],
+							"path": [
+								"board",
+								"displayEvent",
+								"{{brandId}}"
+							]
+						},
+						"description": "Create a board event"
+					},
+					"response": [
+						{
+							"id": "c6df3ea9-f4ca-4231-932b-51fe17302699",
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"idDisplay\": \"Patient 028\",\r\n    \"status\": \"arrived\",\r\n    \"contentDisplay\": \"Attendu en salle Echo 1C\",\r\n    \"targetBoards\": [\"123465\"]\r\n}"
+								},
+								"url": {
+									"raw": "{{kioskServer}}/board/displayEvent/{{brandId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayEvent",
+										"{{brandId}}"
+									]
+								},
+								"description": "Create a board event"
+							},
+							"status": "event created",
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"disabled": false
+								}
+							],
+							"cookie": [],
+							"body": "{\r\n  \"idDisplay\": \"idDisplay32\",\r\n  \"status\": \"status18\",\r\n  \"id\": \"id65\",\r\n  \"contentDisplay\": \"contentDisplay33\",\r\n  \"targetBoards\": [\r\n    \"targetBoards11\"\r\n  ]\r\n}"
+						},
+						{
+							"id": "8a14f6bb-57c8-4353-ba6a-021d6f7e11db",
+							"name": "Response_401",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"idDisplay\": \"Patient 028\",\r\n    \"status\": \"arrived\",\r\n    \"contentDisplay\": \"Attendu en salle Echo 1C\",\r\n    \"targetBoards\": [\"123465\"]\r\n}"
+								},
+								"url": {
+									"raw": "{{kioskServer}}/board/displayEvent/{{brandId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayEvent",
+										"{{brandId}}"
+									]
+								},
+								"description": "Create a board event"
+							},
+							"status": "Authorization not provided",
+							"code": 401,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"id": "08910562-206a-4886-a83b-4545f89c5465",
+							"name": "Response_400",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"idDisplay\": \"Patient 028\",\r\n    \"status\": \"arrived\",\r\n    \"contentDisplay\": \"Attendu en salle Echo 1C\",\r\n    \"targetBoards\": [\"123465\"]\r\n}"
+								},
+								"url": {
+									"raw": "{{kioskServer}}/board/displayEvent/{{brandId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayEvent",
+										"{{brandId}}"
+									]
+								},
+								"description": "Create a board event"
+							},
+							"status": "Bad input format",
+							"code": 400,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "deleteAllEvents",
+					"id": "08c53c33-13a8-4817-9a28-007c219c76c5",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AuthorizationBrand}}",
+								"description": "Brand Authorization key"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{kioskServer}}/board/displayEvent/{{brandId}}",
+							"host": [
+								"{{kioskServer}}"
+							],
+							"path": [
+								"board",
+								"displayEvent",
+								"{{brandId}}"
+							]
+						},
+						"description": "delete all events"
+					},
+					"response": [
+						{
+							"id": "c05af136-1015-41e2-a076-5e4e03ada52f",
+							"name": "Response_204",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{kioskServer}}/board/displayEvent/{{brandId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayEvent",
+										"{{brandId}}"
+									]
+								},
+								"description": "delete all events"
+							},
+							"status": "no content answer",
+							"code": 204,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"id": "d493f1a8-d0c9-4ef1-b865-7775c33d48c4",
+							"name": "Response_401",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{kioskServer}}/board/displayEvent/{{brandId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayEvent",
+										"{{brandId}}"
+									]
+								},
+								"description": "delete all events"
+							},
+							"status": "Authorization not provided",
+							"code": 401,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "getEvent",
+					"id": "dff951b0-f944-44c6-af01-ef26a23d2af6",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AuthorizationBrand}}",
+								"description": "Brand Authorization key"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{kioskServer}}/board/displayEvent/{{brandId}}/{{displayEventId}}",
+							"host": [
+								"{{kioskServer}}"
+							],
+							"path": [
+								"board",
+								"displayEvent",
+								"{{brandId}}",
+								"{{displayEventId}}"
+							]
+						},
+						"description": "get a single event with id"
+					},
+					"response": [
+						{
+							"id": "b41bddb1-44cc-4a0e-b167-bc9f974daff1",
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{kioskServer}}/board/displayEvent/{{brandId}}/{{displayEventId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayEvent",
+										"{{brandId}}",
+										"{{displayEventId}}"
+									]
+								},
+								"description": "get a single event with id"
+							},
+							"status": "test",
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"disabled": false
+								}
+							],
+							"cookie": [],
+							"body": "{\r\n  \"idDisplay\": \"idDisplay32\",\r\n  \"status\": \"status18\",\r\n  \"id\": \"id65\",\r\n  \"contentDisplay\": \"contentDisplay33\",\r\n  \"targetBoards\": [\r\n    \"targetBoards11\"\r\n  ]\r\n}"
+						},
+						{
+							"id": "4c4bb731-f45d-4a93-abb6-f2f6d10509ea",
+							"name": "Response_401",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{kioskServer}}/board/displayEvent/{{brandId}}/{{displayEventId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayEvent",
+										"{{brandId}}",
+										"{{displayEventId}}"
+									]
+								},
+								"description": "get a single event with id"
+							},
+							"status": "Authorization not provided",
+							"code": 401,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "deleteEvent",
+					"id": "9b0748eb-433d-496f-8c52-de2c7b9d1f31",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AuthorizationBrand}}",
+								"description": "Brand Authorization key"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{kioskServer}}/board/displayEvent/{{brandId}}/{{displayEventId}}",
+							"host": [
+								"{{kioskServer}}"
+							],
+							"path": [
+								"board",
+								"displayEvent",
+								"{{brandId}}",
+								"{{displayEventId}}"
+							]
+						},
+						"description": "delete a single event with id"
+					},
+					"response": [
+						{
+							"id": "f27372a3-d0dd-4520-9581-fd804862978e",
+							"name": "Response_204",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{kioskServer}}/board/displayEvent/{{brandId}}/{{displayEventId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayEvent",
+										"{{brandId}}",
+										"{{displayEventId}}"
+									]
+								},
+								"description": "delete a single event with id"
+							},
+							"status": "no content answer",
+							"code": 204,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"id": "f5c55443-dc07-4acc-bceb-8744a1d9a1cf",
+							"name": "Response_401",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{kioskServer}}/board/displayEvent/{{brandId}}/{{displayEventId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"board",
+										"displayEvent",
+										"{{brandId}}",
+										"{{displayEventId}}"
+									]
+								},
+								"description": "delete a single event with id"
+							},
+							"status": "Authorization not provided",
+							"code": 401,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "updateEvent",
+					"id": "defc040e-8bf4-4712-9540-601c26e8a6cb",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AuthorizationBrand}}",
+								"description": "Brand Authorization key"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idDisplay\": \"idDisplay32\",\r\n  \"status\": \"status18\",\r\n  \"contentDisplay\": \"contentDisplay65\",\r\n  \"targetBoards\": [\r\n    \"targetBoards33\"\r\n  ]\r\n}"
+						},
+						"url": {
+							"raw": "{{default}}/board/displayEvent/:brandId/:displayEventId",
+							"host": [
+								"{{default}}"
+							],
+							"path": [
+								"board",
+								"displayEvent",
+								":brandId",
+								":displayEventId"
+							],
+							"variable": [
+								{
+									"key": "brandId",
+									"value": "brandId32"
+								},
+								{
+									"key": "displayEventId",
+									"value": "displayEventId32"
+								}
+							]
+						},
+						"description": "update a single event with id"
+					},
+					"response": [
+						{
+							"id": "9f30db62-309e-4656-a2b2-6e3bd34fad20",
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"idDisplay\": \"idDisplay32\",\r\n  \"status\": \"status18\",\r\n  \"contentDisplay\": \"contentDisplay65\",\r\n  \"targetBoards\": [\r\n    \"targetBoards33\"\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "{{default}}/board/displayEvent/:brandId/:displayEventId",
+									"host": [
+										"{{default}}"
+									],
+									"path": [
+										"board",
+										"displayEvent",
+										":brandId",
+										":displayEventId"
+									],
+									"variable": [
+										{
+											"key": "brandId",
+											"value": "brandId32"
+										},
+										{
+											"key": "displayEventId",
+											"value": "displayEventId32"
+										}
+									]
+								},
+								"description": "update a single event with id"
+							},
+							"status": "test",
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"disabled": false
+								}
+							],
+							"cookie": [],
+							"body": "{\r\n  \"idDisplay\": \"idDisplay32\",\r\n  \"status\": \"status18\",\r\n  \"id\": \"id65\",\r\n  \"contentDisplay\": \"contentDisplay33\",\r\n  \"targetBoards\": [\r\n    \"targetBoards11\"\r\n  ]\r\n}"
+						},
+						{
+							"id": "ad2b9273-d7d9-4702-b97d-d4a8565ef79d",
+							"name": "Response_401",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"idDisplay\": \"idDisplay32\",\r\n  \"status\": \"status18\",\r\n  \"contentDisplay\": \"contentDisplay65\",\r\n  \"targetBoards\": [\r\n    \"targetBoards33\"\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "{{default}}/board/displayEvent/:brandId/:displayEventId",
+									"host": [
+										"{{default}}"
+									],
+									"path": [
+										"board",
+										"displayEvent",
+										":brandId",
+										":displayEventId"
+									],
+									"variable": [
+										{
+											"key": "brandId",
+											"value": "brandId32"
+										},
+										{
+											"key": "displayEventId",
+											"value": "displayEventId32"
+										}
+									]
+								},
+								"description": "update a single event with id"
+							},
+							"status": "Authorization not provided",
+							"code": 401,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"id": "0d0f6526-5d64-4b01-8512-aa735c99d577",
+							"name": "Response_400",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationBrand}}",
+										"description": "Brand Authorization key"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"idDisplay\": \"idDisplay32\",\r\n  \"status\": \"status18\",\r\n  \"contentDisplay\": \"contentDisplay65\",\r\n  \"targetBoards\": [\r\n    \"targetBoards33\"\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "{{default}}/board/displayEvent/:brandId/:displayEventId",
+									"host": [
+										"{{default}}"
+									],
+									"path": [
+										"board",
+										"displayEvent",
+										":brandId",
+										":displayEventId"
+									],
+									"variable": [
+										{
+											"key": "brandId",
+											"value": "brandId32"
+										},
+										{
+											"key": "displayEventId",
+											"value": "displayEventId32"
+										}
+									]
+								},
+								"description": "update a single event with id"
+							},
+							"status": "Bad input format",
+							"code": 400,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			],
+			"id": "1fdf427f-2640-4f59-865a-8775d86dfa58"
+		},
+		{
+			"name": "TriggerEvent",
+			"item": [
+				{
+					"name": "changeChromeAddress",
+					"id": "ce701d3e-c8d7-445c-b064-cf680a82a0d5",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AuthorizationProject}}",
+								"description": "Project Authorization key"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"targetUrl\": \"https://google.com\"\r\n}"
+						},
+						"url": {
+							"raw": "{{kioskServer}}/triggerEvent/changeChromeAddressUrl/{{deviceId}}",
+							"host": [
+								"{{kioskServer}}"
+							],
+							"path": [
+								"triggerEvent",
+								"changeChromeAddressUrl",
+								"{{deviceId}}"
+							]
+						},
+						"description": "Change url on the device"
+					},
+					"response": [
+						{
+							"id": "0b57b20f-772f-4513-960d-625b6a3801fa",
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationProject}}",
+										"description": "Project Authorization key"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"targetUrl\": \"https://google.com\"\r\n}"
+								},
+								"url": {
+									"raw": "{{kioskServer}}/triggerEvent/changeChromeAddressUrl/{{deviceId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"triggerEvent",
+										"changeChromeAddressUrl",
+										"{{deviceId}}"
+									]
+								},
+								"description": "Change url on the device"
+							},
+							"status": "successfully changed adress",
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"id": "b7d6ecec-1b9f-4e7d-97f1-245bc80a65f2",
+							"name": "Response_401",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationProject}}",
+										"description": "Project Authorization key"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"targetUrl\": \"https://google.com\"\r\n}"
+								},
+								"url": {
+									"raw": "{{kioskServer}}/triggerEvent/changeChromeAddressUrl/{{deviceId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"triggerEvent",
+										"changeChromeAddressUrl",
+										"{{deviceId}}"
+									]
+								},
+								"description": "Change url on the device"
+							},
+							"status": "Authorization not provided",
+							"code": 401,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "speak",
+					"id": "eeb8a1b3-fedf-46a2-9048-ecd994763711",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AuthorizationProject}}",
+								"description": "Project Authorization key"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"speakText\": \"BONJOUR MONDE\"\r\n}"
+						},
+						"url": {
+							"raw": "{{kioskServer}}/triggerEvent/speak/{{deviceId}}",
+							"host": [
+								"{{kioskServer}}"
+							],
+							"path": [
+								"triggerEvent",
+								"speak",
+								"{{deviceId}}"
+							]
+						},
+						"description": "Make you kisok saying something"
+					},
+					"response": [
+						{
+							"id": "1254e327-45fb-4f5c-9ce2-20effdc242c5",
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationProject}}",
+										"description": "Project Authorization key"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"speakText\": \"BONJOUR MONDE\"\r\n}"
+								},
+								"url": {
+									"raw": "{{kioskServer}}/triggerEvent/speak/{{deviceId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"triggerEvent",
+										"speak",
+										"{{deviceId}}"
+									]
+								},
+								"description": "Make you kisok saying something"
+							},
+							"status": "successfully changed adress",
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"id": "f6b4f06a-19a9-427d-9cf7-67fefecbca76",
+							"name": "Response_401",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationProject}}",
+										"description": "Project Authorization key"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"speakText\": \"BONJOUR MONDE\"\r\n}"
+								},
+								"url": {
+									"raw": "{{kioskServer}}/triggerEvent/speak/{{deviceId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"triggerEvent",
+										"speak",
+										"{{deviceId}}"
+									]
+								},
+								"description": "Make you kisok saying something"
+							},
+							"status": "Authorization not provided",
+							"code": 401,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "printTicket",
+					"id": "b63b3c33-c7bc-4dff-8787-899c391d85d8",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AuthorizationProject}}",
+								"description": "Project Authorization key"
+							},
+							{
+								"key": "Content-Type",
+								"value": "text/plain"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "printer.println('hello world')"
+						},
+						"url": {
+							"raw": "{{kioskServer}}/triggerEvent/printTicket/{{deviceId}}",
+							"host": [
+								"{{kioskServer}}"
+							],
+							"path": [
+								"triggerEvent",
+								"printTicket",
+								"{{deviceId}}"
+							]
+						},
+						"description": "Print a ticket on your configured thermal printer"
+					},
+					"response": [
+						{
+							"id": "9325ee20-eacb-403a-94ed-cc919eb33ab2",
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationProject}}",
+										"description": "Project Authorization key"
+									},
+									{
+										"key": "Content-Type",
+										"value": "text/plain"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "printer.println('hello world')"
+								},
+								"url": {
+									"raw": "{{kioskServer}}/triggerEvent/printTicket/{{deviceId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"triggerEvent",
+										"printTicket",
+										"{{deviceId}}"
+									]
+								},
+								"description": "Print a ticket on your configured thermal printer"
+							},
+							"status": "successfully printed ticket",
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"id": "d4ad79e8-1f69-4578-8762-0b7f1377289f",
+							"name": "Response_401",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationProject}}",
+										"description": "Project Authorization key"
+									},
+									{
+										"key": "Content-Type",
+										"value": "text/plain"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "printer.println('hello world')"
+								},
+								"url": {
+									"raw": "{{kioskServer}}/triggerEvent/printTicket/{{deviceId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"triggerEvent",
+										"printTicket",
+										"{{deviceId}}"
+									]
+								},
+								"description": "Print a ticket on your configured thermal printer"
+							},
+							"status": "Authorization not provided",
+							"code": 401,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "reboot",
+					"id": "30618449-3b61-4acf-b16a-3d117c771aea",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{AuthorizationProject}}",
+								"description": "Project Authorization key"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{kioskServer}}/triggerEvent/reboot/{{deviceId}}",
+							"host": [
+								"{{kioskServer}}"
+							],
+							"path": [
+								"triggerEvent",
+								"reboot",
+								"{{deviceId}}"
+							]
+						},
+						"description": "Reboot your device"
+					},
+					"response": [
+						{
+							"id": "06aa62d2-2a5c-4d09-b8fc-b6b35706f3d9",
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationProject}}",
+										"description": "Project Authorization key"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{kioskServer}}/triggerEvent/reboot/{{deviceId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"triggerEvent",
+										"reboot",
+										"{{deviceId}}"
+									]
+								},
+								"description": "Reboot your device"
+							},
+							"status": "Rebooted",
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"id": "aa9cfd44-ae2a-4e45-bbab-1517541cd8ad",
+							"name": "Response_401",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{AuthorizationProject}}",
+										"description": "Project Authorization key"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{kioskServer}}/triggerEvent/reboot/{{deviceId}}",
+									"host": [
+										"{{kioskServer}}"
+									],
+									"path": [
+										"triggerEvent",
+										"reboot",
+										"{{deviceId}}"
+									]
+								},
+								"description": "Reboot your device"
+							},
+							"status": "Authorization not provided",
+							"code": 401,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			],
+			"id": "d1a171d0-2c91-4001-8deb-2262186b50da"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "d3424074-ac06-4ab4-a60f-a7b8ef7bca3a",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "effd4054-ef51-4f8c-9942-8feab354bc0e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "2b71774a-453b-4029-a226-4e33677a1266",
+			"key": "kioskServer",
+			"value": "https://us-central1-totemsystem-5889b.cloudfunctions.net"
+		},
+		{
+			"id": "e198976f-4848-4255-be39-ba3292046c68",
+			"key": "brandId",
+			"value": "[YOUR_BRAND_ID]",
+			"type": "string"
+		},
+		{
+			"id": "061edbcd-4c5b-4bf6-bf45-75763241d4d3",
+			"key": "AuthorizationBrand",
+			"value": "[YOUR_BRAND_KEY]",
+			"type": "string"
+		},
+		{
+			"id": "41630f30-f425-4018-bb2a-dba9bdac3d61",
+			"key": "AuthorizationProject",
+			"value": "[YOUR_PROJECT_KEY]",
+			"type": "string"
+		},
+		{
+			"id": "a10e77e6-787d-45ab-a117-aeb6f547ebac",
+			"key": "deviceId",
+			"value": "[YOUR_DEVICE_ID]",
+			"type": "string"
+		}
+	]
+}
