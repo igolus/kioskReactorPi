@@ -15,4 +15,3 @@ files[] = {"path":"igolus-KioskReactor-1.2.0-resolved (6).yaml","metaData":{}}
 
 [relations.apiDefinition.metaData]
 type = openapi:3
-rootFiles[] = igolus-KioskReactor-1.2.0-resolved (6).yaml
