@@ -4,7 +4,7 @@ const {exec} = require("child_process");
 function execDeploy(url, callBack) {
     const command = "sudo rm -rf /var/www/html/* && wget \"" + url+ "\" -O siteContent.zip && " +
         "sudo unzip siteContent.zip -d /var/www/html && rm siteContent.zip && " +
-        "wget https://raw.githubusercontent.com/igolus/rocketKioskPi/master/programs/rocketKioskUtil.js &&" +
+        "wget https://raw.githubusercontent.com/igolus/rocketKioskPi/master/programs/kioskReactorUtil.js &&" +
         "cp kioskReactorUtil.js /var/www/html"
     try {
         exec(command, (error, stdout, stderr) => {
