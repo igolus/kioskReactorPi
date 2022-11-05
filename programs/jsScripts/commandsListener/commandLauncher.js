@@ -162,7 +162,7 @@ function onEvent(dataJSON, ws, device, project) {
     const deployWebSite = getDeployWebSiteCommand(dataJSON);
     if (deployWebSite) {
         chromeNavigate(deploySiteUrl);
-        deployWebSiteCommand (project, chromeNavigateHome);
+        deployWebSiteCommand (project, device, chromeNavigateHome);
         chromeNavigateHome(project);
     }
 

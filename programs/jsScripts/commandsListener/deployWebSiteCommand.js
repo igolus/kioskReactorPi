@@ -1,10 +1,10 @@
 const {loggerCommand} = require("../util/loggerUtil");
 const {exec} = require("child_process");
 
-function execDeploy(url, callBack) {
+function execDeploy(url, device, callBack) {
     const command = "sudo rm -rf /var/www/html/* && wget \"" + url+ "\" -O siteContent.zip && " +
         "sudo unzip siteContent.zip -d /var/www/html && rm siteContent.zip && " +
-        "wget https://raw.githubusercontent.com/igolus/rocketKioskPi/master/programs/kioskReactorUtil.js &&" +
+        "wget https://us-central1-totemsystem-5889b.cloudfunctions.net/homePage/kioskReactorJs/" + device.id + " &&" +
         "cp kioskReactorUtil.js /var/www/html"
     try {
         exec(command, (error, stdout, stderr) => {
@@ -24,12 +24,12 @@ function execDeploy(url, callBack) {
     }
 }
 
-function deployWebSiteCommand (project, chromeNavigate) {
+function deployWebSiteCommand (project, device, chromeNavigate) {
     try {
         if (!project.webSiteZipPubliUrl) {
             return;
         }
-        execDeploy(project.webSiteZipPubliUrl,() => chromeNavigate(project));
+        execDeploy(project.webSiteZipPubliUrl,device, () => chromeNavigate(project));
     }
     catch (err) {
         loggerCommand.error(err);
