@@ -6,7 +6,7 @@ const axios = require('axios');
 const {loggerWs} = require("../util/loggerUtil");
 const {getCurrentDevice} = require("../dbUtil/deviceUtil");
 const {getCurrentProject} = require("../dbUtil/projectUtil");
-const {eventTypeQrCode, eventTypeSnapReady, eventTypeInactivity} = require("./eventTypes");
+const {eventTypeQrCode, eventTypeSnapReady, eventTypeInactivity, eventTypePaymentDone} = require("./eventTypes");
 const {commandTypeReboot, commandTypeOpenUrl, commandTypeUpdate,
     commandTypePrintTicket, commandTypeSpeak, internalCommandTypePlayMp3, internalCommandTypeSnap,
     internalCommandTypeCancelSnap, internalCommandTypeInactivity, commandTypeDeployWebSite
@@ -21,11 +21,12 @@ getCurrentDevice().then(device => {
     listenToEvents(device.id, (event) => {
         //checkData(dataJson)
         if (checkData(event)) {
+            broadCastMessage(wsSocket, event)
             triggerWebHook(wsSocket, event, currentProject.webHookEventUrl)
         }
     })
-    listenToCommands(device.id, (event) => {
-        broadCastMessage(wsSocket, event);
+    listenToCommands(device.id, (command) => {
+        broadCastMessage(wsSocket, command);
     })
 })
 
@@ -40,7 +41,7 @@ const noParamCommands = [commandTypeReboot, internalCommandTypeInactivity,
 
 const noParamEvents = [eventTypeInactivity]
 
-const allEvents = [eventTypeQrCode, eventTypeSnapReady, eventTypeInactivity]
+const allEvents = [eventTypeQrCode, eventTypeSnapReady, eventTypeInactivity, eventTypePaymentDone]
 let device;
 let currentProject;
 
