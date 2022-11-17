@@ -6,10 +6,15 @@ const {eventTypeSnapReady, buildEventJson} = require("../webSocket/eventTypes");
 const storage = new Storage({
     keyFilename: "../../../conf/myReactorKioskUser.json",
 });
-
-const storageBucket = storage.bucket(config.bucketName);
+let storageBucket;
+if (config.bucketName) {
+    storageBucket = storage.bucket(config.bucketName);
+}
 
 const uploadSnap = (ws, device, dataJSON) => {
+    if (!storageBucket) {
+        return;
+    }
     let destination = "devices/" + device.id + "/photos/" + uuidv4() + ".jpg";
     const options = {
         destination: destination,
