@@ -89,6 +89,26 @@ def toggle_tty_echo(fh, enable=True):
         flags[3] &= ~termios.ECHO
     termios.tcsetattr(fh.fileno(), termios.TCSANOW, flags)
 
+def on_message(ws, message):
+    global lastCheck
+    print(message)
+    event = json.loads(message)
+    eventType = event.get('eventType')
+    if eventType is not None:
+      lastCheck = time.time()
+
+def checkEvent():
+    init = False
+    websocket.enableTrace(True)
+    while not init:
+        try:
+            ws = websocket.WebSocketApp("ws://localhost:8080",
+                                        on_message=on_message)
+            ws.run_forever()  # Set dispatcher to automatic reconnection
+            init = True;
+        except:
+            print("Cannot connect to web socket !!")
+        time.sleep(3)
 
 if __name__ == '__main__':
     try:
