@@ -3,6 +3,9 @@ const {buildEventJson, eventTypeSnapReady, eventTypeInactivity} = require("../we
 
 function inactivityCommand (project, ws, chromeNavigate) {
     if (project.useInactivityTouchScreen) {
+        if (project.inactivityTouchScreenAction === constants.SEND_EVENT_ACTION) {
+            return;
+        }
         if (project.inactivityTouchScreenAction === constants.GO_TO_HOME_PAGE_ACTION) {
             chromeNavigate(project.homePageUrl)
         }
