@@ -11,6 +11,7 @@ import time
 import threading
 import commod
 import asyncio
+import websocket
 
 try:
     input = raw_input
@@ -37,6 +38,7 @@ if durationInactivityTouchScreen is None:
 if mouseDevice is None:
     mouseDevice = "/dev/input/event3"
 
+
 def triggerInactivity():
     global lastCheck
     global loop
@@ -49,7 +51,7 @@ def triggerInactivity():
 def checkInactivity():
     now = time.time()
     diff = now - lastCheck
-    #print(diff)
+    # print(diff)
     if diff >= durationInactivityTouchScreen:
         triggerInactivity()
     threading.Timer(3, checkInactivity).start()
@@ -58,13 +60,8 @@ def checkInactivity():
 def main():
     global lastCheck
     checkInactivity()
-    devices = [InputDevice(mouseDevice)]
-
-    print(str(devices))
-    if not devices:
-        devices = select_devices()
-    else:
-        devices = [InputDevice(path) for path in devices]
+    devices = sorted(list_devices('/dev/input'))
+    devices = [InputDevice(path) for path in devices]
 
     if sys.stdin.isatty():
         toggle_tty_echo(sys.stdin, enable=False)
@@ -78,7 +75,7 @@ def main():
         for fd in r:
             for event in fd_to_device[fd].read():
                 lastCheck = time.time()
-                #print(event)
+                # print(event)
 
 
 def toggle_tty_echo(fh, enable=True):
@@ -89,13 +86,15 @@ def toggle_tty_echo(fh, enable=True):
         flags[3] &= ~termios.ECHO
     termios.tcsetattr(fh.fileno(), termios.TCSANOW, flags)
 
+
 def on_message(ws, message):
     global lastCheck
     print(message)
     event = json.loads(message)
     eventType = event.get('eventType')
     if eventType is not None:
-      lastCheck = time.time()
+        lastCheck = time.time()
+
 
 def checkEvent():
     init = False
@@ -104,14 +103,19 @@ def checkEvent():
         try:
             ws = websocket.WebSocketApp("ws://localhost:8080",
                                         on_message=on_message)
-            ws.run_forever()  # Set dispatcher to automatic reconnection
+            wst = threading.Thread(target=ws.run_forever)
+            wst.daemon = True
+            wst.start()
             init = True;
         except:
             print("Cannot connect to web socket !!")
         time.sleep(3)
 
+
 if __name__ == '__main__':
     try:
+        checkEvent();
+
         ret = main()
     except (KeyboardInterrupt, EOFError):
         ret = 0
