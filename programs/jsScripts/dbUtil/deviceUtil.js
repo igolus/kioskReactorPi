@@ -3,14 +3,18 @@ const { devicesCollection, billingCollection, brandsCollection, versionCollectio
 const config = require('../../../conf/config.json');
 const moment = require("moment");
 
-const createDeviceIdDb = async (deviceId) => {
+const createDeviceIdDb = async (deviceId, lite) => {
     const item = await fireBaseDb
         .collection(devicesCollection)
         .doc(deviceId);
-    await item.set({
+    let data = {
         deviceId: deviceId,
         version: "1.0.0"
-    });
+    };
+    if (lite) {
+        data.lite = true;
+    }
+    await item.set(data);
 }
 
 const getCurrentDevice = async () => {

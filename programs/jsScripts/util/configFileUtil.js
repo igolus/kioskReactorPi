@@ -17,7 +17,7 @@ const writeConfig = (configJson) => {
     fs.writeFileSync(confFileSource, JSON.stringify(configJson, null, 2), 'utf8');
 }
 
-const writeDeviceAndProjectConfig = async (deviceId) => {
+const writeDeviceAndProjectConfig = async (deviceId, isLite) => {
     const device = await getDevice(deviceId)
     const project = await getCurrentProject(device)
     fs.writeFileSync(deviceFileSource, JSON.stringify(device, null, 2), 'utf8');

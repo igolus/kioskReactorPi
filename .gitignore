@@ -31,4 +31,4 @@ yarn-error.log*
 /programs/jsScripts/commandsListener/.env
 /programs/jsScripts/util/.env
 /programs/jsScripts/webSocket/.env
-
+/conf/config.json

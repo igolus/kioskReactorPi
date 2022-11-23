@@ -2,13 +2,17 @@ const { readConfig, writeConfig, writeDeviceAndProjectConfig} = require("../util
 const shortid = require('shortid');
 const {createDeviceIdDb} = require("../dbUtil/deviceUtil");
 let conf = readConfig();
+const myArgs = process.argv.slice(2);
+let isLite = myArgs[0].toLowerCase() === 'lite';
 
 (async () => {
+
     if (!conf.deviceId) {
         conf.deviceId = shortid.generate();
         writeConfig(conf);
-        await createDeviceIdDb(conf.deviceId);
+
+        await createDeviceIdDb(conf.deviceId, myArgs.length > 0 && isLite);
     }
-    await writeDeviceAndProjectConfig(conf.deviceId);
+    await writeDeviceAndProjectConfig(conf.deviceId, isLite);
     process.exit()
 })();

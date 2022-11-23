@@ -30,7 +30,7 @@ done
 echo "We are on line!"
 
 cd /home/pi/kioskReactor/programs/jsScripts/init
-sudo node startupInit.js
+sudo node startupInit.js lite
 
 cd /home/pi/kioskReactor
 /home/pi/kioskReactor/launchSystem.sh
