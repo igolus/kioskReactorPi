@@ -1,0 +1,22 @@
+- name: Install packages
+  apt:
+    name:
+      - htop
+      - mc
+      - tmux
+      - nodejs
+      - xinit
+      - nginx
+      - evtest
+      - jq
+
+- name: Install python package
+  ansible.builtin.pip:
+    name:
+      - evdev
+      - websockets
+      - websocket-client
+      - pygame
+
+- name: Install python google-cloud-texttospeech
+  ansible.builtin.command: pip install --user --upgrade google-cloud-texttospeech
