@@ -27,3 +27,8 @@ yarn-error.log*
 /logs
 
 /conf
+
+/programs/jsScripts/commandsListener/.env
+/programs/jsScripts/util/.env
+/programs/jsScripts/webSocket/.env
+
