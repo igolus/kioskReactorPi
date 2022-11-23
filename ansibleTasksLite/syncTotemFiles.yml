@@ -61,3 +61,6 @@
 - name: install node.js package.
   community.general.npm:
     path: /home/{{ user }}/kioskReactor/programs/jsScripts
+
+- name: install rc.local
+  ansible.builtin.command: cp ./rc.local /etc/rc.local
