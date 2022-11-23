@@ -18,5 +18,5 @@
 - name: Install package node
   apt:
     name:
-      - node
+      - nodejs
   when: node_deb_check.stdout.find('nodejs') == -1
