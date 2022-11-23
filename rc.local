@@ -10,7 +10,6 @@
 # bits.
 #
 # By default this script does nothing.
-# TEST CHANGE
 
 # Print the IP address
 _IP=$(hostname -I) || true
@@ -29,6 +28,9 @@ do
    fi
 done
 echo "We are on line!"
+
+cd /home/pi/kioskReactor/programs/jsScripts/init
+sudo node startupInit.js
 
 cd /home/pi/kioskReactor
 /home/pi/kioskReactor/launchSystem.sh

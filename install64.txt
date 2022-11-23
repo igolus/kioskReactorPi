@@ -30,6 +30,8 @@ cp /home/pi/.ssh/* /root/.ssh
 sudo ansible-pull --extra-vars "user=pi" -U ssh://git@github.com:/igolus/totemSystemWeb.git
 sudo ansible-pull --extra-vars "user=pi" -v -U https://github.com/igolus/rocketKioskPi.git
 sudo ansible-pull --extra-vars "user=pi" -U https://github.com/igolus/rocketKioskPi.git
+-- LITE
+sudo ansible-pull --extra-vars "user=pi" -U https://github.com/igolus/rocketKioskPi.git local-lite.yml
 
 -- SPI
 git clone https://github.com/Freenove/SPI-Py

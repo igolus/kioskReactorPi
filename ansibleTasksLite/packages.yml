@@ -17,6 +17,7 @@
       - websockets
       - websocket-client
       - pygame
+      - picamera
 
 - name: Install python google-cloud-texttospeech
   ansible.builtin.command: pip install --user --upgrade google-cloud-texttospeech
