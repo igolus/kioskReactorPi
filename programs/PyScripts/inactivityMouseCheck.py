@@ -27,8 +27,11 @@ with open('../../conf/device.json') as f:
 
 mouseDevice = device.get('mouseSystemDevPath')
 
-with open('../../conf/project.json') as f:
-    projectConf = json.load(f);
+try:
+    with open('../../conf/project.json') as f:
+        projectConf = json.load(f)
+except:
+  print("No Project conf")
 
 durationInactivityTouchScreen = projectConf.get('mouseSystemDevPath')
 
