@@ -3,7 +3,7 @@ const shortid = require('shortid');
 const {createDeviceIdDb} = require("../dbUtil/deviceUtil");
 let conf = readConfig();
 const myArgs = process.argv.slice(2);
-let isLite = myArgs[0].toLowerCase() === 'lite';
+let isLite = myArgs.length > 0 && myArgs[0].toLowerCase() === 'lite';
 
 (async () => {
 
