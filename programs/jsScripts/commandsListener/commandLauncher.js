@@ -128,7 +128,7 @@ function printTicket(ticketSourceCode) {
 function onEvent(dataJSON, ws, device, project) {
     loggerCommand.info("data JSON " + JSON.stringify(dataJSON))
     let openUrl = getOpenUrlCommand(dataJSON);
-    if (openUrl) {
+    if (openUrl && !device.lite) {
         chromeNavigate(openUrl);
     }
     const reboot = geRebootCommand(dataJSON);
@@ -145,12 +145,12 @@ function onEvent(dataJSON, ws, device, project) {
     }
 
     const snap = getSnapCommand(dataJSON);
-    if (snap) {
+    if (snap && !device.lite) {
         uploadSnap(ws, device, dataJSON);
     }
 
     const cancelSnap = getCancelSnapCommand(dataJSON);
-    if (cancelSnap) {
+    if (cancelSnap && !device.lite) {
         chromeNavigateBack(project)
     }
 
