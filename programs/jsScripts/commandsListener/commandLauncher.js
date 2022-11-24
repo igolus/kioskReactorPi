@@ -174,6 +174,8 @@ function onEvent(dataJSON, ws, device, project) {
     }
 }
 
+console.log("START")
+
 if (process.argv.length > 2 && process.argv[2] === "local") {
     (async () => {
         device = await getCurrentDevice();
@@ -186,25 +188,31 @@ else {
         let init = false;
         device = await getCurrentDevice();
         project = await getCurrentProject(device);
-        while (!init) {
-            try {
-                const resChrome = await axios.get(localChromeDebuggerServerJsonCheck);
-                const data = resChrome.data;
-                if (data.length > 0) {
-                    const firstTab = data[0];
-                    const wsUrl = firstTab.webSocketDebuggerUrl;
-                    wsChromeSocket = new WebSocket(wsUrl);
-                    loggerCommand.info("wsChromeSocket opened " + wsUrl)
-                    init = true;
-                    await startSeverAndConfigureListening(onEvent, device, project);
-                } else {
-                    loggerCommand.info("No tabs open " + resp.data)
+        console.log(JSON.stringify(device))
+        if (device.lite) {
+            await startSeverAndConfigureListening(onEvent, device, project);
+        }
+        else {
+            while (!init) {
+                try {
+                    const resChrome = await axios.get(localChromeDebuggerServerJsonCheck);
+                    const data = resChrome.data;
+                    if (data.length > 0) {
+                        const firstTab = data[0];
+                        const wsUrl = firstTab.webSocketDebuggerUrl;
+                        wsChromeSocket = new WebSocket(wsUrl);
+                        loggerCommand.info("wsChromeSocket opened " + wsUrl)
+                        init = true;
+                        await startSeverAndConfigureListening(onEvent, device, project);
+                    } else {
+                        loggerCommand.info("No tabs open " + resp.data)
+                    }
+                } catch (err) {
+                    loggerCommand.info("Unable to communicate with chrome", err);
+                    //return;
                 }
-            } catch (err) {
-                loggerCommand.info("Unable to communicate with chrome", err);
-                //return;
+                await delay(1000)
             }
-            await delay(1000)
         }
 
     })();
