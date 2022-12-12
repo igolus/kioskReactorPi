@@ -3,12 +3,13 @@ const { v4: uuidv4 } = require('uuid');
 const config = require('../../../conf/config.json')
 const {eventTypeSnapReady, buildEventJson} = require("../webSocket/eventTypes");
 const {loggerCommand} = require("../util/loggerUtil");
-const storage = new Storage({
-    keyFilename: "../../../conf/myReactorKioskUser.json",
-});
+
 let storageBucket;
 if (config.bucketName) {
     try {
+        const storage = new Storage({
+            keyFilename: "../../../conf/myReactorKioskUser.json",
+        });
         storageBucket = storage.bucket(config.bucketName);
     }
     catch (err) {
