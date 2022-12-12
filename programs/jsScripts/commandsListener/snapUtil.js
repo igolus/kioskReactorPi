@@ -2,13 +2,18 @@ const { Storage } = require("@google-cloud/storage");
 const { v4: uuidv4 } = require('uuid');
 const config = require('../../../conf/config.json')
 const {eventTypeSnapReady, buildEventJson} = require("../webSocket/eventTypes");
-
+const {loggerCommand} = require("../util/loggerUtil");
 const storage = new Storage({
     keyFilename: "../../../conf/myReactorKioskUser.json",
 });
 let storageBucket;
 if (config.bucketName) {
-    storageBucket = storage.bucket(config.bucketName);
+    try {
+        storageBucket = storage.bucket(config.bucketName);
+    }
+    catch (err) {
+        loggerCommand.error("no bucket configured")
+    }
 }
 
 const uploadSnap = (ws, device, dataJSON) => {

@@ -127,17 +127,25 @@ wsSocket.on('connection', function connection(ws) {
             goodMessage = false;
         }
         if (goodMessage) {
-            let typeCommand = dataJson.commandType;
-            let typeEvent = dataJson.eventType;
+            try {
+                let typeCommand = dataJson.commandType;
+                let typeEvent = dataJson.eventType;
 
-            if (typeCommand) {
-                loggerWs.info("BroadCast event ")
-                broadCastMessage(ws, dataJson, isBinary);
+                if (typeCommand) {
+                    loggerWs.info("BroadCast event ")
+                    broadCastMessage(ws, dataJson, isBinary);
+                } else if (typeEvent) {
+                    loggerWs.info("Trigger webhook")
+                    broadCastMessage(ws, dataJson, isBinary)
+                    if (currentProject && currentProject.webHookEventUrl && currentProject.webHookEventUrl != "") {
+                        triggerWebHook(ws, dataJson, currentProject.webHookEventUrl)
+                    }
+
+                }
             }
-            else if(typeEvent) {
-                loggerWs.info("Trigger webhook")
-                broadCastMessage(ws, dataJson, isBinary)
-                triggerWebHook(ws, dataJson, currentProject.webHookEventUrl)
+            catch (err)
+            {
+                loggerWs.error(err);
             }
         }
 
