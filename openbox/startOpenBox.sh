@@ -22,7 +22,7 @@ screenSize=`jq '.screenSize' /home/pi/kioskReactor/conf/device.json | tr -d '"'`
 if [ screenSize == "null" ]; then
   screenSize="1360,768"
 fi
-sudo nano /etc/modules
+
 #DISPLAY=:0 xrandr --output HDMI-1 --rotate right
 #DISPLAY=:0 xinput set-prop 'Windows pointer' "Coordinate Transformation Matrix" 0.000000, 1.000000, 0.000000, -1.000000, 0.000000, 1.000000, 0.000000, 0.000000, 1.000000
 
