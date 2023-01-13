@@ -47,7 +47,7 @@ launchSystem() {
 }
 
 
-if [ $credit == "null" -a $blockWhenInsufficientCredit == "true"]; then
+if [ $credit == "null" -o $blockWhenInsufficientCredit == "false"]; then
 	url=https://us-central1-totemsystem-5889b.cloudfunctions.net/homePage/$deviceId
 	launchBrowser
 	launchSystem
