@@ -51,7 +51,7 @@ async def main():
     if dev is None:
         print('No barcode device found')
         sys.exit()
-        
+
     signal.signal(signal.SIGINT, signal_handler)
     dev.grab()
 
@@ -67,9 +67,9 @@ async def main():
                     print("key_lookup " + key_lookup)
                     if data.scancode == 28: # if enter detected print barcode value and then clear it
                         print("Trigger bar code " + barcode)
+                        barcode = barcode.replace("LCTRLJ", "")
+                        print("Trigger bar code corrected" + barcode)
                         await commod.triggerQrCode(barcode)
-
-
                         barcode = ""
                     else:
                         barcode += key_lookup # append character to barcode string

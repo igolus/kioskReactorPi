@@ -17,10 +17,14 @@ sudo node startupInit.js
 deviceId=`jq '.deviceId' /home/pi/kioskReactor/conf/config.json | tr -d '"'`
 minimalCreditToLock=`jq '.minimalCreditToLock' /home/pi/kioskReactor/conf/brand.json | tr -d '"'`
 credit=`jq '.credit' /home/pi/kioskReactor/conf/brand.json | tr -d '"'`
+blockWhenInsufficientCredit=`jq '.blockWhenInsufficientCredit' /home/pi/kioskReactor/conf/brand.json | tr -d '"'`
 screenSize=`jq '.screenSize' /home/pi/kioskReactor/conf/device.json | tr -d '"'`
 if [ screenSize == "null" ]; then
   screenSize="1360,768"
 fi
+sudo nano /etc/modules
+#DISPLAY=:0 xrandr --output HDMI-1 --rotate right
+#DISPLAY=:0 xinput set-prop 'Windows pointer' "Coordinate Transformation Matrix" 0.000000, 1.000000, 0.000000, -1.000000, 0.000000, 1.000000, 0.000000, 0.000000, 1.000000
 
 echo $url
 echo $minimalCreditToLock
@@ -43,7 +47,7 @@ launchSystem() {
 }
 
 
-if [ $credit == "null" ]; then
+if [ $credit == "null" -a $blockWhenInsufficientCredit == "true"]; then
 	url=https://us-central1-totemsystem-5889b.cloudfunctions.net/homePage/$deviceId
 	launchBrowser
 	launchSystem

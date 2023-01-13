@@ -33,7 +33,7 @@ try:
 except:
   print("No Project conf")
 
-durationInactivityTouchScreen = projectConf.get('mouseSystemDevPath')
+durationInactivityTouchScreen = projectConf.get('durationInactivityTouchScreen')
 
 if durationInactivityTouchScreen is None:
     durationInactivityTouchScreen = 120
@@ -78,7 +78,7 @@ def main():
         for fd in r:
             for event in fd_to_device[fd].read():
                 lastCheck = time.time()
-                # print(event)
+                #print(event)
 
 
 def toggle_tty_echo(fh, enable=True):
