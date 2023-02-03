@@ -7,5 +7,4 @@
 
 
   tasks:
-    - include: ansibleTasksLite/packages.yml
     - include: ansibleTasksLite/syncTotemFiles.yml
