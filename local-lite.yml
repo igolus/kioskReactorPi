@@ -4,9 +4,8 @@
     - name: update repository
       apt:
         update_cache: yes
-    
-  
+
+
   tasks:
-    - include: ansibleTasks/node.yml
     - include: ansibleTasksLite/packages.yml
     - include: ansibleTasksLite/syncTotemFiles.yml
