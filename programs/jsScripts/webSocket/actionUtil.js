@@ -26,10 +26,26 @@ function geRebootCommand(input) {
 }
 
 function getTicketCommand(input) {
-    if (input && input.commandType && input.commandType.toLowerCase() === commandTypePrintTicket) {
+    if (input && input.commandType && !input.commandContext && input.commandType.toLowerCase() === commandTypePrintTicket) {
         try {
             let decode = base64.decode(input.commandParam);
             return decode;
+        }
+        catch (err) {
+            return null;
+        }
+    }
+    return null;
+}
+
+function getTicketCommandTargetIp(input) {
+    if (input && input.commandType && input.commandContext && input.commandType.toLowerCase() === commandTypePrintTicket) {
+        try {
+            let decode = base64.decode(input.commandParam);
+            return {
+                source: decode,
+                ip: input.commandContext
+            };
         }
         catch (err) {
             return null;
@@ -80,6 +96,7 @@ module.exports = {
     geRebootCommand: geRebootCommand,
     getUpdateCommand: getUpdateCommand,
     getTicketCommand: getTicketCommand,
+    getTicketCommandTargetIp: getTicketCommandTargetIp,
     getSpeakCommand: getSpeakCommand,
     getSnapCommand: getSnapCommand,
     getCancelSnapCommand: getCancelSnapCommand,

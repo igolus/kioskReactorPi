@@ -19,6 +19,8 @@ wait-for-url() {
 
 cd /home/pi/kioskReactor/programs/jsScripts/webSocket
 sudo node wsServer.js &
+cd /home/pi/kioskReactor/programs/jsScripts/serverService
+sudo node services.js &
 cd /home/pi/kioskReactor/programs/jsScripts/commandsListener
 sudo node commandLauncher.js &
 cd /home/pi/kioskReactor/programs/PyScripts

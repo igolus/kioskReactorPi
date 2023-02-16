@@ -93,11 +93,54 @@ screen
 --window-size=1360,768
 
 --rotation
-cd /usr/share/X11/xorg.conf.d
-sudo nano 40-libinput.conf
+cd /usr/share/X11/xorg.conf.d/40-libinput.conf
+sudo nano /usr/share/X11/xorg.conf.d/40-libinput.conf
 
+MAKEN
 90° = Option "TransformationMatrix" "0 1 0 -1 0 1 0 0 1"
+
 180° = Option "TransformationMatrix" "-1 0 1 0 -1 1 0 0 1"
 270° = Option "TransformationMatrix" "0 -1 1 1 0 0 0 0 1"
 
 --> touchscreen catchball
+
+--PHP
+sudo wget -q https://packages.sury.org/php/apt.gpg -O- | apt-key add -
+echo "deb https://packages.sury.org/php/ buster main" > /etc/apt/sources.list.d/php.list
+wget https://github.com/harmon25/Raspcontrol/zipball/master
+mv harmon25-raspcontrol-a6da261/ raspcontrol
+sudo mv raspcontrol /var/www/
+
+sudo mkdir /etc/raspcontrol
+sudo touch /etc/raspcontrol/database.aptmnt
+sudo nano /etc/raspcontrol/database.aptmnt
+---
+{
+"user":"admin",
+"password":"admin"
+}
+---
+
+sudo usermod -a -G video www-data
+sudo nano /etc/nginx/sites-enabled/default
+
+sudo nano /etc/nginx/sites-enabled/default
+AJOUTEZ APRÈS LES LIGNES :
+location / {
+    root   /var/www;
+    index  index.php index.html index.htm;
+LES LIGNES SUIVANTES :
+    rewrite ^/raspcontrol/details$ /raspcontrol/index.php?page=details last;
+    rewrite ^/raspcontrol/logout$ /raspcontrol/login.php?logout last;
+CE QUI DOIT MAINTENANT VOUS DONNER :
+location / {
+    root   /var/www;
+    index  index.php index.html index.htm;
+    rewrite ^/raspcontrol/details$ /raspcontrol/index.php?page=details last;
+    rewrite ^/raspcontrol/logout$ /raspcontrol/login.php?logout last;
+ON RELANCE LE SERVEUR NGINX :
+sudo service nginx reload
+
+
+sudo apt install php-fpm
+http://192.168.1.19/raspcontrol/index.php

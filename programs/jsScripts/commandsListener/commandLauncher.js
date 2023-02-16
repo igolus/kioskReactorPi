@@ -4,7 +4,8 @@ const axios = require('axios')
 const {loggerCommand} = require("../util/loggerUtil");
 const {getOpenUrlCommand, geRebootCommand,
     getUpdateCommand, getTicketCommand,
-    getSpeakCommand, getSnapCommand, getCancelSnapCommand, getInactivityCommand, getDeployWebSiteCommand
+    getSpeakCommand, getSnapCommand, getCancelSnapCommand, getInactivityCommand, getDeployWebSiteCommand,
+    getTicketCommandTargetIp
 } = require("../webSocket/actionUtil");
 const {exec, spawn} = require("child_process");
 const {getCurrentDevice} = require("../dbUtil/deviceUtil");
@@ -124,6 +125,14 @@ function printTicket(ticketSourceCode) {
     execPrintTicket(device.localPrinterIp, ticketSourceCode);
 }
 
+function printTicketTargetIp(ticketWithIpTarget) {
+    // source: decode,
+    //     ip: input.commandContext
+
+    loggerCommand.info(`print Ticket !! on ip ` + ticketWithIpTarget.ip);
+    execPrintTicket(ticketWithIpTarget.ip, ticketWithIpTarget.source);
+}
+
 
 function onEvent(dataJSON, ws, device, project) {
     loggerCommand.info("data JSON " + JSON.stringify(dataJSON))
@@ -142,6 +151,11 @@ function onEvent(dataJSON, ws, device, project) {
     const ticketSourceCode = getTicketCommand(dataJSON);
     if (ticketSourceCode) {
         printTicket(ticketSourceCode);
+    }
+
+    const ticketWithIpTarget = getTicketCommandTargetIp(dataJSON);
+    if (ticketWithIpTarget) {
+        printTicketTargetIp(ticketWithIpTarget);
     }
 
     const snap = getSnapCommand(dataJSON);
