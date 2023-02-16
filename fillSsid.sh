@@ -23,13 +23,13 @@ deleteBlock() {
 }
 
 
-lineStart=`grep -n "#KIOSK" testFile.conf | head -n 1 | cut -d: -f1`
+lineStart=`grep -n "#KIOSK" ${fileName} | head -n 1 | cut -d: -f1`
 if [ -z $lineStart ]
 then
   lineStart=0
 fi
 
-lineEnd=`grep -n "#ENDKIOSK" testFile.conf | head -n 1 | cut -d: -f1`
+lineEnd=`grep -n "#ENDKIOSK" ${fileName} | head -n 1 | cut -d: -f1`
 if [ -z $lineEnd ]
 then
   lineEnd=0
