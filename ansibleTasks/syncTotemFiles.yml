@@ -21,7 +21,6 @@
 
 - name: Copy script files launchSystem.sh
   ansible.builtin.command: cp launchSystem.sh /home/{{ user }}/kioskReactor
-  when: files_in_kioskReactor.stdout.find('launchSystem.sh') == -1
 
 - name: make launchSystem.sh executable
   ansible.builtin.file:

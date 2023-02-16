@@ -5,54 +5,23 @@ pass=$2
 
 fileName="/etc/wpa_supplicant/wpa_supplicant.conf"
 tempFile="/home/pi/temp_wpa_supplicant.conf"
-echo "" > $tempFile
+#echo "" > $tempFile
 
-appendNew () {
-  echo "" >>   $tempFile
-  echo "#KIOSK" >> $tempFile
-  echo "network={" >> $tempFile
-  echo "  ssid=\"${ssid}\"" >> $tempFile
-  echo "  psk=\"${pass}\"" >> $tempFile
-  echo "}" >> $tempFile
-  echo "#ENDKIOSK" >> $tempFile
+buildConf () {
+  echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev" > $fileName
+  echo "update_config=1" >> $fileName
+  echo "country=GB" >> $fileName
+  echo "network={" >> $fileName
+  echo -e "\tssid=\"${ssid}\"" >> $fileName
+  echo -e "\tpsk=\"${pass}\"" >> $fileName
+  echo "}" >> $fileName
+  echo "" >> $fileName
 }
 
-deleteBlock() {
-  echo "${lineStart},${lineEnd}d ${fileName}"
-  sed -e ${lineStart},${lineEnd}d $fileName > $tempFile
-}
-
-
-lineStart=`grep -n "#KIOSK" ${fileName} | head -n 1 | cut -d: -f1`
-if [ -z $lineStart ]
-then
-  lineStart=0
-fi
-
-lineEnd=`grep -n "#ENDKIOSK" ${fileName} | head -n 1 | cut -d: -f1`
-if [ -z $lineEnd ]
-then
-  lineEnd=0
-fi
-
-echo $lineStart
-echo $lineEnd
-
-if [[ $lineStart -eq 0 ]]
-then
-  echo "append new"
-  cat $fileName > $tempFile
-
-  appendNew
-else
-  echo "append exist"
-  deleteBlock
-  appendNew
-
-fi
-
-sed -i '/^$/d' $tempFile
-cp $tempFile $fileName
+buildConf
+sudo systemctl daemon-reload
+sudo systemctl restart dhcpcd
+sudo wpa_cli -i wlan0 reconfigure
 
 #network={
 #        ssid="Livebox-49D8"
