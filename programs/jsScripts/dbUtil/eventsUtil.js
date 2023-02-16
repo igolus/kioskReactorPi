@@ -24,6 +24,11 @@ const listenToCommands = (deviceId, triggerCallBack) => {
                 await orderDoc.set({...event, processed: true})
                 loggerWs.info("triggerCallBack command")
                 triggerCallBack(event);
+
+                await fireBaseDb.collection(devicesCollection).doc(deviceId)
+                    .collection(commandsCollection)
+                    .doc(change.doc.id)
+                    .delete();
             }
         });
     }, err => {
