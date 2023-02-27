@@ -49,26 +49,22 @@ app.use(function(req, res, next) {
 });
 
 app.get('/listSSIDs', async function (req, res) {
-    // let out = await execCommand("sudo iwlist wlan0 scan|grep SSID");
-    // const ssidsAvailable = getSsidsAvailable(out);
-    // console.log(ssidsAvailable);
-    // res.json(ssidsAvailable);
-    res.json(
-        ["one", "two"]);
+    let out = await execCommand("sudo iwlist wlan0 scan|grep SSID");
+    const ssidsAvailable = getSsidsAvailable(out);
+    console.log(ssidsAvailable);
+    res.json(ssidsAvailable);
 })
 
 app.post('/connectWifi', async function (req, res) {
     const body = req.body;
-    console.log(JSON.stringify(body))
-    // let out = await execCommand("sudo iwlist wlan0 scan|grep SSID");
-    // const ssidsAvailable = getSsidsAvailable(out);
-    // console.log(ssidsAvailable);
-    // res.json(ssidsAvailable);
+    let out = await execCommand("sudo /home/pi/kioskReactor/fillSsid.sh " + body.ssid + " " + body.pass);
+    console.log(out)
+    out = await execCommand("sudo reboot");
+    console.log(out)
     res.json({});
 })
 
 app.get('/jquery', function(request, response) {
-    //response.sendfile('../../pages/jquery-3.6.3.min.js');
     const data = fs.readFileSync('../../pages/jquery-3.6.3.min.js', 'utf8');
     response.set('Content-Type', 'text/javascript');
     response.send(Buffer.from(data));
@@ -81,14 +77,12 @@ app.get('/bootStrapJs', function(request, response) {
 });
 
 app.get('/bootStrapCss', function(request, response) {
-    //response.sendfile('../../pages/bootstrap.min.css');
     const data = fs.readFileSync('../../pages/bootstrap.min.css', 'utf8');
     response.set('Content-Type', 'text/css');
     response.send(Buffer.from(data));
 });
 
 function getSsidsAvailable(dataRaw) {
-    //console.log(dataRaw)
     var rx = /ESSID\:\"(.*)\"/g;
     var arr = rx.exec(dataRaw);
     let split = dataRaw.split(/ESSID\:\"/);
@@ -102,7 +96,6 @@ function getSsidsAvailable(dataRaw) {
     console.log(all)
     all = [...new Set(all)];
     return all.filter(ssid => ssid !== '')
-    //console.log(arr)
 }
 
 
@@ -113,14 +106,13 @@ app.get('/home', async function(request, response) {
 });
 
 app.post('/connect', async function (req, res) {
-    //cors(req, res, () => {
-    //console.log(req.body)
     console.log(JSON.stringify(req.body))
     res.json({});
-    //})
 })
 
 var server = app.listen(8081, function () {
     var host = server.address().address
     var port = server.address().port
 })
+
+console.log("listening on 8081");

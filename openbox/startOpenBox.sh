@@ -1,6 +1,7 @@
 #!/bin/bash
 ONLINE=1
-while [ $ONLINE -ne 0 ]
+TRY=0
+while [ $ONLINE -ne 0 ] || [ $TRY -ge 5 ]
 do
    ping -q -c 1 -w 1 www.google.com >/dev/null 2>&1
    ONLINE=$?
@@ -8,8 +9,14 @@ do
      then
        sleep 2
    fi
+   TRY=$((TRY+1))
 done
-echo "We are on line!"
+
+echo($ONLINE)
+
+if [ $ONLINE -eq 0 ]
+  echo "We are on line!"
+fi
 
 cd /home/pi/kioskReactor/programs/jsScripts/init
 sudo node startupInit.js
@@ -46,6 +53,11 @@ launchSystem() {
 	/home/pi/kioskReactor/launchSystem.sh
 }
 
+if [ $ONLINE -ne 0 ]
+ $url="http://127.0.0.1:8081/home"
+ launchBrowser
+ exit 0
+fi
 
 if [ $credit == "null" -o $blockWhenInsufficientCredit == "false" ]; then
 	url=https://us-central1-totemsystem-5889b.cloudfunctions.net/homePage/$deviceId

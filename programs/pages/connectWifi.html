@@ -7,9 +7,6 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/bootStrapCss" crossorigin="anonymous">
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script type="text/javascript" src="/jquery"></script>
     <script type="text/javascript" src="/bootStrapJs"></script>
 
@@ -17,25 +14,31 @@
 
     <script>
 
+        function wait(n) { return new Promise(resolve => setTimeout(resolve, n)); }
+
+        function testConnection(retry) {
+            if (retry < 0) return Promise.reject();
+            return fetch('http://google.com').
+            catch(() => wait(2000)).
+            then(() => testConnection(retry - 1))
+        }
+
+
         $( document ).ready(async function () {
-            console.log("ready!");
             let response = await fetch("/listSSIDs");
             let data = await response.json();
             var $dropdown = $("#SSIDs");
-            $.each(data, function(item) {
-            //response.foreach(ssid => {
-                $dropdown.append($("<option />").val(item).text(item));
+            $.each(data, function (item) {
+                $dropdown.append($("<option />").val(this).text(this));
             })
 
-            $( "#connectButt" ).click(async function () {
-                alert($("#SSIDs").val());
-                alert($("#passWifi").val());
-
+            $("#connectButt").click(async function () {
+                $("#spinner").addClass("spinner-grow spinner-grow-sm");
+                $("#connectionDiv").show();
                 const body = {
                     ssid: $("#SSIDs").val(),
                     pass: $("#passWifi").val()
                 }
-                alert(JSON.stringify(body))
                 const response = await fetch('/connectWifi', {
                     method: "POST",
                     body: JSON.stringify(body),
@@ -43,8 +46,25 @@
                         "Content-Type": "application/json",
                     },
                 });
+
+                $("#spinner").removeClass("spinner-grow spinner-grow-sm");
+                $("#connectionDiv").hide();
+                alert("REBOOTING ")
+                // testConnection(10).then(() => {
+                //     alert("connected")
+                //     const response = fetch('/connected', {
+                //         method: "POST",
+                //         headers: {
+                //             "Content-Type": "application/json",
+                //         },
+                //     });
+                // }).catch(() => {
+                //     $("#spinner").removeClass("spinner-grow spinner-grow-sm");
+                //     $("#connectionDiv").hide();
+                //     alert("unable to connect")
+                // });
             });
-            });
+        });
     </script>
 </head>
 <body>
@@ -53,19 +73,30 @@
     <img src="https://dashboard.kioskreactor.com/static/images/kioskreactorLogo.png" width="300px">
 </div>
 
+<div class="text-center" id="connectionDiv" style="display: none">
+    <h2> Trying to connect </h2>
+    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+    </div>
+</div>
+
 <div style="margin: 10px;">
-    <form>
+    <div>
         <fieldset>
             <div class="mb-3">
-            <select class="form-select" aria-label="Default select example" id="SSIDs">
-            </select>
+                <label for="SSIDs" class="form-label">Select SSID</label>
+                <select class="form-select" aria-label="Default select example" id="SSIDs">
+                </select>
             </div>
             <div class="mb-3">
+                <label for="passWifi" class="form-label">WIFI Password</label>
                 <input type="text" id="passWifi" class="form-control" aria-describedby="passWifi">
             </div>
-            <button class="btn btn-primary" id="connectButt">Connect</button>
+            <button class="btn btn-primary" id="connectButt">
+<!--                <span class="spinner-grow spinner-grow-sm" id="spinner" role="status" aria-hidden="true"></span>Connect-->
+                Connect <span class="" id="spinner" role="status" aria-hidden="true"></span>
+            </button>
         </fieldset>
-    </form>
+    </div>
 </div>
 
 </body>
