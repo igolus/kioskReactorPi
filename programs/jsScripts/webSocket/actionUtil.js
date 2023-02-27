@@ -28,8 +28,8 @@ function geRebootCommand(input) {
 function getTicketCommand(input) {
     if (input && input.commandType && !input.commandContext && input.commandType.toLowerCase() === commandTypePrintTicket) {
         try {
-            //let decode = base64.decode(input.commandParam);
-            let decode = input.commandParam;
+            let decode = base64.decode(input.commandParam);
+            //let decode = input.commandParam;
             return decode;
         }
         catch (err) {
@@ -42,10 +42,9 @@ function getTicketCommand(input) {
 function getTicketCommandTargetIp(input) {
     if (input && input.commandType && input.commandContext && input.commandType.toLowerCase() === commandTypePrintTicket) {
         try {
-            //let decode = base64.decode(input.commandParam);
-            //console.log(" decode " + decode)
+            let decode = base64.decode(input.commandParam);
             return {
-                source: input.commandParam,
+                source: decode,
                 ip: input.commandContext
             };
         }

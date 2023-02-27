@@ -1,7 +1,7 @@
 #!/bin/bash
 ONLINE=1
 TRY=0
-while [ $ONLINE -ne 0 ] || [ $TRY -ge 5 ]
+while [ $ONLINE -ne 0 ] && [ $TRY -le 10 ]
 do
    ping -q -c 1 -w 1 www.google.com >/dev/null 2>&1
    ONLINE=$?
@@ -9,12 +9,13 @@ do
      then
        sleep 2
    fi
+   echo $TRY
    TRY=$((TRY+1))
 done
 
-echo($ONLINE)
+echo $ONLINE
 
-if [ $ONLINE -eq 0 ]
+if [ $ONLINE -eq 0 ]; then
   echo "We are on line!"
 fi
 
@@ -30,7 +31,7 @@ if [ screenSize == "null" ]; then
   screenSize="1360,768"
 fi
 
-#DISPLAY=:0 xrandr --output HDMI-1 --rotate right
+DISPLAY=:0 xrandr --output HDMI-1 --rotate right
 #DISPLAY=:0 xinput set-prop 'Windows pointer' "Coordinate Transformation Matrix" 0.000000, 1.000000, 0.000000, -1.000000, 0.000000, 1.000000, 0.000000, 0.000000, 1.000000
 
 echo $url
@@ -53,9 +54,10 @@ launchSystem() {
 	/home/pi/kioskReactor/launchSystem.sh
 }
 
-if [ $ONLINE -ne 0 ]
- $url="http://127.0.0.1:8081/home"
+if [ $ONLINE -ne 0 ]; then
+ url="http://127.0.0.1:8081/home"
  launchBrowser
+ launchSystem
  exit 0
 fi
 
@@ -75,4 +77,3 @@ else
 fi
 
 echo $url
-

@@ -122,6 +122,8 @@ function rebootDevice() {
 
 function printTicket(ticketSourceCode) {
     loggerCommand.info(`print Ticket !!`);
+    loggerCommand.info(ticketSourceCode);
+    loggerCommand.info(device.localPrinterIp);
     execPrintTicket(device.localPrinterIp, ticketSourceCode);
 }
 
