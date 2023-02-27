@@ -25,10 +25,10 @@ const listenToCommands = (deviceId, triggerCallBack) => {
                 loggerWs.info("triggerCallBack command")
                 triggerCallBack(event);
 
-                await fireBaseDb.collection(devicesCollection).doc(deviceId)
-                    .collection(commandsCollection)
-                    .doc(change.doc.id)
-                    .delete();
+                // await fireBaseDb.collection(devicesCollection).doc(deviceId)
+                //     .collection(commandsCollection)
+                //     .doc(change.doc.id)
+                //     .delete();
             }
         });
     }, err => {

@@ -49,14 +49,22 @@ app.use(function(req, res, next) {
 });
 
 app.get('/listSSIDs', async function (req, res) {
-    //cors(req, res, () => {
+    // let out = await execCommand("sudo iwlist wlan0 scan|grep SSID");
+    // const ssidsAvailable = getSsidsAvailable(out);
+    // console.log(ssidsAvailable);
+    // res.json(ssidsAvailable);
+    res.json(
+        ["one", "two"]);
+})
 
-    let out = await execCommand("sudo iwlist wlan0 scan|grep SSID");
-    const ssidsAvailable = getSsidsAvailable(out);
-    console.log(ssidsAvailable);
-
-    res.json(ssidsAvailable);
-    //})
+app.post('/connectWifi', async function (req, res) {
+    const body = req.body;
+    console.log(JSON.stringify(body))
+    // let out = await execCommand("sudo iwlist wlan0 scan|grep SSID");
+    // const ssidsAvailable = getSsidsAvailable(out);
+    // console.log(ssidsAvailable);
+    // res.json(ssidsAvailable);
+    res.json({});
 })
 
 app.get('/jquery', function(request, response) {
@@ -99,17 +107,7 @@ function getSsidsAvailable(dataRaw) {
 
 
 app.get('/home', async function(request, response) {
-    //const pageFile = request.params.pageFile;
-    //console.log("pageFile " + pageFile);
-
-
     const data = fs.readFileSync('../../pages/connectWifi.html', 'utf8');
-    //if (!pageFile) {
-    //    response.sendfile('./pages/index.html');
-    //}
-    //let out = await execCommand("sudo iwlist wlan0 scan|grep SSID");
-
-
     response.set('Content-Type', 'text/html');
     response.send(Buffer.from(data));
 });
@@ -118,8 +116,6 @@ app.post('/connect', async function (req, res) {
     //cors(req, res, () => {
     //console.log(req.body)
     console.log(JSON.stringify(req.body))
-
-
     res.json({});
     //})
 })
@@ -128,29 +124,3 @@ var server = app.listen(8081, function () {
     var host = server.address().address
     var port = server.address().port
 })
-
-// const dataRaw="                     ESSID:\"Livebox-49D8\"\n" +
-//     "                    ESSID:\"Livebox-79D0\"\n" +
-//     "                    ESSID:\"DIRECT-A6-HP PageWide MFP P57750\"\n" +
-//     "                    ESSID:\"Livebox-49D8\"\n" +
-//     "                    ESSID:\"DIRECT-98-HP PageWide Pro 477dw\"\n" +
-//     "                    ESSID:\"LUDOTIC\"\n" +
-//     "                    ESSID:\"Bbox-B700F230\"\n" +
-//     "                    ESSID:\"LUDOTIC\"\n" +
-//     "                    ESSID:\"Livebox-79D0\"\n" +
-//     "                    ESSID:\"\"\n" +
-//     "                    ESSID:\"Bbox-B700F230\"\n" +
-//     "\n" +
-//     "                    ESSID:\"Livebox-49D8\"\n" +
-//     "                    ESSID:\"Livebox-79D0\"\n" +
-//     "                    ESSID:\"DIRECT-A6-HP PageWide MFP P57750\"\n" +
-//     "                    ESSID:\"Livebox-49D8\"\n" +
-//     "                    ESSID:\"DIRECT-98-HP PageWide Pro 477dw\"\n" +
-//     "                    ESSID:\"LUDOTIC\"\n" +
-//     "                    ESSID:\"Bbox-B700F230\"\n" +
-//     "                    ESSID:\"LUDOTIC\"\n" +
-//     "                    ESSID:\"Livebox-79D0\"\n" +
-//     "                    ESSID:\"\"\n" +
-//     "                    ESSID:\"Bbox-B700F230\"\n"
-//
-// getSsidsAvailable(dataRaw)

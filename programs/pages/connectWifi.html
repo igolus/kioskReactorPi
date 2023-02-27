@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/bootStrapCss" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script type="text/javascript" src="/jquery"></script>
+    <script type="text/javascript" src="/bootStrapJs"></script>
+
+    <title>WIFI CONNECT</title>
+
+    <script>
+
+        $( document ).ready(async function () {
+            console.log("ready!");
+            let response = await fetch("/listSSIDs");
+            let data = await response.json();
+            var $dropdown = $("#SSIDs");
+            $.each(data, function(item) {
+            //response.foreach(ssid => {
+                $dropdown.append($("<option />").val(item).text(item));
+            })
+
+            $( "#connectButt" ).click(async function () {
+                alert($("#SSIDs").val());
+                alert($("#passWifi").val());
+
+                const body = {
+                    ssid: $("#SSIDs").val(),
+                    pass: $("#passWifi").val()
+                }
+                alert(JSON.stringify(body))
+                const response = await fetch('/connectWifi', {
+                    method: "POST",
+                    body: JSON.stringify(body),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+            });
+            });
+    </script>
+</head>
+<body>
+
+<div style="text-align: center;">
+    <img src="https://dashboard.kioskreactor.com/static/images/kioskreactorLogo.png" width="300px">
+</div>
+
+<div style="margin: 10px;">
+    <form>
+        <fieldset>
+            <div class="mb-3">
+            <select class="form-select" aria-label="Default select example" id="SSIDs">
+            </select>
+            </div>
+            <div class="mb-3">
+                <input type="text" id="passWifi" class="form-control" aria-describedby="passWifi">
+            </div>
+            <button class="btn btn-primary" id="connectButt">Connect</button>
+        </fieldset>
+    </form>
+</div>
+
+</body>
+</html>
