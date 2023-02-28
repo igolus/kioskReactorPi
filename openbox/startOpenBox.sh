@@ -27,12 +27,30 @@ minimalCreditToLock=`jq '.minimalCreditToLock' /home/pi/kioskReactor/conf/brand.
 credit=`jq '.credit' /home/pi/kioskReactor/conf/brand.json | tr -d '"'`
 blockWhenInsufficientCredit=`jq '.blockWhenInsufficientCredit' /home/pi/kioskReactor/conf/brand.json | tr -d '"'`
 screenSize=`jq '.screenSize' /home/pi/kioskReactor/conf/device.json | tr -d '"'`
+screenOrientation=`jq '.screenRotation' /home/pi/kioskReactor/conf/device.json | tr -d '"'`
 if [ screenSize == "null" ]; then
   screenSize="1360,768"
 fi
 
-DISPLAY=:0 xrandr --output HDMI-1 --rotate right
-#DISPLAY=:0 xinput set-prop 'Windows pointer' "Coordinate Transformation Matrix" 0.000000, 1.000000, 0.000000, -1.000000, 0.000000, 1.000000, 0.000000, 0.000000, 1.000000
+if [ screenOrientation == "null" ]; then
+  screenOrientation=0
+fi
+
+if [ screenOrientation -eq 0 ]; then
+  DISPLAY=:0 xrandr --output HDMI-1 --rotate normal
+fi
+
+if [ screenOrientation -eq 1 ]; then
+  DISPLAY=:0 xrandr --output HDMI-1 --rotate right
+fi
+
+if [ screenOrientation -eq 2 ]; then
+  DISPLAY=:0 xrandr --output HDMI-1 --rotate inverted
+fi
+
+if [ screenOrientation -eq 3 ]; then
+  DISPLAY=:0 xrandr --output HDMI-1 --rotate left
+fi
 
 echo $url
 echo $minimalCreditToLock
