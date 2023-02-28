@@ -28,29 +28,34 @@ credit=`jq '.credit' /home/pi/kioskReactor/conf/brand.json | tr -d '"'`
 blockWhenInsufficientCredit=`jq '.blockWhenInsufficientCredit' /home/pi/kioskReactor/conf/brand.json | tr -d '"'`
 screenSize=`jq '.screenSize' /home/pi/kioskReactor/conf/device.json | tr -d '"'`
 screenOrientation=`jq '.screenRotation' /home/pi/kioskReactor/conf/device.json | tr -d '"'`
+echo "screenOrientation"
+echo $screenOrientation
 if [ screenSize == "null" ]; then
   screenSize="1360,768"
 fi
 
-if [ screenOrientation == "null" ]; then
+if [ $screenOrientation == "null" ]; then
   screenOrientation=0
 fi
 
-if [ screenOrientation -eq 0 ]; then
+if [ $screenOrientation == 0 ]; then
   DISPLAY=:0 xrandr --output HDMI-1 --rotate normal
 fi
 
-if [ screenOrientation -eq 1 ]; then
+if [ $screenOrientation == 1 ]; then
   DISPLAY=:0 xrandr --output HDMI-1 --rotate right
 fi
 
-if [ screenOrientation -eq 2 ]; then
+if [ $screenOrientation == 2 ]; then
+  #echo "screenOrientation2"
   DISPLAY=:0 xrandr --output HDMI-1 --rotate inverted
 fi
 
-if [ screenOrientation -eq 3 ]; then
+if [ $screenOrientation == 3 ]; then
   DISPLAY=:0 xrandr --output HDMI-1 --rotate left
 fi
+
+#exit 0
 
 echo $url
 echo $minimalCreditToLock
