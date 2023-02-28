@@ -57,7 +57,7 @@ app.get('/listSSIDs', async function (req, res) {
 
 app.post('/connectWifi', async function (req, res) {
     const body = req.body;
-    let out = await execCommand("sudo /home/pi/kioskReactor/fillSsid.sh " + body.ssid + " " + body.pass);
+    let out = await execCommand("sudo /home/pi/kioskReactor/fillSsid.sh '" + body.ssid + "' '" + body.pass + "'");
     console.log(out)
     out = await execCommand("sudo reboot");
     console.log(out)
