@@ -65,7 +65,7 @@ function chromeNavigate(openUrl) {
     }
 }
 
-export function execCommand(command, callBackDone, callBackError) {
+function execCommand(command, callBackDone, callBackError) {
     loggerCommand.info("running command: " + command);
     try {
         exec(command, (error, stdout, stderr) => {
