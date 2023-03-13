@@ -65,7 +65,7 @@ function chromeNavigate(openUrl) {
     }
 }
 
-function execCommand(command, callBackDone) {
+export function execCommand(command, callBackDone, callBackError) {
     loggerCommand.info("running command: " + command);
     try {
         exec(command, (error, stdout, stderr) => {
@@ -82,11 +82,12 @@ function execCommand(command, callBackDone) {
             }
             loggerCommand.info(`command Done`);
             if (callBackDone) {
-                callBackDone()
+                callBackDone(stdout)
             }
         });
     } catch (error) {
-        loggerCommand.error("Unable to rune command " + error)
+        loggerCommand.error("Unable to run command " + error);
+        callBackError(error);
     }
 }
 
@@ -232,4 +233,8 @@ else {
         }
 
     })();
+}
+
+module.exports = {
+    execCommand: execCommand
 }

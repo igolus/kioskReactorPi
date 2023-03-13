@@ -2,8 +2,17 @@ const {fireBaseDb} = require("../dbUtil/firebaseUtil");
 const {brandsCollection, deviceHealthCollection} = require("../dbUtil/collectionsNames");
 const conf = require("../../../conf/config.json");
 const {getCurrentDevice} = require("../dbUtil/deviceUtil");
+const {execCommand} = require("../commandsListener/commandLauncher");
+
+var ipDefined = "";
+
+
 
 (async () => {
+    execCommand("hostname -I", (out) => {
+        ipDefined = out;
+    })
+
     const device = await getCurrentDevice();
     const queryEvent = fireBaseDb
         .collection(brandsCollection)
@@ -24,6 +33,7 @@ const {getCurrentDevice} = require("../dbUtil/deviceUtil");
             await doc.set({
                 ...deviceHealth,
                 alive: true,
+                ip: ipDefined,
             });
         })
     })
