@@ -235,6 +235,6 @@ else {
     })();
 }
 
-module.exports = {
-    execCommand: execCommand
-}
+// module.exports = {
+//     execCommand: execCommand
+// }
