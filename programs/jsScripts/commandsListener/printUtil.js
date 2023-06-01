@@ -4,6 +4,9 @@ const {loggerCommand} = require("../util/loggerUtil");
 var esprima = require('esprima');
 
 const execPrintTicket = async (ip, sourceCode) => {
+    if (!ip || ip === "") {
+        return;
+    }
     try {
         let printer = new ThermalPrinter({
             type: PrinterTypes.EPSON,                                  // Printer type: 'star' or 'epson'
