@@ -12,3 +12,10 @@
     - name: Copy script file launchSystem.ps1
       command: "cp launchSystem.ps1 /cygdrive/c/kioskReactor"
       when: files_in_kioskReactor.stdout.find('launchSystem.ps1') == -1
+
+    - name: rsync programs file
+      command: "rsync -avz ./programs /cygdrive/c/kioskReactor"
+
+    - name: rsync conf file
+      command: "rsync --ignore-existing -avz ./conf /cygdrive/c/kioskReactor"
+      when: files_in_kioskReactor.stdout.find('conf') == -1
