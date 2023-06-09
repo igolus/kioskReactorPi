@@ -1,0 +1,3 @@
+-- ansible
+
+ansible-pull --extra-vars "user=pi" -U https://github.com/igolus/rocketKioskPi.git local-windows.yml
