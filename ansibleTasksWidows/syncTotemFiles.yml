@@ -1,0 +1,3 @@
+- name: Create kioskReactor dir if not exists
+  ansible.builtin.command: c:\cygwin64\bin\bash.exe -c "mkdir -p /cygdrive/c/kioskReactor
+

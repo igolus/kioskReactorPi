@@ -12,6 +12,8 @@ sudo apt -y purge "pulseaudio"
 --screen
 sudo nano /boot/cmdline.txt
 console=serial0,115200 console=tty1 root=PARTUUID=9e7ae996-02 rootfstype=ext4 fsck.repair=yes rootwait quiet splash plymouth.ignore-serial-consoles logo.nologo vt.global_cursor_default=0 usbhid.mousepoll=0
+vs
+console=serial0,115200 console=tty1 root=PARTUUID=be0ea745-02 rootfstype=ext4 fsck.repair=yes rootwait quiet splash plymouth.ignore-serial-consoles
 
 
 -- git secret
