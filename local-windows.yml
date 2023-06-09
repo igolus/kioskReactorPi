@@ -3,4 +3,4 @@
 
   tasks:
     - name: Create kioskReactor dir if not exists
-      ansible.builtin.command: mkdir -p /cygdrive/c/kioskReactor
+      command: "mkdir -p /cygdrive/c/kioskReactor"
