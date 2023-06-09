@@ -16,6 +16,9 @@
     - name: rsync programs file
       command: "rsync -avz ./programs /cygdrive/c/kioskReactor"
 
+    - name: Create kioskReactor conf dir if not exists
+      command: "mkdir -p /cygdrive/c/kioskReactor/conf"
+
     - name: rsync conf file
-      command: "rsync --ignore-existing -avz ./conf /cygdrive/c/kioskReactor"
+      command: "rsync --ignore-existing -avz ./confWin/ /cygdrive/c/kioskReactor/conf/"
       when: files_in_kioskReactor.stdout.find('conf') == -1
