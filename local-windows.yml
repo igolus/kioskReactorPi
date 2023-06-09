@@ -1,3 +1,5 @@
 ---
+- hosts: localhost
+
   tasks:
     - include: ansibleTasksWidows/syncTotemFiles.yml
