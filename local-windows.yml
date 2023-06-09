@@ -13,6 +13,10 @@
       command: "cp launchSystem.ps1 /cygdrive/c/kioskReactor"
       when: files_in_kioskReactor.stdout.find('launchSystem.ps1') == -1
 
+    - name: Copy script file installNPM.bat
+      command: "cp installNPM.bat /cygdrive/c/kioskReactor"
+      when: files_in_kioskReactor.stdout.find('installNPM.bat') == -1
+
     - name: rsync programs file
       command: "rsync -avz ./programs /cygdrive/c/kioskReactor"
 
