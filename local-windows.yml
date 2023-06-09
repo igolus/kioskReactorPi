@@ -23,5 +23,8 @@
       command: "rsync --ignore-existing -avz ./confWin/ /cygdrive/c/kioskReactor/conf/"
       when: files_in_kioskReactor.stdout.find('conf') == -1
 
-    - name: install node.js package.
-      command: "cd /cygdrive/c/kioskReactor/programs/jsScripts && npm install"
+    - name: cd node.js packages
+      command: "cd /cygdrive/c/kioskReactor/programs/jsScripts"
+
+    - name: install node.js packages
+      command: "npm install"
