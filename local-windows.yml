@@ -4,3 +4,11 @@
   tasks:
     - name: Create kioskReactor dir if not exists
       command: "mkdir -p /cygdrive/c/kioskReactor"
+
+    - name: get files in kioskReactor folder
+      command: "ls /cygdrive/c/kioskReactor"
+      register: files_in_kioskReactor
+
+    - name: Copy script file launchSystem.ps1
+      command: "cp launchSystem.ps1 cygdrive/c/kioskReactor"
+      when: files_in_kioskReactor.stdout.find('launchSystem.ps1') == -1
