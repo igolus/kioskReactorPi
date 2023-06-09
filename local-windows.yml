@@ -10,5 +10,5 @@
       register: files_in_kioskReactor
 
     - name: Copy script file launchSystem.ps1
-      command: "cp launchSystem.ps1 cygdrive/c/kioskReactor"
+      command: "cp launchSystem.ps1 /cygdrive/c/kioskReactor"
       when: files_in_kioskReactor.stdout.find('launchSystem.ps1') == -1
