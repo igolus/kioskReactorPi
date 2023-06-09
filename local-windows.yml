@@ -24,5 +24,4 @@
       when: files_in_kioskReactor.stdout.find('conf') == -1
 
     - name: install node.js package.
-      community.general.npm:
-        path: "/cygdrive/c/kioskReactor/programs/jsScripts"
+      command: "cd /cygdrive/c/kioskReactor/programs/jsScripts && npm install"
