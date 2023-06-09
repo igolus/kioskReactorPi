@@ -25,4 +25,3 @@
 
     - name: rsync conf file
       command: "cd /cygdrive/c/kioskReactor/programs/jsScripts && npm install"
-      when: files_in_kioskReactor.stdout.find('conf') == -1
