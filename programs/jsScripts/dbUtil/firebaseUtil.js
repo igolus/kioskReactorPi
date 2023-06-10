@@ -1,4 +1,4 @@
-const firebase = require('firebase')
+const firebase = require('firebase/app')
 require("firebase/firestore");
 const firebaseConfig = require('../../../conf/firebaseconfig.json')
 if (firebase.apps.length === 0) {

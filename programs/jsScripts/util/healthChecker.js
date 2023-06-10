@@ -35,9 +35,11 @@ function execCommand(command, callBackDone, callBackError) {
 var ipDefined = "";
 
 (async () => {
-    execCommand("hostname -I", (out) => {
-        ipDefined = out;
-    })
+    if (!conf.windows) {
+        execCommand("hostname -I", (out) => {
+            ipDefined = out;
+        })
+    }
 
     const device = await getCurrentDevice();
     const queryEvent = fireBaseDb

@@ -133,7 +133,7 @@ function printTicketTargetIp(ticketWithIpTarget) {
     //     ip: input.commandContext
 
     loggerCommand.info(`print Ticket !! on ip ` + ticketWithIpTarget.ip);
-    execPrintTicket(ticketWithIpTarget.ip, ticketWithIpTarget.source);
+    execPrintTicket(ticketWithIpTarget.ip, ticketWithIpTarget.source, true);
 }
 
 
@@ -235,6 +235,3 @@ else {
     })();
 }
 
-// module.exports = {
-//     execCommand: execCommand
-// }

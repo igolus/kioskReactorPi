@@ -1,3 +1,5 @@
 {
-  "urlWsLocal": "ws://localhost:8080"
+  "urlWsLocal": "ws://localhost:8080",
+  "windows": "true",
+  "deviceId": "i3GYyHbRr"
 }
