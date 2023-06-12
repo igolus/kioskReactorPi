@@ -1,3 +1,4 @@
 -- ansible
 
+c:\cygwin64\bin\bash -c "ansible-pull -U https://github.com/igolus/rocketKioskPi.git local-windows.yml"
 ansible-pull -U https://github.com/igolus/rocketKioskPi.git local-windows.yml

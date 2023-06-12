@@ -1,7 +1,7 @@
 #!/bin/bash
 
-url=`jq '.deviceId' /home/pi/kioskReactor/conf/config.json | tr -d '"'`
-echo $url
+#url=`jq '.deviceId' /home/pi/kioskReactor/conf/config.json | tr -d '"'`
+#echo $url
 
 set -x #echo on
 #/usr/bin/chromium-browser --noerrdialogs --incognito --disable-pinch --overscroll-history-navigation=0 --disable-infobars --remote-debugging-port=9222 https://us-central1-totemsystem-5889b.cloudfunctions.net/homePage/$url &
@@ -17,12 +17,13 @@ wait-for-url() {
 }
 
 launchSystem() {
+	echo launchSystem
 	cd /cygdrive/c/kioskReactor/programs/jsScripts/init
 	node startupInit.js
 	cd  /cygdrive/c/kioskReactor/programs/jsScripts/webSocket
 	node wsServer.js &
-	cd /cygdrive/c/kioskReactor/programs/jsScripts/serverService
-	node services.js &
+	#cd /cygdrive/c/kioskReactor/programs/jsScripts/serverService
+	#node services.js &
 	cd /cygdrive/c/kioskReactor/programs/jsScripts/commandsListener
 	node commandLauncher.js &
 }
