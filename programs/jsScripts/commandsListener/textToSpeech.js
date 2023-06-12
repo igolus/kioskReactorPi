@@ -8,7 +8,6 @@ const { v4: uuidv4 } = require('uuid');
 const {loggerCommand} = require("../util/loggerUtil");
 const {internalCommandTypePlayMp3, buildCommandJson} = require("../webSocket/commandTypes");
 const conf = require ('../../../conf/config.json')
-const Speaker = require("speaker");
 const {execCommand} = require("../util/commandUtil");
 async function speak(message, ws, project) {
     if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
