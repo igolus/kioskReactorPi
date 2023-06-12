@@ -10,7 +10,7 @@
       register: files_in_kioskReactor
 
     - name: Copy script file launchSystemWin.sh
-      command: "cp aunchSystemWin.sh /cygdrive/c/kioskReactor"
+      command: "cp launchSystemWin.sh /cygdrive/c/kioskReactor"
       when: files_in_kioskReactor.stdout.find('launchSystemWin.sh') == -1
 
     - name: Copy script file killSystemWin.sh
