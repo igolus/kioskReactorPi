@@ -16,12 +16,15 @@ const {uploadSnap} = require("./snapUtil");
 const {inactivityCommand} = require("./inactivityCommand");
 const {deployWebSiteCommand} = require("./deployWebSiteCommand");
 const localChromeDebuggerServerJsonCheck = 'http://127.0.0.1:9222/json';
+const localChromeDebuggerServerJsonCheckWin = 'http://localhost:9222/json';
 const versionUtil = require('../dbUtil/versionUtil')
 const deviceUtil = require('../dbUtil/deviceUtil')
 
 const updatingUrl = "https://totemsystem-5889b.web.app/static/updating.html";
 const deploySiteUrl = "https://totemsystem-5889b.web.app/static/deploySite.html";
 const defaultUrl = "https://totemsystem-5889b.web.app/static/default.html";
+const conf = require('../../../conf/config.json');
+const {execCommand} = require("../util/commandUtil");
 
 let wsChromeSocket;
 let device;
@@ -65,31 +68,6 @@ function chromeNavigate(openUrl) {
     }
 }
 
-function execCommand(command, callBackDone, callBackError) {
-    loggerCommand.info("running command: " + command);
-    try {
-        exec(command, (error, stdout, stderr) => {
-            if (error) {
-                loggerCommand.error(error)
-                return;
-            }
-            if (stderr) {
-                loggerCommand.error(stderr)
-                return;
-            }
-            if (stdout) {
-                loggerCommand.info(stdout)
-            }
-            loggerCommand.info(`command Done`);
-            if (callBackDone) {
-                callBackDone(stdout)
-            }
-        });
-    } catch (error) {
-        loggerCommand.error("Unable to run command " + error);
-        callBackError(error);
-    }
-}
 
 function updateDevice(device) {
     loggerCommand.info(`reboot !!`);
@@ -118,7 +96,13 @@ function updateDevice(device) {
 
 function rebootDevice() {
     loggerCommand.info(`reboot !!`);
-    execCommand("sudo reboot");
+    if (conf.windows) {
+        execCommand("shutdown /r");
+    }
+    else {
+        execCommand("sudo reboot");
+    }
+
 }
 
 function printTicket(ticketSourceCode) {
@@ -212,7 +196,8 @@ else {
         else {
             while (!init) {
                 try {
-                    const resChrome = await axios.get(localChromeDebuggerServerJsonCheck);
+                    //const resChrome = await axios.get(conf.windows ? localChromeDebuggerServerJsonCheckWin : localChromeDebuggerServerJsonCheck);
+                    const resChrome = await axios.get("http://127.0.0.1:9222/json");
                     const data = resChrome.data;
                     if (data.length > 0) {
                         const firstTab = data[0];

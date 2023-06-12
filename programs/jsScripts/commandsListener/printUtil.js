@@ -4,7 +4,7 @@ const {loggerCommand} = require("../util/loggerUtil");
 var esprima = require('esprima');
 const conf = require('../../../conf/config.json');
 const execPrintTicket = async (ip, sourceCode, useIp) => {
-    if (!ip || ip === "" && !conf.windows) {
+    if ((!ip || ip === "") && !conf.windows) {
         return;
     }
     try {

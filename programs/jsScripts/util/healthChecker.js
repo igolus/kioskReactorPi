@@ -40,6 +40,11 @@ var ipDefined = "";
             ipDefined = out;
         })
     }
+    if (!conf.windows) {
+        execCommand("hostname", (out) => {
+            ipDefined = out;
+        })
+    }
 
     const device = await getCurrentDevice();
     const queryEvent = fireBaseDb

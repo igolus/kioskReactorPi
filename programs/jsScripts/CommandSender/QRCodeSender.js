@@ -1,12 +1,29 @@
-const WebSocket = require("ws");
-const config = require("../../../conf/config.json");
-const {buildEventJson, eventTypeSnapReady, eventTypeQrCode} = require("../webSocket/eventTypes");
-const wsLocalSocket = new WebSocket(config.urlWsLocal);
+var keypress = require('keypress');
+const {sendEvent} = require("./SendEventUtil");
+const {eventTypeQrCode, buildEventJson} = require("../webSocket/eventTypes");
 
+keypress(process.stdin);
 
-wsLocalSocket.onopen = function(open) {
-    wsLocalSocket.send(buildEventJson(eventTypeQrCode, "toto"), {binary: true});
-    wsLocalSocket.close()
+let buffer = "";
+
+function sendQrCode(buffer) {
+    sendEvent(buildEventJson(eventTypeQrCode, buffer))
 }
 
+process.stdin.on('keypress', function (ch, key) {
+    console.log('got "keypress"', key);
+    console.log('got "char"', ch);
+    buffer += ch;
+    if (key && key.name === 'return') {
+        sendQrCode(buffer)
+        buffer = "";
+    }
 
+    if (key && key.ctrl && key.name == 'c') {
+        process.stdin.pause();
+    }
+
+});
+
+process.stdin.setRawMode(true);
+process.stdin.resume();

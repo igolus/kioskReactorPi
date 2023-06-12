@@ -7,7 +7,9 @@ const { exec, spawn} = require('child_process');
 const { v4: uuidv4 } = require('uuid');
 const {loggerCommand} = require("../util/loggerUtil");
 const {internalCommandTypePlayMp3, buildCommandJson} = require("../webSocket/commandTypes");
-
+const conf = require ('../../../conf/config.json')
+const Speaker = require("speaker");
+const {execCommand} = require("../util/commandUtil");
 async function speak(message, ws, project) {
     if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
         return;
@@ -31,8 +33,21 @@ async function speak(message, ws, project) {
         const writeFile = util.promisify(fs.writeFile);
 
         let fileName = uuidv4() + ".mp3";
-        await writeFile("../" + fileName, response.audioContent, 'binary');
-        ws.send(buildCommandJson(internalCommandTypePlayMp3, fileName), {binary: true});
+        let pathFile = "../" + fileName;
+        await writeFile(pathFile, response.audioContent, 'binary');
+
+        //https://jiml.us/posts/cmdmp3/
+        if (conf.windows) {
+            execCommand("C:\\kioskReactor\\programs\\jsScripts\\cmdmp3.exe " + pathFile, () => {
+                console.log("done")
+            }, (e) => {
+                console.log(e)
+            });
+        }
+        else {
+            ws.send(buildCommandJson(internalCommandTypePlayMp3, fileName), {binary: true});
+        }
+
     }
     catch (err) {
         loggerCommand.error(err);
