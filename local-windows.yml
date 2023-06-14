@@ -17,6 +17,10 @@
       command: "cp killSystemWin.sh /cygdrive/c/kioskReactor"
       when: files_in_kioskReactor.stdout.find('killSystemWin.sh') == -1
 
+    - name: Copy script file update.sh
+      command: "cp update.sh /cygdrive/c/kioskReactor"
+      when: files_in_kioskReactor.stdout.find('update.sh') == -1
+
     - name: Copy script file installNPM.bat
       command: "cp installNPM.bat /cygdrive/c/kioskReactor"
       when: files_in_kioskReactor.stdout.find('installNPM.bat') == -1

@@ -13,6 +13,7 @@ const {commandTypeReboot, commandTypeOpenUrl, commandTypeUpdate,
 } = require("./commandTypes");
 const {listenToEvents, listenToCommands} = require("../dbUtil/eventsUtil");
 require('../util/healthChecker')
+const {readConfig, writeDeviceAndProjectConfig, writeConfig} = require("../util/configFileUtil");
 
 const wsSocket =new WebSocket({
     server: server,
@@ -152,15 +153,14 @@ wsSocket.on('connection', function connection(ws) {
     });
 });
 
-//server.listen(8080);
+// let isLite = myArgs.length > 0 && myArgs[0].toLowerCase() === 'lite';
 
 (async () => {
     device = await getCurrentDevice();
     currentProject = await getCurrentProject(device)
-    // listenToProjectChange(
-    //     device.brandId,
-    //     device.projectId,
-    //     p => currentProject = p);
     server.listen(8080);
+    let conf = readConfig();
+    conf.wsInit = 1;
+    await writeConfig(conf);
 })();
 

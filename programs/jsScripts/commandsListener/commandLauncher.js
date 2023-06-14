@@ -72,8 +72,18 @@ function chromeNavigate(openUrl) {
 function updateDevice(device) {
     loggerCommand.info(`reboot !!`);
     chromeNavigate(updatingUrl)
-    let command = "sudo ansible-pull --extra-vars \"user=pi\" -U https://github.com/igolus/rocketKioskPi.git"
-    let commandReboot = "sudo reboot"
+    let command;
+    let commandReboot;
+
+    if (conf.windows) {
+        command = "c:\\cygwin64\\bin\\bash.exe C:\\kioskReactor\\update.sh"
+        commandReboot = "shutdown /r"
+    }
+    else {
+        command = "sudo ansible-pull --extra-vars \"user=pi\" -U https://github.com/igolus/rocketKioskPi.git"
+        commandReboot = "sudo reboot"
+    }
+
     execCommand(command, () => {
         try {
             versionUtil.getVersion().then(versionItem => {
@@ -92,6 +102,7 @@ function updateDevice(device) {
             loggerCommand.error("unable to get version")
         }
     });
+
 }
 
 function rebootDevice() {
