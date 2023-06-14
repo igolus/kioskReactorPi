@@ -69,6 +69,24 @@ function chromeNavigate(openUrl) {
 }
 
 
+function updateVersionAndReboot(device) {
+    try {
+        versionUtil.getVersion().then(versionItem => {
+            console.log("versionItem " + JSON.stringify(versionItem))
+            device.version = versionItem.version;
+            deviceUtil.updateDevice(device).then(data => {
+                try {
+                    rebootDevice()
+                } catch (err) {
+                    loggerCommand.error("unable to update device version")
+                }
+            })
+        })
+    } catch (err) {
+        loggerCommand.error("unable to get version")
+    }
+}
+
 function updateDevice(device) {
     loggerCommand.info(`reboot !!`);
     chromeNavigate(updatingUrl)
@@ -85,22 +103,9 @@ function updateDevice(device) {
     }
 
     execCommand(command, () => {
-        try {
-            versionUtil.getVersion().then(versionItem => {
-                console.log("versionItem " + JSON.stringify(versionItem))
-                device.version = versionItem.version;
-                deviceUtil.updateDevice(device).then(data => {
-                    try {
-                        execCommand(commandReboot);
-                    } catch (err) {
-                        loggerCommand.error("unable to update device version")
-                    }
-                })
-            })
-        }
-        catch (err) {
-            loggerCommand.error("unable to get version")
-        }
+        updateVersionAndReboot(device);
+    }, () => {
+        updateVersionAndReboot(device);
     });
 
 }
@@ -120,7 +125,7 @@ function printTicket(ticketSourceCode) {
     loggerCommand.info(`print Ticket !!`);
     loggerCommand.info(ticketSourceCode);
     loggerCommand.info(device.localPrinterIp);
-    execPrintTicket(device.localPrinterIp, ticketSourceCode);
+    execPrintTicket(device.localPrinterIp, ticketSourceCode, false, device);
 }
 
 function printTicketTargetIp(ticketWithIpTarget) {
@@ -128,7 +133,7 @@ function printTicketTargetIp(ticketWithIpTarget) {
     //     ip: input.commandContext
 
     loggerCommand.info(`print Ticket !! on ip ` + ticketWithIpTarget.ip);
-    execPrintTicket(ticketWithIpTarget.ip, ticketWithIpTarget.source, true);
+    execPrintTicket(ticketWithIpTarget.ip, ticketWithIpTarget.source, true, device);
 }
 
 

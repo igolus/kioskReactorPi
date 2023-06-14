@@ -11,6 +11,9 @@ function execCommand(command, callBackDone, callBackError) {
             }
             if (stderr) {
                 loggerCommand.error(stderr)
+                if (callBackError) {
+                    callBackError(new Error(stderr));
+                }
                 return;
             }
             if (stdout) {
