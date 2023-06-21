@@ -34,6 +34,3 @@
     - name: rsync conf file
       command: "rsync --ignore-existing -avz ./confWin/ /cygdrive/c/kioskReactor/conf/"
       when: files_in_kioskReactor.stdout.find('conf') == -1
-
-    - name: rsync conf file
-      command: "installNPM.bat"
