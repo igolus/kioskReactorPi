@@ -1,23 +1,22 @@
 #!/bin/bash
 
-#url=`jq '.deviceId' /cygdrive/c/kioskReactor//conf/config.json | tr -d '"'`
-#echo $url
+ONLINE=1
+TRY=0
+while [ $ONLINE -ne 0 ] && [ $TRY -le 10000 ]
+do
+   content=`curl -IL google.com`
+   if [[ "$content" == *"200 OK"* ]]; then
+     ONLINE=0
+   fi
+   if [ $ONLINE -ne 0 ]
+     then
+	   echo "Waiting for online internet..."
+       sleep 2
+   fi
+   TRY=$((TRY+1))
+done
 
-#set -x #echo on
-#/usr/bin/chromium-browser --noerrdialogs --incognito --disable-pinch --overscroll-history-navigation=0 --disable-infobars --remote-debugging-port=9222 https://us-central1-totemsystem-5889b.cloudfunctions.net/homePage/$url &
-
-
-
-wait-for-url() {
-    echo "Testing $1"
-    timeout -s TERM 45 bash -c \
-    'while [[ "$(curl -s -o /dev/null -L -w ''%{http_code}'' ${0})" != "200" ]];\
-    do echo "Waiting for ${0}" && sleep 2;\
-    done' ${1}
-    echo "OK!"
-    curl -I $1
-}
-
+echo "Online !!!"
 
 wait-for-ws() {
 	echo "wait-for-ws"
@@ -29,7 +28,7 @@ wait-for-ws() {
     do
        wsInit=`jq '.wsInit' './config.json' | tr -d '"'`
 	   wsInitl=`echo $wsInit | sed 's/\\r//g'`
-       echo $wsInitl
+       echo "Waiting forweb socket..."
     done
 }
 
@@ -49,26 +48,14 @@ credit=`jq '.credit' './brand.json' | tr -d '"'`
 blockWhenInsufficientCredit=`jq '.blockWhenInsufficientCredit' './brand.json' | tr -d '"'`
 screenSize=`jq '.screenSize' './config.json' | tr -d '"'`
 screenOrientation=`jq '.screenRotation' './config.json' | tr -d '"'`
-echo "screenOrientation"
-echo $screenOrientation
-
-#exit 0
-
-echo $url
-echo $minimalCreditToLock
-echo $credit
-echo $minimalCreditToLock
-echo $screenSize
 
 creditl=`echo $credit | sed 's/\\r//g'`
-echo $creditl
 
 minimalCreditToLock=-2000
-#credit=`echo $credit`
 
 launchBrowser() {
 	wait-for-ws
-	echo $url
+	#echo $url
 	cd '/cygdrive/C/Program Files/Google/Chrome/Application'
 	./chrome.exe --no-sandbox --no-first-run --fast --fast-start --password-store=basic --disable-features=TouchpadOverscrollHistoryNavigation --disable-features=TranslateUI --noerrdialogs --incognito --disable-pinch --overscroll-history-navigation=0 --disable-infobars --remote-debugging-port=9222 $url &
 }
