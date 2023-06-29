@@ -12,7 +12,7 @@ const execPrintTicket = async (ip, sourceCode, useIp, device) => {
         if (device.usbDevice && !useIp) {
             printer = new ThermalPrinter({
                 type: PrinterTypes.EPSON,                                  // Printer type: 'star' or 'epson'
-                interface: device.usbDevice,                 // Printer interface
+                interface: ip,                                              // Printer interface
                 driver: require('printer'),
                 characterSet: 'SLOVENIA',                                 // Printer character set - default: SLOVENIA
                 removeSpecialCharacters: false,                           // Removes special characters - default: false
