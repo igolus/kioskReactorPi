@@ -8,7 +8,7 @@ const { v4: uuidv4 } = require('uuid');
 const {loggerCommand} = require("../util/loggerUtil");
 const {internalCommandTypePlayMp3, buildCommandJson} = require("../webSocket/commandTypes");
 const conf = require ('../../../conf/config.json')
-const {execCommand} = require("../util/commandUtil");
+const {execCommand, execCommandSync} = require("../util/commandUtil");
 async function speak(message, ws, project) {
     if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
         return;
@@ -37,7 +37,7 @@ async function speak(message, ws, project) {
 
         //https://jiml.us/posts/cmdmp3/
         if (conf.windows) {
-            execCommand("C:\\kioskReactor\\programs\\jsScripts\\cmdmp3.exe " + pathFile, () => {
+            execCommandSync("C:\\kioskReactor\\programs\\jsScripts\\cmdmp3.exe " + pathFile, () => {
                 console.log("done")
             }, (e) => {
                 console.log(e)

@@ -1,5 +1,18 @@
 const {loggerCommand} = require("./loggerUtil");
-const {exec} = require("child_process");
+const {exec, execSync } = require("child_process");
+
+function execCommandSync(command, callBackDone, callBackError) {
+    loggerCommand.info("running command: " + command);
+    try {
+        execSync(command);
+        callBackDone();
+    } catch (error) {
+        loggerCommand.error("Unable to run command " + error);
+        if (callBackError) {
+            callBackError(error);
+        }
+    }
+}
 
 function execCommand(command, callBackDone, callBackError) {
     loggerCommand.info("running command: " + command);
@@ -33,5 +46,6 @@ function execCommand(command, callBackDone, callBackError) {
 }
 
 module.exports = {
-    execCommand: execCommand
+    execCommand: execCommand,
+    execCommandSync: execCommandSync
 }
