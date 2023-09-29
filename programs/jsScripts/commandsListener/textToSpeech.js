@@ -37,11 +37,7 @@ async function speak(message, ws, project) {
 
         //https://jiml.us/posts/cmdmp3/
         if (conf.windows) {
-            execCommandSync("C:\\kioskReactor\\programs\\jsScripts\\cmdmp3.exe " + pathFile, () => {
-                console.log("done")
-            }, (e) => {
-                console.log(e)
-            });
+            execCommandSync("C:\\kioskReactor\\programs\\jsScripts\\cmdmp3.exe " + pathFile);
         }
         else {
             ws.send(buildCommandJson(internalCommandTypePlayMp3, fileName), {binary: true});

@@ -1,16 +1,13 @@
 const {loggerCommand} = require("./loggerUtil");
 const {exec, execSync } = require("child_process");
 
-function execCommandSync(command, callBackDone, callBackError) {
+function execCommandSync(command) {
     loggerCommand.info("running command: " + command);
     try {
         execSync(command);
-        callBackDone();
     } catch (error) {
         loggerCommand.error("Unable to run command " + error);
-        if (callBackError) {
-            callBackError(error);
-        }
+        throw error;
     }
 }
 
