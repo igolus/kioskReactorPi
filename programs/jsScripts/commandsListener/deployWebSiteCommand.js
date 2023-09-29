@@ -28,14 +28,11 @@ function execDeploy(url, device, callBack) {
 }
 
 function execDeployWindows(url, device, callBack) {
-    // const command = "sudo rm -rf /var/www/html/* && wget \"" + url+ "\" -O siteContent.zip && " +
-    //     "sudo unzip siteContent.zip -d /var/www/html && rm siteContent.zip && " +
-    //     "wget https://us-central1-totemsystem-5889b.cloudfunctions.net/homePage/kioskReactorJs/" + device.id + " &&" +
-    //     "cp device.id /var/www/html/kioskReactorUtil.js"
     try {
-        console.log("wget \"" + url+ "\" -O siteContent.zip")
-
         execCommandSync("wget \"" + url+ "\" -O siteContent.zip")
+        execCommandSync("del /S /Q c:\\nginx-1.25.2\\html\\*")
+        execCommandSync("tar -xf siteContent.zip -C c:\\nginx-1.25.2\\html")
+
     } catch (error) {
         loggerCommand.error("Unable to rune command " + error)
     }
@@ -43,7 +40,7 @@ function execDeployWindows(url, device, callBack) {
 
 function deployWebSiteCommand (project, device, chromeNavigate) {
     try {
-        writeDeviceAndProjectConfig(device).then(() => {
+        writeDeviceAndProjectConfig(device.id).then(() => {
             if (!project.webSiteZipPubliUrl) {
                 return;
             }
