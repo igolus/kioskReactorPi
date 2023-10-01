@@ -1,0 +1,6 @@
+# Connexion automatique
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon]
+"AutoAdminLogon"="1"
+"ForceAutoLogon"="1"
+"DefaultUserName"="kioskUser"
+"DefaultPassword"="logicsante"
