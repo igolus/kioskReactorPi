@@ -33,13 +33,13 @@ wait-for-ws() {
 }
 
 launchSystem() {
-	echo launchSystem
+  echo launchSystem
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/lifeCheck
   node lifeCheckRunner.js &
-	cd  /cygdrive/c/kioskReactor/programs/jsScripts/webSocket
-	node wsServer.js &
-	cd /cygdrive/c/kioskReactor/programs/jsScripts/commandsListener
-	node commandLauncher.js &
+  cd  /cygdrive/c/kioskReactor/programs/jsScripts/webSocket
+  node wsServer.js &
+  cd /cygdrive/c/kioskReactor/programs/jsScripts/commandsListener
+  node commandLauncher.js &
 }
 
 cd /cygdrive/c/kioskReactor/conf/
