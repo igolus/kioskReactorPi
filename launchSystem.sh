@@ -17,6 +17,8 @@ wait-for-url() {
     curl -I $1
 }
 
+cd /home/pi/kioskReactor/programs/jsScripts/lifeCheck
+sudo node lifeCheckRunner.js &
 cd /home/pi/kioskReactor/programs/jsScripts/webSocket
 sudo node wsServer.js &
 cd /home/pi/kioskReactor/programs/jsScripts/serverService
