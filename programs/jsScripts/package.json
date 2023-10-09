@@ -19,6 +19,7 @@
     "firebase": "^8.6.8",
     "firebase-admin": "^11.0.0",
     "moment": "^2.29.4",
+    "node-global-key-listener": "^0.1.1",
     "node-thermal-printer": "^4.1.2",
     "play-sound": "^1.1.5",
     "printer": "^0.4.0",

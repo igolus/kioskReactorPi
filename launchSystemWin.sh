@@ -36,6 +36,8 @@ launchSystem() {
   echo launchSystem
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/lifeCheck
   node lifeCheckRunner.js &
+  cd  /cygdrive/c/kioskReactor/programs/jsScripts/keyBoardListener
+  node listener.js &
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/webSocket
   node wsServer.js &
   cd /cygdrive/c/kioskReactor/programs/jsScripts/commandsListener
@@ -59,7 +61,7 @@ launchBrowser() {
 	wait-for-ws
 	#echo $url
 	cd '/cygdrive/C/Program Files/Google/Chrome/Application'
-	./chrome.exe --no-sandbox --no-first-run --fast --fast-start --password-store=basic --disable-features=TouchpadOverscrollHistoryNavigation --disable-features=TranslateUI --noerrdialogs --incognito --disable-pinch --overscroll-history-navigation=0 --disable-infobars --remote-debugging-port=9222 $url &
+	./chrome.exe --kiosk -no-sandbox --no-first-run --fast --fast-start --password-store=basic --disable-features=TouchpadOverscrollHistoryNavigation --disable-features=TranslateUI --noerrdialogs --incognito --disable-pinch --overscroll-history-navigation=0 --disable-infobars --remote-debugging-port=9222 $url &
 }
 
 cd /cygdrive/c/kioskReactor/programs/jsScripts/init
