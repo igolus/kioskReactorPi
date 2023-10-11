@@ -8,13 +8,29 @@ let buffer = "";
 v.addListener(function (e, down) {
     if (e.rawKey._nameRaw == "VK_RETURN" && e.state == "UP") {
         loggerCommand.info("QR Code detected: " + buffer);
-        sendEvent(buildEventJson(eventTypeQrCode, buffer))
+        try {
+            sendEvent(buildEventJson(eventTypeQrCode, buffer))
+        }
+        catch (error) {
+            loggerCommand.error(error.message)
+        }
+
         buffer = "";
         return
     }
+    //console.log(e.name)
+    //console.log(JSON.stringify(e))
+    if (e.state == "UP" && e.name.length == 1) {
 
-    if (e.state == "UP") {
         buffer +=e.name.toString();
+    }
+    if (e.state == "UP" && e.name == "COMMA") {
+
+        buffer += ',';
+    }
+    if (e.state == "UP" && e.name == "DOT") {
+
+        buffer += '.';
     }
 
 });
