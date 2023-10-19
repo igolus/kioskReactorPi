@@ -20,9 +20,9 @@ const writeConfig = (configJson) => {
 const writeDeviceAndProjectConfig = async (deviceId) => {
     const device = await getDevice(deviceId)
     const project = await getCurrentProject(device)
-    fs.writeFileSync(deviceFileSource, JSON.stringify(device), 'utf8');
+    fs.writeFileSync(deviceFileSource, JSON.stringify(device, null, 2), 'utf8');
     if (project) {
-        fs.writeFileSync(projectFileSource, JSON.stringify(project), 'utf8');
+        fs.writeFileSync(projectFileSource, JSON.stringify(project, null, 2), 'utf8');
     }
     if (device && device.brandId) {
         const brand = await getBrand(device.brandId);
