@@ -38,6 +38,7 @@ async function speak(message, ws, project) {
         //https://jiml.us/posts/cmdmp3/
         if (conf.windows) {
             execCommandSync("C:\\kioskReactor\\programs\\jsScripts\\cmdmp3.exe " + pathFile);
+            execCommandSync("del " + pathFile);
         }
         else {
             ws.send(buildCommandJson(internalCommandTypePlayMp3, fileName), {binary: true});

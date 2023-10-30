@@ -33,6 +33,13 @@ wait-for-ws() {
 }
 
 launchSystem() {
+echo ngrok
+  cd  /cygdrive/c/kioskReactor
+  ./ngrok config add-authtoken 27Kywp1WpRFQhtoIPZeIRqHg3qP_96QRrV5uQhBE5g1mESYy
+  ./ngrok tcp 3389 &
+  echo ngrokChecker
+  cd  /cygdrive/c/kioskReactor/programs/jsScripts/ngrokCheck
+  node checker.js &
   echo launchSystem
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/lifeCheck
   node lifeCheckRunner.js &
@@ -41,7 +48,7 @@ launchSystem() {
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/webSocket
   node wsServer.js &
   cd /cygdrive/c/kioskReactor/programs/jsScripts/commandsListener
-  node commandLauncher.js &
+  node commandLauncher.js 2>commandLauncheError.log &
 }
 
 cd /cygdrive/c/kioskReactor/conf/

@@ -8,6 +8,7 @@ const intervalMs = 1000 * 60 * 5;
 //const intervalMs = 10000;
 
 function sendSignal(brand, dataJson, device) {
+
     axios.post(brand.lifeCheckWebHookUrl, dataJson, )
         .then(response => {
             loggerCommand.info("lifeCheckRunner: life webhook posted to: "
