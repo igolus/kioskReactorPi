@@ -36,7 +36,6 @@ launchSystem() {
 echo ngrok
   cd  /cygdrive/c/kioskReactor
   ./ngrok config add-authtoken 27Kywp1WpRFQhtoIPZeIRqHg3qP_96QRrV5uQhBE5g1mESYy
-  ./ngrok tcp 3389 &
   echo ngrokChecker
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/ngrokCheck
   node checker.js &

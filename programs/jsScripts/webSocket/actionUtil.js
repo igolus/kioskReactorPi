@@ -90,6 +90,13 @@ function getDeployWebSiteCommand(input) {
     return false;
 }
 
+function getNGrokCommand(input) {
+    if (input && input.commandType && input.commandType.toLowerCase() === commandTypeNGrok) {
+        return input.commandParam;
+    }
+    return null;
+}
+
 
 
 module.exports = {
@@ -99,6 +106,7 @@ module.exports = {
     getTicketCommand: getTicketCommand,
     getTicketCommandTargetIp: getTicketCommandTargetIp,
     getSpeakCommand: getSpeakCommand,
+    getNGrokCommand: getNGrokCommand,
     getSnapCommand: getSnapCommand,
     getCancelSnapCommand: getCancelSnapCommand,
     getInactivityCommand: getInactivityCommand,
