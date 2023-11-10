@@ -29,6 +29,7 @@ module.exports = {
     internalCommandTypeCancelSnap :"cancelsnap",
     internalCommandTypeInactivity :"inactivity",
     commandTypeDeployWebSite:"deploywebsite",
+    commandTypeNGrok:"ngrok",
     buildCommandJson: buildCommandJson,
     cleanJson: cleanJson
 }

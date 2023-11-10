@@ -34,8 +34,6 @@ async function speak(message, ws, project) {
         let fileName = uuidv4() + ".mp3";
         let pathFile = "../" + fileName;
         await writeFile(pathFile, response.audioContent, 'binary');
-
-        //https://jiml.us/posts/cmdmp3/
         if (conf.windows) {
             execCommandSync("C:\\kioskReactor\\programs\\jsScripts\\cmdmp3.exe " + pathFile);
             execCommandSync("del " + pathFile);
@@ -43,7 +41,6 @@ async function speak(message, ws, project) {
         else {
             ws.send(buildCommandJson(internalCommandTypePlayMp3, fileName), {binary: true});
         }
-
     }
     catch (err) {
         loggerCommand.error(err);
