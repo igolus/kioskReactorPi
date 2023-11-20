@@ -3,6 +3,34 @@ const PrinterTypes = require("node-thermal-printer").types;
 const {loggerCommand} = require("../util/loggerUtil");
 var esprima = require('esprima');
 const conf = require('../../../conf/config.json');
+const fs = require("fs");
+const Downloader = require("nodejs-file-downloader");
+const jimp = require("jimp");
+
+
+async function downloadOrGetFile(url, width, extension) {
+    let buff = new Buffer.from(width + url);
+    let fileName = buff.toString('base64') + "." + extension;
+    const path = "./" + fileName;
+    if (fs.existsSync(path)) {
+        return path
+    }
+    const downloader = new Downloader({
+        url: url,
+        directory: ".",
+        fileName: fileName
+    });
+    try {
+        const {filePath,downloadStatus} = await downloader.download(); //Downloader.download() resolves with some useful properties.
+        const image = await jimp.read(path);
+        await image.resize(width, jimp.AUTO);
+        console.log("All done");
+        return path
+    } catch (error) {
+        console.log("Download failed", error);
+    }
+}
+
 const execPrintTicket = async (ip, sourceCode, useIp, device) => {
     try {
         let printer;
