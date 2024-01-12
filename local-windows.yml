@@ -12,6 +12,9 @@
     - name: Copy script file launchSystemWin.sh
       command: "cp launchSystemWin.sh /cygdrive/c/kioskReactor"
 
+    - name: Copy ngrok
+      command: "cp winutil/ngrok.exe /cygdrive/c/kioskReactor"
+
     - name: Copy script file killSystemWin.sh
       command: "cp killSystemWin.sh /cygdrive/c/kioskReactor"
       when: files_in_kioskReactor.stdout.find('killSystemWin.sh') == -1

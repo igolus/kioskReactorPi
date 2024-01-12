@@ -30,7 +30,6 @@ function sleep(ms) {
             await deviceUtil.updateDevice(device)
             await sleep(20000);
         } catch (error) {
-            loggerCommand.error("Unable to get ngrok data");
             device.rdpAddress = null;
             await deviceUtil.updateDevice(device)
 
