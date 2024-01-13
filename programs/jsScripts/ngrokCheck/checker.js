@@ -19,8 +19,6 @@ function sleep(ms) {
             const res = await axios.get('http://127.0.0.1:4040/api/tunnels', {
             })
             const data = res.data;
-            //console.log(JSON.stringify(device, null, 2));
-            // console.log(JSON.stringify(data, null, 2));
             let publicUrl = data.tunnels[0].public_url;
 
             const rdpAddress = publicUrl.split("//") [1];
@@ -32,7 +30,6 @@ function sleep(ms) {
         } catch (error) {
             device.rdpAddress = null;
             await deviceUtil.updateDevice(device)
-
             await delay(2000);
         }
     }
