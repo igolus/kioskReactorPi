@@ -81,6 +81,13 @@ function updateVersionAndReboot(device) {
                 } catch (err) {
                     loggerCommand.error("unable to update device version")
                 }
+            }).catch((err) => {
+                console.log("error")
+                try {
+                    rebootDevice()
+                } catch (err) {
+                    loggerCommand.error("unable to update device version")
+                }
             })
         })
     } catch (err) {
