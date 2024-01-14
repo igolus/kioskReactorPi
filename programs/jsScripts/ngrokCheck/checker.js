@@ -12,7 +12,7 @@ function sleep(ms) {
 
 (async () => {
     let init = false;
-    const device = await getCurrentDevice();
+
     //let processed = false;
     while (true) {
         try {
@@ -20,15 +20,15 @@ function sleep(ms) {
             })
             const data = res.data;
             let publicUrl = data.tunnels[0].public_url;
-
             const rdpAddress = publicUrl.split("//") [1];
             console.log(rdpAddress);
-
+            const device = await getCurrentDevice();
             device.rdpAddress = rdpAddress;
             await deviceUtil.updateDevice(device)
             await sleep(20000);
         } catch (error) {
             device.rdpAddress = null;
+            const device = await getCurrentDevice();
             await deviceUtil.updateDevice(device)
             await delay(2000);
         }
