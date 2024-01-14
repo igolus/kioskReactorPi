@@ -27,8 +27,8 @@ function sleep(ms) {
             await deviceUtil.updateDevice(device)
             await sleep(20000);
         } catch (error) {
-            device.rdpAddress = null;
             const device = await getCurrentDevice();
+            device.rdpAddress = null;
             await deviceUtil.updateDevice(device)
             await delay(2000);
             //update
