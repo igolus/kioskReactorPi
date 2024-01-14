@@ -31,6 +31,7 @@ function sleep(ms) {
             const device = await getCurrentDevice();
             await deviceUtil.updateDevice(device)
             await delay(2000);
+            //update
         }
     }
     process.exit();
