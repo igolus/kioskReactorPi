@@ -8,31 +8,32 @@ const Downloader = require("nodejs-file-downloader");
 const jimp = require("jimp");
 
 
-async function downloadOrGetFile(url, width, extension) {
-    let buff = new Buffer.from(width + url);
-    let fileName = buff.toString('base64') + "." + extension;
-    const path = "./" + fileName;
-    if (fs.existsSync(path)) {
-        return path
-    }
-    const downloader = new Downloader({
-        url: url,
-        directory: ".",
-        fileName: fileName
-    });
-    try {
-        const {filePath,downloadStatus} = await downloader.download(); //Downloader.download() resolves with some useful properties.
-        const image = await jimp.read(path);
-        await image.resize(width, jimp.AUTO);
-        console.log("All done");
-        return path
-    } catch (error) {
-        console.log("Download failed", error);
-    }
-}
+//async function downloadOrGetFile(url, width, extension) {
+//    let buff = new Buffer.from(width + url);
+//    let fileName = buff.toString('base64') + "." + extension;
+//    const path = "./" + fileName;
+//    if (fs.existsSync(path)) {
+//        return path
+//    }
+//    const downloader = new Downloader({
+//        url: url,
+//        directory: ".",
+//        fileName: fileName
+//    });
+//    try {
+//        const {filePath,downloadStatus} = await downloader.download(); //Downloader.download() resolves with some useful properties.
+//        const image = await jimp.read(path);
+//        await image.resize(width, jimp.AUTO);
+//        console.log("All done");
+//        return path
+//    } catch (error) {
+//        console.log("Download failed", error);
+//    }
+//}
 
 const execPrintTicket = async (ip, sourceCode, useIp, device) => {
     try {
+        console.log(sourceCode)
         let printer;
         if (device.usbDevice && !useIp) {
             printer = new ThermalPrinter({
@@ -48,9 +49,16 @@ const execPrintTicket = async (ip, sourceCode, useIp, device) => {
             });
         }
         else {
+            if (sourceCode) {
+                sourceCode = sourceCode.substring(1);
+                sourceCode = sourceCode.slice(0, -1);
+                sourceCode = sourceCode.replaceAll("\\n", "\n");
+                sourceCode = sourceCode.replaceAll("\\\"", "\"");
+            }
+            console.log("printerIp");
             printer = new ThermalPrinter({
                 type: PrinterTypes.EPSON,                                  // Printer type: 'star' or 'epson'
-                interface: `tcp://${ip}:9100`,                                 // Printer interface
+                interface: `tcp://${ip}:9100`,                             // Printer interface
                 characterSet: 'SLOVENIA',                                 // Printer character set - default: SLOVENIA
                 removeSpecialCharacters: false,                           // Removes special characters - default: false
                 lineCharacter: "=",                                       // Set character for lines - default: "-"
@@ -61,8 +69,19 @@ const execPrintTicket = async (ip, sourceCode, useIp, device) => {
         }
 
 
-
+        console.log("PRINT !!!")
         if (sourceCode) {
+
+            //sourceCode = sourceCode.substring(1);
+            //sourceCode = sourceCode.slice(0, -1);
+            //sourceCode = sourceCode.replaceAll("\\n", "\n");
+            //sourceCode = sourceCode.replaceAll("\\\"", "\"");
+            //if (sourceCode.charAt(0) == '\"') {
+            //	sourceCode = sourceCode.substring(1);
+            //	sourceCode = sourceCode.slice(0, -1);
+            //}
+
+            console.log(sourceCode)
             try {
                 esprima.parse(sourceCode);
             } catch (err) {
