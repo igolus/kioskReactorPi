@@ -24,6 +24,7 @@ module.exports = {
     commandTypeUpdate:"update",
     commandTypePrintTicket:"printticket",
     commandTypeSpeak:"speak",
+    commandTypePrintFromUrl:"printfromurl",
     internalCommandTypePlayMp3 :"playmp3",
     internalCommandTypeSnap :"snap",
     internalCommandTypeCancelSnap :"cancelsnap",

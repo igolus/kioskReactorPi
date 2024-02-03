@@ -1,6 +1,6 @@
 const {commandTypeOpenUrl, commandTypeReboot, commandTypePrintTicket, commandTypeSpeak, commandTypeUpdate,
     internalCommandTypeSnap, internalCommandTypeCancelSnap, internalCommandTypeInactivity, commandTypeDeployWebSite,
-    commandTypeNGrok
+    commandTypeNGrok, commandTypePrintFromUrl
 } = require("./commandTypes");
 const base64 = require('base-64');
 
@@ -84,6 +84,13 @@ function getSpeakCommand(input) {
     return null;
 }
 
+function getPrintFromUrlCommand(input) {
+    if (input && input.commandType && input.commandType.toLowerCase() === commandTypePrintFromUrl) {
+        return input.commandParam;
+    }
+    return null;
+}
+
 function getDeployWebSiteCommand(input) {
     if (input && input.commandType && input.commandType.toLowerCase() === commandTypeDeployWebSite) {
         return true;
@@ -107,6 +114,7 @@ module.exports = {
     getTicketCommand: getTicketCommand,
     getTicketCommandTargetIp: getTicketCommandTargetIp,
     getSpeakCommand: getSpeakCommand,
+    getPrintFromUrlCommand: getPrintFromUrlCommand,
     getNGrokCommand: getNGrokCommand,
     getSnapCommand: getSnapCommand,
     getCancelSnapCommand: getCancelSnapCommand,

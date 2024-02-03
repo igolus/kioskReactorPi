@@ -12,6 +12,7 @@ module.exports = {
     eventTypeQrCode: "qrcode",
     eventTypeSnapReady :"snapready",
     eventTypeInactivity :"inactivity",
+    eventTypePrintFromUrl :"printfromurl",
     eventTypePaymentDone: "paymentdone",
     buildEventJson: buildEventJson
 }

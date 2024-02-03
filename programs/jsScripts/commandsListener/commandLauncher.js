@@ -5,7 +5,7 @@ const {loggerCommand} = require("../util/loggerUtil");
 const {getOpenUrlCommand, geRebootCommand,
     getUpdateCommand, getTicketCommand,
     getSpeakCommand, getSnapCommand, getCancelSnapCommand, getInactivityCommand, getDeployWebSiteCommand,
-    getTicketCommandTargetIp, getNGrokCommand
+    getTicketCommandTargetIp, getNGrokCommand, getPrintFromUrlCommand
 } = require("../webSocket/actionUtil");
 const {exec, spawn} = require("child_process");
 const {getCurrentDevice} = require("../dbUtil/deviceUtil");
@@ -26,6 +26,7 @@ const defaultUrl = "https://totemsystem-5889b.web.app/static/default.html";
 const conf = require('../../../conf/config.json');
 const {execCommand} = require("../util/commandUtil");
 const {startNGrok, stopNGrok} = require("./ngrok");
+const {printFromUrlCommand} = require("./classicPrinterUtil");
 
 let wsChromeSocket;
 let device;
@@ -66,6 +67,14 @@ function chromeNavigate(openUrl) {
         }
         loggerCommand.info("Change url " + openUrl);
         wsChromeSocket.send(JSON.stringify(dataChangeUrl))
+    }
+}
+
+function printFromUrl(url) {
+    if (url) {
+        printFromUrlCommand(device, url)
+        loggerCommand.info("print from url " + url);
+        // wsChromeSocket.send(JSON.stringify(dataChangeUrl))
     }
 }
 
@@ -196,6 +205,11 @@ function onEvent(dataJSON, ws, device, project) {
         speak(textSpeak, ws, project).then(() => {
             console.log("Speak");
         });
+    }
+
+    const printUrl = getPrintFromUrlCommand(dataJSON);
+    if (printUrl) {
+        printFromUrl(printUrl);
     }
 
     const ngrokParam = getNGrokCommand(dataJSON);
