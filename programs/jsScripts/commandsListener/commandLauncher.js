@@ -26,7 +26,6 @@ const defaultUrl = "https://totemsystem-5889b.web.app/static/default.html";
 const conf = require('../../../conf/config.json');
 const {execCommand} = require("../util/commandUtil");
 const {startNGrok, stopNGrok} = require("./ngrok");
-const {printFromUrlCommand} = require("./classicPrinterUtil");
 
 let wsChromeSocket;
 let device;
@@ -72,8 +71,8 @@ function chromeNavigate(openUrl) {
 
 function printFromUrl(url) {
     if (url) {
-        printFromUrlCommand(device, url)
-        loggerCommand.info("print from url " + url);
+        //printFromUrlCommand(device, url)
+        //loggerCommand.info("print from url " + url);
         // wsChromeSocket.send(JSON.stringify(dataChangeUrl))
     }
 }
