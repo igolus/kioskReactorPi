@@ -23,13 +23,18 @@ function sleep(ms) {
             const rdpAddress = publicUrl.split("//") [1];
             console.log(rdpAddress);
             const device = await getCurrentDevice();
-            device.rdpAddress = rdpAddress;
-            await deviceUtil.updateDevice(device)
+            if (device) {
+                device.rdpAddress = rdpAddress;
+                await deviceUtil.updateDevice(device)
+            }
+
             await sleep(20000);
         } catch (error) {
             const device = await getCurrentDevice();
-            device.rdpAddress = null;
-            await deviceUtil.updateDevice(device)
+            if (device) {
+                device.rdpAddress = null;
+                await deviceUtil.updateDevice(device)
+            }
             await delay(2000);
             //update
         }

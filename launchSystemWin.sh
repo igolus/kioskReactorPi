@@ -45,7 +45,7 @@ echo ngrok
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/keyBoardListener
   node listener.js &
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/webSocket
-  node wsServer.js &
+  node wsServer.js 2>wsServer.log &
   cd /cygdrive/c/kioskReactor/programs/jsScripts/commandsListener
   node commandLauncher.js 2>commandLauncheError.log &
 }

@@ -40,7 +40,7 @@ var ipDefined = "";
             ipDefined = out;
         })
     }
-    if (!conf.windows) {
+    if (conf.windows) {
         execCommand("hostname", (out) => {
             ipDefined = out;
         })
@@ -56,18 +56,23 @@ var ipDefined = "";
 
     queryEvent.onSnapshot(querySnapshot => {
         querySnapshot.docChanges().forEach(async (change) => {
-            const doc = await fireBaseDb
-                .collection(brandsCollection)
-                .doc(device.brandId)
-                .collection(deviceHealthCollection)
-                .doc(device.id)
+            try {
+                const doc = await fireBaseDb
+                    .collection(brandsCollection)
+                    .doc(device.brandId)
+                    .collection(deviceHealthCollection)
+                    .doc(device.id)
 
-            let deviceHealth = change.doc.data();
-            await doc.set({
-                ...deviceHealth,
-                alive: true,
-                ip: ipDefined,
-            });
+                let deviceHealth = change.doc.data();
+                await doc.set({
+                    ...deviceHealth,
+                    alive: true,
+                    ip: ipDefined,
+                });
+            }
+            catch (err) {
+                loggerCommand.error(err)
+            }
         })
     })
 })();
