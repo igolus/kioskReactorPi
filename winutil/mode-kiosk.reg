@@ -1,6 +1,15 @@
+#Ajouter de l'application au démarrage
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System]
+"Shell"="c:\\cygwin64\\bin\\bash.exe C:\kioskReactor\launchSystemWin.sh"
+
 # Connexion automatique
 [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon]
 "AutoAdminLogon"="1"
 "ForceAutoLogon"="1"
 "DefaultUserName"="kioskUser"
 "DefaultPassword"="logicsante"
+
+#Désactiver le gestionnaire de tâches pour cet utilisateur
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System]
+"DisableTaskMgr"=dword:00000001
+"DisableChangePassword"=dword:00000001
