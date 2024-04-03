@@ -160,8 +160,8 @@ wsSocket.on('connection', function connection(ws) {
     device = await getCurrentDevice();
     currentProject = await getCurrentProject(device)
     server.listen(8080);
-    let conf = readConfig();
-    conf.wsInit = 1;
-    await writeConfig(conf);
+    // let conf = readConfig();
+    // conf.wsInit = 1;
+    // await writeConfig(conf);
 })();
 

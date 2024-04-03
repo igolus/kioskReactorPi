@@ -6,8 +6,8 @@ const myArgs = process.argv.slice(2);
 let isLite = myArgs.length > 0 && myArgs[0].toLowerCase() === 'lite';
 
 (async () => {
-    conf.wsInit = 0;
-    await writeConfig(conf);
+    // conf.wsInit = 0;
+    // writeConfig(conf);
     if (!conf.deviceId) {
         conf.deviceId = shortid.generate();
         writeConfig(conf);
