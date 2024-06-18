@@ -9,7 +9,17 @@ const https = require("https");
 const {execCommand, execCommandSync} = require("../util/commandUtil");
 
 function writeIcaVersion(versionNum) {
-    fs.writeFile('./icaversion.txt', versionNum, err => {
+    console.error("writing versionNum " + versionNum)
+
+    try {
+        return fs.writeFileSync('./icaversion.txt', versionNum);
+    }
+    catch (e) {
+        console.error("unable to write version file");
+        process.exit(0);
+    }
+
+    fs.writeFileSync('./icaversion.txt', versionNum, err => {
         if (err) {
             console.error(err);
         } else {
@@ -21,7 +31,6 @@ function writeIcaVersion(versionNum) {
 function readIcaVersion(versionNum) {
     try {
         return fs.readFileSync('./icaversion.txt').toString();
-
     }
     catch (e) {
         return null;
@@ -31,7 +40,7 @@ function readIcaVersion(versionNum) {
 
 function installNewVersion(versionNum) {
     console.log(`new Version ${versionNum} Downloaded`)
-    console.log(`installing Version ${versionNum}`)
+    console.log(`installing Version ${versionNum} Downloaded`)
 
     try {
         execCommandSync("icanope.exe /S")
