@@ -1,5 +1,5 @@
 const {fireBaseDb} = require("./firebaseUtil");
-const { devicesCollection, billingCollection, brandsCollection, versionCollection} = require("./collectionsNames");
+const { devicesCollection, billingCollection, brandsCollection, versionCollection, icaCollection} = require("./collectionsNames");
 const config = require('../../../conf/config.json');
 const moment = require("moment");
 
@@ -26,6 +26,26 @@ const getCurrentDevice = async () => {
     return doc.exists && doc.data();
 }
 
+const getCurrentBrand = async (brandId) => {
+    const doc = await fireBaseDb
+        .collection(brandsCollection)
+        .doc(brandId)
+        .get();
+
+    return doc.exists && doc.data();
+}
+
+const getIca = async (brandId) => {
+    const doc = await fireBaseDb
+        .collection(brandsCollection)
+        .doc(brandId)
+        .collection(icaCollection)
+        .doc("1")
+        .get();
+
+    return doc.exists && doc.data();
+}
+
 const getDevice = async (deviceId) => {
     const doc = await fireBaseDb
         .collection(devicesCollection)
@@ -47,6 +67,8 @@ const updateDevice = async (data) => {
 module.exports = {
     createDeviceIdDb: createDeviceIdDb,
     getCurrentDevice: getCurrentDevice,
+    getCurrentBrand: getCurrentBrand,
+    getIca: getIca,
     getDevice: getDevice,
     updateDevice: updateDevice,
 }

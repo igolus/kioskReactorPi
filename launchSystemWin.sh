@@ -33,7 +33,9 @@ wait-for-ws() {
 }
 
 launchSystem() {
-echo ngrok
+  echo ngrok
+  cd  /cygdrive/c/kioskReactor/programs/jsScripts/icanopee
+  node icanopeUpdate.js 2>icanopeUpdateError.log
   cd  /cygdrive/c/kioskReactor
   ./ngrok config add-authtoken 27Kywp1WpRFQhtoIPZeIRqHg3qP_96QRrV5uQhBE5g1mESYy
   echo ngrokChecker
