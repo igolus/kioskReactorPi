@@ -31,33 +31,38 @@ function readIcaVersion(versionNum) {
 
 function installNewVersion(versionNum) {
     console.log(`new Version ${versionNum} Downloaded`)
-    console.log(`installing Version ${versionNum} Downloaded`)
+    console.log(`installing Version ${versionNum}`)
 
     try {
         execCommandSync("icanope.exe /S")
     }
     catch (e) {
         console.error("Error during installation " + e.message)
+        process.exit(0);
     }
     try {
         execCommandSync("cp dmpconnect_params.ini \"C:\\Program Files (x86)\\DmpConnect-JS2\"")
     }
     catch (e) {
         console.error("Error during installation " + e.message)
+        process.exit(0);
     }
     try {
         execCommandSync("net stop DmpConnect-JS2")
     }
     catch (e) {
         console.error("Error during installation " + e.message)
+        process.exit(0);
     }
     try {
         execCommandSync("net start DmpConnect-JS2")
     }
     catch (e) {
         console.error("Error during installation " + e.message)
+        process.exit(0);
     }
     console.log("Icanopee Installation finished !!")
+
 }
 
 (async () => {
@@ -115,6 +120,8 @@ function installNewVersion(versionNum) {
                 writer.close(() => {
                     installNewVersion(versionNum);
                     writeIcaVersion(versionNum);
+                    process.exit(0);
+
                 });
             });
             writer.on('error', () => console.error("Error de telechargement"));
@@ -125,8 +132,9 @@ function installNewVersion(versionNum) {
     }
     catch (error) {
         console.log(error);
+        process.exit(0);
     }
     finally {
-        process.exit(0);
+
     }
 })();
