@@ -78,10 +78,10 @@ function installNewVersion(versionNum) {
     try {
         const actualVersion = readIcaVersion();
         const device = await getCurrentDevice();
-        console.log(device.brandId);
+        // console.log(device.brandId);
         const ica = await getIca(device.brandId);
-        console.log(JSON.stringify(device.brandId));
-        console.log(JSON.stringify(ica));
+        // console.log(JSON.stringify(device.brandId));
+        // console.log(JSON.stringify(ica));
 
         const agent = new https.Agent({
             rejectUnauthorized: false
@@ -96,7 +96,7 @@ function installNewVersion(versionNum) {
                 httpsAgent: agent
             });
 
-        console.log(JSON.stringify(connect.data.token));
+        // console.log(JSON.stringify(connect.data.token));
         let versions =await axios.get("https://clients.icanopee.net/api/customer_area/latest_builds?product=337",
             {
                 headers: {
@@ -108,7 +108,7 @@ function installNewVersion(versionNum) {
         let winVersion =  versions.data.find(v => v.filename.endsWith("dev.exe"));
         let versionNum = winVersion.version;
 
-        console.log(JSON.stringify(winVersion, null, 2))
+        // console.log(JSON.stringify(winVersion, null, 2))
         if (!actualVersion || actualVersion !== versionNum) {
             console.log("New Icanopee version available");
 
@@ -137,6 +137,7 @@ function installNewVersion(versionNum) {
         }
         else {
             console.log("Icanopee is up to date");
+            process.exit(0);
         }
     }
     catch (error) {
