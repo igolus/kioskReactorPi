@@ -79,9 +79,10 @@ function installNewVersion(versionNum) {
         const actualVersion = readIcaVersion();
         const device = await getCurrentDevice();
         // console.log(device.brandId);
-        const ica = await getIca(device.brandId);
+        // const ica = await getIca(device.brandId);
+        //const officialVersion = await getIca(device.brandId);
         // console.log(JSON.stringify(device.brandId));
-        // console.log(JSON.stringify(ica));
+        console.log(JSON.stringify(ica));
 
         const agent = new https.Agent({
             rejectUnauthorized: false
@@ -97,16 +98,21 @@ function installNewVersion(versionNum) {
             });
 
         // console.log(JSON.stringify(connect.data.token));
-        let versions =await axios.get("https://clients.icanopee.net/api/customer_area/latest_builds?product=337",
+        let versions =await axios.get("https://clients.icanopee.net/api/customer_area/builds?product=337",
             {
                 headers: {
                     Authorization: `Bearer ${connect.data.token}`
                 },
                 httpsAgent: agent
             });
-
-        let winVersion =  versions.data.find(v => v.filename.endsWith("dev.exe"));
+        // console.log(JSON.stringify(versions.data));
+        let winVersion =  versions.data.find(v => v.filename.endsWith("dev.exe") && v.version === ica.officialVersion);
+        if (!winVersion) {
+            console.log("No version " + ica.officialVersion + " listed");
+            return;
+        }
         let versionNum = winVersion.version;
+
 
         // console.log(JSON.stringify(winVersion, null, 2))
         if (!actualVersion || actualVersion !== versionNum) {
