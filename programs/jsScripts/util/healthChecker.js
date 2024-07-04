@@ -35,45 +35,49 @@ function execCommand(command, callBackDone, callBackError) {
 var ipDefined = "";
 
 (async () => {
-    if (!conf.windows) {
-        execCommand("hostname -I", (out) => {
-            ipDefined = out;
+    try {
+        if (!conf.windows) {
+            execCommand("hostname -I", (out) => {
+                ipDefined = out;
+            })
+        }
+        if (conf.windows) {
+            execCommand("hostname", (out) => {
+                ipDefined = out;
+            })
+        }
+
+        const device = await getCurrentDevice();
+        const queryEvent = fireBaseDb
+            .collection(brandsCollection)
+            .doc(device.brandId)
+            .collection(deviceHealthCollection)
+            .where('alive', '==', false)
+            .where('id', '==', conf.deviceId)
+
+        queryEvent.onSnapshot(querySnapshot => {
+            querySnapshot.docChanges().forEach(async (change) => {
+                try {
+                    const doc = await fireBaseDb
+                        .collection(brandsCollection)
+                        .doc(device.brandId)
+                        .collection(deviceHealthCollection)
+                        .doc(device.id)
+
+                    let deviceHealth = change.doc.data();
+                    await doc.set({
+                        ...deviceHealth,
+                        alive: true,
+                        ip: ipDefined,
+                    });
+                } catch (err) {
+                    loggerCommand.error(err)
+                }
+            })
         })
     }
-    if (conf.windows) {
-        execCommand("hostname", (out) => {
-            ipDefined = out;
-        })
+    catch (err) {
+        loggerCommand.error(err)
     }
-
-    const device = await getCurrentDevice();
-    const queryEvent = fireBaseDb
-        .collection(brandsCollection)
-        .doc(device.brandId)
-        .collection(deviceHealthCollection)
-        .where('alive', '==', false)
-        .where('id', '==', conf.deviceId)
-
-    queryEvent.onSnapshot(querySnapshot => {
-        querySnapshot.docChanges().forEach(async (change) => {
-            try {
-                const doc = await fireBaseDb
-                    .collection(brandsCollection)
-                    .doc(device.brandId)
-                    .collection(deviceHealthCollection)
-                    .doc(device.id)
-
-                let deviceHealth = change.doc.data();
-                await doc.set({
-                    ...deviceHealth,
-                    alive: true,
-                    ip: ipDefined,
-                });
-            }
-            catch (err) {
-                loggerCommand.error(err)
-            }
-        })
-    })
 })();
 
