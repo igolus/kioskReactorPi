@@ -79,10 +79,10 @@ function installNewVersion(versionNum) {
         const actualVersion = readIcaVersion();
         const device = await getCurrentDevice();
         // console.log(device.brandId);
-        // const ica = await getIca(device.brandId);
+        const ica = await getIca(device.brandId);
         //const officialVersion = await getIca(device.brandId);
         // console.log(JSON.stringify(device.brandId));
-        console.log(JSON.stringify(ica));
+        // console.log(JSON.stringify(ica));
 
         const agent = new https.Agent({
             rejectUnauthorized: false
