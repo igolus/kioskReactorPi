@@ -12,6 +12,9 @@
     - name: Copy script file launchSystemWin.sh
       command: "cp launchSystemWin.sh /cygdrive/c/kioskReactor"
 
+    - name: Copy script file kill.bat
+      command: "cp kill.bat /cygdrive/c/kioskReactor"
+
     - name: Copy ngrok
       command: "cp winutil/ngrok.exe /cygdrive/c/kioskReactor"
 
