@@ -139,7 +139,7 @@ function installNewVersion(versionNum) {
 
                 });
             });
-            writer.on('error', () => console.error("Error de telechargement"));
+            writer.on('error', () => console.error("Erreur de telechargement"));
         }
         else {
             console.log("Icanopee is up to date");

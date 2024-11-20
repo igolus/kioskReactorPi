@@ -21,7 +21,7 @@ const execPrintTicket = async (ip, sourceCode, useIp, device) => {
             });
         }
         else {
-            if (sourceCode) {
+            if (sourceCode && useIp) {
                 sourceCode = sourceCode.substring(1);
                 sourceCode = sourceCode.slice(0, -1);
                 sourceCode = sourceCode.replaceAll("\\n", "\n");
