@@ -1,6 +1,6 @@
 const {commandTypeOpenUrl, commandTypeReboot, commandTypePrintTicket, commandTypeSpeak, commandTypeUpdate,
     internalCommandTypeSnap, internalCommandTypeCancelSnap, internalCommandTypeInactivity, commandTypeDeployWebSite,
-    commandTypeNGrok, commandTypePrintFromUrl
+    commandTypeNGrok, commandTypePrintFromUrl, commandTypeOpenRelay, commandTypeCloseRelay
 } = require("./commandTypes");
 const base64 = require('base-64');
 
@@ -21,6 +21,20 @@ function getUpdateCommand(input) {
 
 function geRebootCommand(input) {
     if (input && input.commandType && input.commandType.toLowerCase() === commandTypeReboot) {
+        return true;
+    }
+    return false;
+}
+
+function getOpenRelayCommand(input) {
+    if (input && input.commandType && input.commandType.toLowerCase() === commandTypeOpenRelay) {
+        return true;
+    }
+    return false;
+}
+
+function getCloseRelayCommand(input) {
+    if (input && input.commandType && input.commandType.toLowerCase() === commandTypeCloseRelay) {
         return true;
     }
     return false;
@@ -119,6 +133,8 @@ module.exports = {
     getSnapCommand: getSnapCommand,
     getCancelSnapCommand: getCancelSnapCommand,
     getInactivityCommand: getInactivityCommand,
-    getDeployWebSiteCommand: getDeployWebSiteCommand
+    getDeployWebSiteCommand: getDeployWebSiteCommand,
+    getOpenRelayCommand: getOpenRelayCommand,
+    getCloseRelayCommand: getCloseRelayCommand
 }
 

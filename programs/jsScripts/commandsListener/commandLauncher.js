@@ -5,7 +5,7 @@ const {loggerCommand} = require("../util/loggerUtil");
 const {getOpenUrlCommand, geRebootCommand,
     getUpdateCommand, getTicketCommand,
     getSpeakCommand, getSnapCommand, getCancelSnapCommand, getInactivityCommand, getDeployWebSiteCommand,
-    getTicketCommandTargetIp, getNGrokCommand, getPrintFromUrlCommand
+    getTicketCommandTargetIp, getNGrokCommand, getPrintFromUrlCommand, getOpenRelayCommand, getCloseRelayCommand
 } = require("../webSocket/actionUtil");
 const {exec, spawn} = require("child_process");
 const {getCurrentDevice} = require("../dbUtil/deviceUtil");
@@ -26,6 +26,7 @@ const defaultUrl = "https://totemsystem-5889b.web.app/static/default.html";
 const conf = require('../../../conf/config.json');
 const {execCommand} = require("../util/commandUtil");
 const {startNGrok, stopNGrok} = require("./ngrok");
+const {turnRelayOn, turnRelayOff} = require("../elec/relay");
 
 let wsChromeSocket;
 let device;
@@ -145,13 +146,19 @@ function printTicket(ticketSourceCode) {
 }
 
 function printTicketTargetIp(ticketWithIpTarget) {
-    // source: decode,
-    //     ip: input.commandContext
-
     loggerCommand.info(`print Ticket !! on ip ` + ticketWithIpTarget.ip);
     execPrintTicket(ticketWithIpTarget.ip, ticketWithIpTarget.source, true, device);
 }
 
+function openRelay() {
+    loggerCommand.info(`openRelay`);
+    turnRelayOn();
+}
+
+function closeRelay() {
+    loggerCommand.info(`closeRelay`);
+    turnRelayOff();
+}
 
 function onEvent(dataJSON, ws, device, project) {
     loggerCommand.info("data JSON " + JSON.stringify(dataJSON))
@@ -159,6 +166,13 @@ function onEvent(dataJSON, ws, device, project) {
     if (openUrl && !device.lite) {
         chromeNavigate(openUrl);
     }
+    if (getOpenRelayCommand(dataJSON)) {
+        openRelay();
+    }
+    if (getCloseRelayCommand(dataJSON)) {
+        closeRelay();
+    }
+
     const reboot = geRebootCommand(dataJSON);
     if (reboot) {
         rebootDevice();
@@ -242,18 +256,18 @@ else {
             while (!init) {
                 try {
                     //const resChrome = await axios.get(conf.windows ? localChromeDebuggerServerJsonCheckWin : localChromeDebuggerServerJsonCheck);
-                    const resChrome = await axios.get("http://127.0.0.1:9222/json");
-                    const data = resChrome.data;
-                    if (data.length > 0) {
-                        const firstTab = data[0];
-                        const wsUrl = firstTab.webSocketDebuggerUrl;
-                        wsChromeSocket = new WebSocket(wsUrl);
-                        loggerCommand.info("wsChromeSocket opened " + wsUrl)
+                    // const resChrome = await axios.get("http://127.0.0.1:9222/json");
+                    // const data = resChrome.data;
+                    // if (data.length > 0) {
+                    //     const firstTab = data[0];
+                    //     const wsUrl = firstTab.webSocketDebuggerUrl;
+                    //     wsChromeSocket = new WebSocket(wsUrl);
+                    //     loggerCommand.info("wsChromeSocket opened " + wsUrl)
                         init = true;
                         await startSeverAndConfigureListening(onEvent, device, project);
-                    } else {
-                        loggerCommand.info("No tabs open " + resp.data)
-                    }
+                    // } else {
+                    //     loggerCommand.info("No tabs open " + resp.data)
+                    // }
                 } catch (err) {
                     loggerCommand.info("Unable to communicate with chrome", err);
                     //return;
