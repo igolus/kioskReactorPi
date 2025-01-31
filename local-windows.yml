@@ -26,6 +26,14 @@
       command: "cp update.sh /cygdrive/c/kioskReactor"
       when: files_in_kioskReactor.stdout.find('update.sh') == -1
 
+    - name: Copy script file launchSystemWinWithCPSReader.sh
+      command: "cp launchSystemWinWithCPSReader.sh /cygdrive/c/kioskReactor"
+      when: files_in_kioskReactor.stdout.find('launchSystemWinWithCPSReader.sh') == -1
+
+    - name: Copy script file launchWithCps.bat
+      command: "cp launchWithCps.bath /cygdrive/c/kioskReactor"
+      when: files_in_kioskReactor.stdout.find('launchWithCps.bat') == -1
+
     - name: Copy script file installNPM.bat
       command: "cp installNPM.bat /cygdrive/c/kioskReactor"
       when: files_in_kioskReactor.stdout.find('installNPM.bat') == -1
