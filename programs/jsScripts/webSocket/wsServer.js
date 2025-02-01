@@ -10,7 +10,7 @@ const {eventTypeQrCode, eventTypeSnapReady, eventTypeInactivity, eventTypePaymen
 const {commandTypeReboot, commandTypeOpenUrl, commandTypeUpdate,
     commandTypePrintTicket, commandTypeSpeak, internalCommandTypePlayMp3, internalCommandTypeSnap,
     internalCommandTypeCancelSnap, internalCommandTypeInactivity, commandTypeDeployWebSite, commandTypeNGrok,
-    commandTypePrintFromUrl
+    commandTypePrintFromUrl, commandTypeOpenRelay, commandTypeCloseRelay
 } = require("./commandTypes");
 const {listenToEvents, listenToCommands} = require("../dbUtil/eventsUtil");
 require('../util/healthChecker')
@@ -36,10 +36,10 @@ getCurrentDevice().then(device => {
 const allCommands = [commandTypeOpenUrl, commandTypeReboot, commandTypeUpdate,
     commandTypePrintTicket, commandTypeSpeak, internalCommandTypePlayMp3,
     internalCommandTypeSnap, internalCommandTypeCancelSnap, internalCommandTypeInactivity,
-    commandTypeDeployWebSite, commandTypeNGrok, commandTypePrintFromUrl]
+    commandTypeDeployWebSite, commandTypeNGrok, commandTypePrintFromUrl, commandTypeOpenRelay, commandTypeCloseRelay]
 
 const noParamCommands = [commandTypeReboot, internalCommandTypeInactivity,
-    internalCommandTypeSnap, internalCommandTypeCancelSnap, commandTypeDeployWebSite, commandTypeUpdate]
+    internalCommandTypeSnap, internalCommandTypeCancelSnap, commandTypeDeployWebSite, commandTypeUpdate, commandTypeOpenRelay, commandTypeCloseRelay]
 
 const noParamEvents = [eventTypeInactivity]
 

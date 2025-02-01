@@ -1,17 +1,38 @@
-const {SerialPort} = require("serialport");
 const conf = require('../../../conf/config.json');
-const serialport = new SerialPort({ path: conf.comPort, baudRate: 9600 })
+var SerialPort;
+var serialportInstance;
+const {loggerCommand} = require("../util/loggerUtil");
+
+try {
+    sportData = require("serialport");
+    SerialPort = sportData.SerialPort;
+    serialportInstance = new SerialPort({ path: conf.comPort, baudRate: 9600 }, function (err) {
+        if (err) {
+            loggerCommand.error('Error open serialport:', err.message);
+        }
+    });
+}
+catch (error) {
+    loggerCommand.error('unbale to create serialport:', error.message);
+}
+
 
 function turnRelayOff() {
-
-    serialport.write('AT+CH1=0');
-    // serialport.close();
+    try {
+        serialportInstance.write('AT+CH1=0');
+    }
+    catch (error) {
+        loggerCommand.error('Error turnRelayOff:', error.message);
+    }
 }
 
 function turnRelayOn() {
-    // const serialport = new SerialPort({ path: portName, baudRate: 9600 })
-    serialport.write('AT+CH1=1');
-    // serialport.close();
+    try {
+        serialportInstance.write('AT+CH1=1');
+    }
+    catch (error) {
+        loggerCommand.error('Error turnRelayOff:', error.message);
+    }
 }
 
 // Export des deux fonctions
