@@ -1,0 +1,7 @@
+{
+"commandType": "openrelay"
+}
+
+{
+"commandType": "closerelay"
+}
