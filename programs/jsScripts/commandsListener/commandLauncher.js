@@ -255,19 +255,19 @@ else {
         else {
             while (!init) {
                 try {
-                    //const resChrome = await axios.get(conf.windows ? localChromeDebuggerServerJsonCheckWin : localChromeDebuggerServerJsonCheck);
-                    // const resChrome = await axios.get("http://127.0.0.1:9222/json");
-                    // const data = resChrome.data;
-                    // if (data.length > 0) {
-                    //     const firstTab = data[0];
-                    //     const wsUrl = firstTab.webSocketDebuggerUrl;
-                    //     wsChromeSocket = new WebSocket(wsUrl);
-                    //     loggerCommand.info("wsChromeSocket opened " + wsUrl)
+                    // const resChrome = await axios.get(conf.windows ? localChromeDebuggerServerJsonCheckWin : localChromeDebuggerServerJsonCheck);
+                    const resChrome = await axios.get("http://127.0.0.1:9222/json");
+                    const data = resChrome.data;
+                    if (data.length > 0) {
+                        const firstTab = data[0];
+                        const wsUrl = firstTab.webSocketDebuggerUrl;
+                        wsChromeSocket = new WebSocket(wsUrl);
+                        loggerCommand.info("wsChromeSocket opened " + wsUrl)
                         init = true;
                         await startSeverAndConfigureListening(onEvent, device, project);
-                    // } else {
-                    //     loggerCommand.info("No tabs open " + resp.data)
-                    // }
+                    } else {
+                        loggerCommand.info("No tabs open " + resp.data)
+                    }
                 } catch (err) {
                     loggerCommand.info("Unable to communicate with chrome", err);
                     //return;
