@@ -9,11 +9,11 @@ const {loggerCommand} = require("../util/loggerUtil");
 const {internalCommandTypePlayMp3, buildCommandJson} = require("../webSocket/commandTypes");
 const conf = require ('../../../conf/config.json')
 const {execCommand, execCommandSync} = require("../util/commandUtil");
-async function startNGrok() {
+async function startNGrok(port) {
     try {
         console.log("startNGrok");
         if (conf.windows) {
-            execCommand("C:\\kioskReactor\\ngrok tcp 3389");
+            execCommand(`C:\\kioskReactor\\ngrok tcp ${port || 3389}`);
         }
     }
     catch (err) {

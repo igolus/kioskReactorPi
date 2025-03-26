@@ -49,7 +49,8 @@ launchSystem() {
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/webSocket
   node wsServer.js 2>wsServer.log &
   cd /cygdrive/c/kioskReactor/programs/jsScripts/commandsListener
-  node commandLauncher.js 2>commandLauncheError.log &
+  #node commandLauncher.js 2>commandLauncheError.log &
+  node commandLauncher.js 1> >(tee commandLauncherOutput.log) 2>commandLauncherError.log &
 }
 
 cd /cygdrive/c/kioskReactor/conf/

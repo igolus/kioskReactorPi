@@ -1,1 +1,3 @@
 ids_peak
+serial
+pyserial

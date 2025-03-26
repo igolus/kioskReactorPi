@@ -31,6 +31,7 @@ module.exports = {
     internalCommandTypeInactivity :"inactivity",
     commandTypeDeployWebSite:"deploywebsite",
     commandTypeNGrok:"ngrok",
+    commandTypeSsh:"ssh",
     commandTypeOpenRelay:"openrelay",
     commandTypeCloseRelay:"closerelay",
     buildCommandJson: buildCommandJson,

@@ -5,7 +5,8 @@ const {loggerCommand} = require("../util/loggerUtil");
 const {getOpenUrlCommand, geRebootCommand,
     getUpdateCommand, getTicketCommand,
     getSpeakCommand, getSnapCommand, getCancelSnapCommand, getInactivityCommand, getDeployWebSiteCommand,
-    getTicketCommandTargetIp, getNGrokCommand, getPrintFromUrlCommand, getOpenRelayCommand, getCloseRelayCommand
+    getTicketCommandTargetIp, getNGrokCommand, getPrintFromUrlCommand, getOpenRelayCommand, getCloseRelayCommand,
+    getSshCommand
 } = require("../webSocket/actionUtil");
 const {exec, spawn} = require("child_process");
 const {getCurrentDevice} = require("../dbUtil/deviceUtil");
@@ -231,6 +232,11 @@ function onEvent(dataJSON, ws, device, project) {
     }
     if (ngrokParam === "stop") {
         stopNGrok()
+    }
+
+    const sshParam = getSshCommand(dataJSON);
+    if (ngrokParam === "start") {
+        startNGrok(22)
     }
 }
 

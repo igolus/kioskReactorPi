@@ -1,6 +1,7 @@
 const {commandTypeOpenUrl, commandTypeReboot, commandTypePrintTicket, commandTypeSpeak, commandTypeUpdate,
     internalCommandTypeSnap, internalCommandTypeCancelSnap, internalCommandTypeInactivity, commandTypeDeployWebSite,
-    commandTypeNGrok, commandTypePrintFromUrl, commandTypeOpenRelay, commandTypeCloseRelay
+    commandTypeNGrok, commandTypePrintFromUrl, commandTypeOpenRelay,
+    commandTypeCloseRelay, commandTypeSsh,
 } = require("./commandTypes");
 const base64 = require('base-64');
 
@@ -119,6 +120,13 @@ function getNGrokCommand(input) {
     return null;
 }
 
+function getSshCommand(input) {
+    if (input && input.commandType && input.commandType.toLowerCase() === commandTypeSsh) {
+        return input.commandParam;
+    }
+    return null;
+}
+
 
 
 module.exports = {
@@ -130,6 +138,7 @@ module.exports = {
     getSpeakCommand: getSpeakCommand,
     getPrintFromUrlCommand: getPrintFromUrlCommand,
     getNGrokCommand: getNGrokCommand,
+    getSshCommand: getSshCommand,
     getSnapCommand: getSnapCommand,
     getCancelSnapCommand: getCancelSnapCommand,
     getInactivityCommand: getInactivityCommand,
