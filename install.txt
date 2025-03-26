@@ -31,9 +31,5 @@ https://jackaudio.org/faq/routing_alsa.html
 sudo apt install qjackctl
 https://raspberrypi.stackexchange.com/questions/112195/jack-audio-server-can-start-on-cli-but-not-as-a-systemd-service
 
--- SSH
-Install the client: Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
-Install the server: Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
++
 
-Start-Service sshd
-Set-Service -Name sshd -StartupType Automatic

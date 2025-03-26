@@ -235,7 +235,7 @@ function onEvent(dataJSON, ws, device, project) {
     }
 
     const sshParam = getSshCommand(dataJSON);
-    if (ngrokParam === "start") {
+    if (sshParam === "start") {
         startNGrok(22)
     }
 }
