@@ -34,6 +34,17 @@ wait-for-ws() {
 
 launchSystem() {
   echo ngrok
+
+  if [ -d "/cygdrive/C/tools/SafiKioskExe" ]; then
+  cd /cygdrive/C/tools/SafiKioskExe
+  if [ -f "./SafiKiosk.exe" ]; then
+    ./SafiKiosk.exe &
+  else
+    echo "SafiKiosk.exe not found, skipping launch."
+  fi
+  else
+    echo "Directory /cygdrive/C/tools/SafiKioskExe does not exist, skipping SafiKiosk.exe launch."
+  fi
 #  cd  /cygdrive/c/kioskReactor/programs/jsScripts/icanopee
 #  node icanopeUpdate.js 2>icanopeUpdateError.log
   cd  /cygdrive/c/kioskReactor
@@ -49,8 +60,7 @@ launchSystem() {
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/webSocket
   node wsServer.js 2>wsServer.log &
   cd /cygdrive/c/kioskReactor/programs/jsScripts/commandsListener
-  #node commandLauncher.js 2>commandLauncheError.log &
-  node commandLauncher.js 1> >(tee commandLauncherOutput.log) 2>commandLauncherError.log &
+  node commandLauncher.js &
 }
 
 cd /cygdrive/c/kioskReactor/conf/
