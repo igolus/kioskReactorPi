@@ -12,39 +12,39 @@ const kioskFormat = printf( ({ level, message, timestamp , ...metadata}) => {
     return msg
 });
 
-var transportWs = new transports.DailyRotateFile({
-    filename: `../../logs/ws.log-%DATE%.log`,
-    datePattern: 'YYYY-MM-DD-HH',
-    maxSize: '1m',
-    maxFiles: '14d'
-});
+// var transportWs = new transports.DailyRotateFile({
+//     filename: `../../logs/ws.log-%DATE%.log`,
+//     datePattern: 'YYYY-MM-DD-HH',
+//     maxSize: '1m',
+//     maxFiles: '14d'
+// });
+//
+// var transportCommandChrome = new transports.DailyRotateFile({
+//     filename: `../../logs/command.log-%DATE%.log`,
+//     datePattern: 'YYYY-MM-DD-HH',
+//     maxSize: '1m',
+//     maxFiles: '14d'
+// });
+//
+// var transportCommandReboot = new transports.DailyRotateFile({
+//     filename: `../../logs/commandReboot.log-%DATE%.log`,
+//     datePattern: 'YYYY-MM-DD-HH',
+//     maxSize: '1m',
+//     maxFiles: '14d'
+// });
 
-var transportCommandChrome = new transports.DailyRotateFile({
-    filename: `../../logs/command.log-%DATE%.log`,
-    datePattern: 'YYYY-MM-DD-HH',
-    maxSize: '1m',
-    maxFiles: '14d'
-});
-
-var transportCommandReboot = new transports.DailyRotateFile({
-    filename: `../../logs/commandReboot.log-%DATE%.log`,
-    datePattern: 'YYYY-MM-DD-HH',
-    maxSize: '1m',
-    maxFiles: '14d'
-});
-
-transportWs.on('rotate', function(oldFilename, newFilename) {
-});
+// transportWs.on('rotate', function(oldFilename, newFilename) {
+// });
 
 const {LoggingWinston} = require('@google-cloud/logging-winston');
 
-const loggingWinstonWs = new LoggingWinston({
-    logName: conf.deviceId + "_ws.log"
-});
+// const loggingWinstonWs = new LoggingWinston({
+//     logName: conf.deviceId + "_ws.log"
+// });
 
-const loggingWinstonCommand = new LoggingWinston({
-    logName: conf.deviceId + "_command.log"
-});
+// const loggingWinstonCommand = new LoggingWinston({
+//     logName: conf.deviceId + "_command.log"
+// });
 
 
 const loggerWs = createLogger({
@@ -61,23 +61,23 @@ const loggerWs = createLogger({
 
 function getTransportsWs() {
     let transportsData = [
-        transportWs,
+        // transportWs,
         new transports.Console()
     ];
-    if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-        transportsData.push(loggingWinstonWs)
-    }
+    // if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    //     transportsData.push(loggingWinstonWs)
+    // }
     return transportsData;
 }
 
 function getTransportsCommand() {
     let transportsData = [
-        transportCommandChrome,
+        // transportCommandChrome,
         new transports.Console()
     ];
-    if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-        transportsData.push(loggingWinstonCommand)
-    }
+    // if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    //     transportsData.push(loggingWinstonCommand)
+    // }
     return transportsData;
 }
 
@@ -101,7 +101,7 @@ const loggerCommandReboot = createLogger({
         kioskFormat
     ),
     transports: [
-        transportCommandReboot,
+        // transportCommandReboot,
         new transports.Console(),
     ]
 });

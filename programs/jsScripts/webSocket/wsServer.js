@@ -10,7 +10,8 @@ const {eventTypeQrCode, eventTypeSnapReady, eventTypeInactivity, eventTypePaymen
 const {commandTypeReboot, commandTypeOpenUrl, commandTypeUpdate,
     commandTypePrintTicket, commandTypeSpeak, internalCommandTypePlayMp3, internalCommandTypeSnap,
     internalCommandTypeCancelSnap, internalCommandTypeInactivity, commandTypeDeployWebSite, commandTypeNGrok,
-    commandTypePrintFromUrl, commandTypeOpenRelay, commandTypeCloseRelay, commandTypeSsh,
+    commandTypePrintFromUrl, commandTypeOpenRelay, commandTypeCloseRelay,
+    commandTypeSsh, commandTypeUploadLogs, commandTypeUploadDmpLogs,
 } = require("./commandTypes");
 const {listenToEvents, listenToCommands} = require("../dbUtil/eventsUtil");
 require('../util/healthChecker')
@@ -37,10 +38,11 @@ const allCommands = [commandTypeOpenUrl, commandTypeReboot, commandTypeUpdate,
     commandTypePrintTicket, commandTypeSpeak, internalCommandTypePlayMp3,
     internalCommandTypeSnap, internalCommandTypeCancelSnap, internalCommandTypeInactivity,
     commandTypeDeployWebSite, commandTypeNGrok, commandTypeSsh, commandTypePrintFromUrl,
-    commandTypeOpenRelay, commandTypeCloseRelay]
+    commandTypeOpenRelay, commandTypeCloseRelay, commandTypeUploadLogs, commandTypeUploadDmpLogs]
 
 const noParamCommands = [commandTypeReboot, internalCommandTypeInactivity,
-    internalCommandTypeSnap, internalCommandTypeCancelSnap, commandTypeDeployWebSite, commandTypeUpdate, commandTypeOpenRelay, commandTypeCloseRelay]
+    internalCommandTypeSnap, internalCommandTypeCancelSnap, commandTypeDeployWebSite,
+    commandTypeUpdate, commandTypeOpenRelay, commandTypeCloseRelay, commandTypeUploadLogs, commandTypeUploadDmpLogs]
 
 const noParamEvents = [eventTypeInactivity]
 

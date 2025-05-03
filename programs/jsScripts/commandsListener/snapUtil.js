@@ -10,7 +10,7 @@ if (config.bucketName) {
         const storage = new Storage({
             keyFilename: "../../../conf/myReactorKioskUser.json",
         });
-        storageBucket = storage.bucket(config.bucketName);
+        storageBucket = storage.bucket("totemsystem-5889b.appspot.com");
     }
     catch (err) {
         loggerCommand.error("no bucket configured")

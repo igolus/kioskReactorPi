@@ -1,7 +1,7 @@
 const {commandTypeOpenUrl, commandTypeReboot, commandTypePrintTicket, commandTypeSpeak, commandTypeUpdate,
     internalCommandTypeSnap, internalCommandTypeCancelSnap, internalCommandTypeInactivity, commandTypeDeployWebSite,
     commandTypeNGrok, commandTypePrintFromUrl, commandTypeOpenRelay,
-    commandTypeCloseRelay, commandTypeSsh,
+    commandTypeCloseRelay, commandTypeSsh, commandTypeUploadLogs, commandTypeUploadDmpLogs,
 } = require("./commandTypes");
 const base64 = require('base-64');
 
@@ -41,6 +41,22 @@ function getCloseRelayCommand(input) {
     return false;
 }
 
+function getUploadLogsCommand(input) {
+    if (input && input.commandType && input.commandType.toLowerCase() === commandTypeUploadLogs) {
+        return true;
+    }
+    return false;
+}
+
+function getUploadDmpLogsCommand(input) {
+    if (input && input.commandType && input.commandType.toLowerCase() === commandTypeUploadDmpLogs) {
+        return true;
+    }
+    return false;
+}
+
+
+
 function getTicketCommand(input) {
     if (input && input.commandType && !input.commandContext && input.commandType.toLowerCase() === commandTypePrintTicket) {
         try {
@@ -77,6 +93,7 @@ function getSnapCommand(input) {
     }
     return false;
 }
+
 
 function getCancelSnapCommand(input) {
     if (input && input.commandType && input.commandType.toLowerCase() === internalCommandTypeCancelSnap) {
@@ -140,6 +157,8 @@ module.exports = {
     getNGrokCommand: getNGrokCommand,
     getSshCommand: getSshCommand,
     getSnapCommand: getSnapCommand,
+    getUploadLogsCommand: getUploadLogsCommand,
+    getUploadDmpLogsCommand: getUploadDmpLogsCommand,
     getCancelSnapCommand: getCancelSnapCommand,
     getInactivityCommand: getInactivityCommand,
     getDeployWebSiteCommand: getDeployWebSiteCommand,

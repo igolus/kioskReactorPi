@@ -1,5 +1,33 @@
 #!/bin/bash
 
+
+# Crée un log horodaté au format YYYY-MM-DD
+DATE=$(date +%F)
+LOG_DIR="/cygdrive/c/kioskReactor/logs"
+LOG_FILE="$LOG_DIR/log-$DATE.log"
+
+# Créer le dossier s’il n’existe pas
+if [ ! -d "$LOG_DIR" ]; then
+  mkdir -p "$LOG_DIR"
+
+fi
+
+if [ ! -f "$LOG_FILE" ]; then
+  touch "$LOG_FILE"
+fi
+
+chmod 777 "$LOG_DIR"
+# Attendre la création du fichier puis modifier ses droits
+chmod 666 "$LOG_FILE"
+
+
+# Supprimer les logs de plus de 5 jours
+find "$LOG_DIR" -name "*.log" -mtime +5 -exec rm -f {} \;
+
+# Rediriger toute la sortie (stdout et stderr) vers tee
+exec > >(tee -a "$LOG_FILE") 2>&1
+
+
 ONLINE=1
 TRY=0
 while [ $ONLINE -ne 0 ] && [ $TRY -le 10000 ]

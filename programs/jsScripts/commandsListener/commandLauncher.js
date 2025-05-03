@@ -6,7 +6,7 @@ const {getOpenUrlCommand, geRebootCommand,
     getUpdateCommand, getTicketCommand,
     getSpeakCommand, getSnapCommand, getCancelSnapCommand, getInactivityCommand, getDeployWebSiteCommand,
     getTicketCommandTargetIp, getNGrokCommand, getPrintFromUrlCommand, getOpenRelayCommand, getCloseRelayCommand,
-    getSshCommand
+    getSshCommand, getUploadLogsCommand, getUploadDmpLogsCommand
 } = require("../webSocket/actionUtil");
 const {exec, spawn} = require("child_process");
 const {getCurrentDevice} = require("../dbUtil/deviceUtil");
@@ -28,6 +28,7 @@ const conf = require('../../../conf/config.json');
 const {execCommand} = require("../util/commandUtil");
 const {startNGrok, stopNGrok} = require("./ngrok");
 const {turnRelayOn, turnRelayOff} = require("../elec/relay");
+const {uploadLogs, uploadDmpLogs} = require("./logUtil");
 
 let wsChromeSocket;
 let device;
@@ -131,7 +132,7 @@ function updateDevice(device) {
 function rebootDevice() {
     loggerCommand.info(`reboot !!`);
     if (conf.windows) {
-        execCommand("shutdown /r");
+        execCommand("shutdown /r /t 0 /f");
     }
     else {
         execCommand("sudo reboot");
@@ -167,6 +168,15 @@ function onEvent(dataJSON, ws, device, project) {
     if (openUrl && !device.lite) {
         chromeNavigate(openUrl);
     }
+
+    if (getUploadDmpLogsCommand(dataJSON)) {
+        uploadDmpLogs(device);
+    }
+
+    if (getUploadLogsCommand(dataJSON)) {
+        uploadLogs(device);
+    }
+
     if (getOpenRelayCommand(dataJSON)) {
         openRelay();
     }
@@ -191,6 +201,11 @@ function onEvent(dataJSON, ws, device, project) {
     if (ticketWithIpTarget) {
         printTicketTargetIp(ticketWithIpTarget);
     }
+
+    // const upload = getSnapCommand(dataJSON);
+    // if (snap && !device.lite) {
+    //     uploadSnap(ws, device, dataJSON);
+    // }
 
     const snap = getSnapCommand(dataJSON);
     if (snap && !device.lite) {
