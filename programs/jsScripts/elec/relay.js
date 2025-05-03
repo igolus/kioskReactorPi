@@ -22,7 +22,7 @@ function turnRelayOff() {
         serialportInstance.write('AT+CH1=0');
     }
     catch (error) {
-        console.log(e)
+        console.log(error)
         loggerCommand.error('Error turnRelayOff:', error.message);
     }
 }
@@ -32,7 +32,7 @@ function turnRelayOn() {
         serialportInstance.write('AT+CH1=1');
     }
     catch (error) {
-        console.log(e)
+        console.log(error)
         loggerCommand.error('Error turnRelayOff:', error.message);
     }
 }
