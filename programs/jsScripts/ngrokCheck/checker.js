@@ -3,6 +3,7 @@ const axios = require("axios");
 const {loggerCommand} = require("../util/loggerUtil");
 const {delay} = require("../commandsListener/commandUtil");
 const deviceUtil = require("../dbUtil/deviceUtil");
+const config = require('../../../conf/config.json');
 
 function sleep(ms) {
     return new Promise((resolve) => {
@@ -11,8 +12,10 @@ function sleep(ms) {
 }
 
 (async () => {
-    let init = false;
-
+    if (!config.deviceId) {
+        loggerCommand.info("ngrokCheck: No device id !!")
+        process.exit()
+    }
     //let processed = false;
     while (true) {
         try {

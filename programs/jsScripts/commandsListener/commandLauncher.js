@@ -180,6 +180,7 @@ function onEvent(dataJSON, ws, device, project) {
     if (getOpenRelayCommand(dataJSON)) {
         openRelay();
     }
+
     if (getCloseRelayCommand(dataJSON)) {
         closeRelay();
     }

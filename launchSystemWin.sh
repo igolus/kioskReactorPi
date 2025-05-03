@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # Crée un log horodaté au format YYYY-MM-DD
 DATE=$(date +%F)
 LOG_DIR="/cygdrive/c/kioskReactor/logs"
@@ -60,6 +59,10 @@ wait-for-ws() {
     done
 }
 
+cd /cygdrive/c/kioskReactor/conf/
+deviceId=`jq '.deviceId' './config.json' | tr -d '"'`
+echo $deviceId
+
 launchSystem() {
   echo ngrok
 
@@ -77,23 +80,28 @@ launchSystem() {
 #  node icanopeUpdate.js 2>icanopeUpdateError.log
   cd  /cygdrive/c/kioskReactor
   ./ngrok config add-authtoken 27Kywp1WpRFQhtoIPZeIRqHg3qP_96QRrV5uQhBE5g1mESYy
+
   echo ngrokChecker
-  cd  /cygdrive/c/kioskReactor/programs/jsScripts/ngrokCheck
-  node checker.js &
+  if [ -n "$deviceId" ] && [ "$deviceId" != "null" ]; then
+    cd /cygdrive/c/kioskReactor/programs/jsScripts/ngrokCheck
+    node checker.js &
+  else
+    echo "deviceId non défini, ngrokCheck ignoré."
+  fi
+
   echo launchSystem
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/lifeCheck
   node lifeCheckRunner.js &
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/keyBoardListener
   node listener.js &
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/webSocket
-  node wsServer.js 2>wsServer.log &
+  node wsServer.js &
   cd /cygdrive/c/kioskReactor/programs/jsScripts/commandsListener
   node commandLauncher.js &
 }
 
 cd /cygdrive/c/kioskReactor/conf/
-deviceId=`jq '.deviceId' './config.json' | tr -d '"'`
-echo $deviceId
+
 minimalCreditToLock=`jq '.minimalCreditToLock' './config.json' | tr -d '"'`
 credit=`jq '.credit' './brand.json' | tr -d '"'`
 blockWhenInsufficientCredit=`jq '.blockWhenInsufficientCredit' './brand.json' | tr -d '"'`
@@ -113,8 +121,6 @@ launchBrowser() {
 
 cd /cygdrive/c/kioskReactor/programs/jsScripts/init
 node startupInit.js
-
-
 
 if [ $credit == "null" -o $blockWhenInsufficientCredit == "false" ]; then
 	url=https://us-central1-totemsystem-5889b.cloudfunctions.net/homePage/$deviceId

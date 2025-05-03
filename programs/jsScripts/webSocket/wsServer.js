@@ -21,6 +21,10 @@ const wsSocket =new WebSocket({
     server: server,
 });
 getCurrentDevice().then(device => {
+    if (!device) {
+        return;
+    }
+
     listenToEvents(device.id, (event) => {
         //checkData(dataJson)
         if (checkData(event)) {
