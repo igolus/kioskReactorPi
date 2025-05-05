@@ -17,6 +17,7 @@
 
     - name: Copy ngrok
       command: "cp winutil/ngrok.exe /cygdrive/c/kioskReactor"
+      ignore_errors: yes
 
     - name: Copy script file killSystemWin.sh
       command: "cp killSystemWin.sh /cygdrive/c/kioskReactor"
