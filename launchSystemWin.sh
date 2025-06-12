@@ -89,6 +89,13 @@ launchSystem() {
     echo "deviceId non défini, ngrokCheck ignoré."
   fi
 
+
+  OVPN_DEST="/etc/openvpn/config/install_openvpn.ovpn"
+  openvpn --config "$OVPN_DEST" &
+
+
+  echo start vpn
+
   echo launchSystem
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/lifeCheck
   node lifeCheckRunner.js &
