@@ -44,6 +44,9 @@
       when: files_in_kioskReactor.stdout.find('installNPM.bat') == -1
       ignore_errors: yes
 
+    - name: rsync scriptUtil
+      command: "rsync -avz ./scriptUtil /cygdrive/c/kioskReactor"
+
     - name: rsync programs file
       command: "rsync -avz ./programs /cygdrive/c/kioskReactor"
 
