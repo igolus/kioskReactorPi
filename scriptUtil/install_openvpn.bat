@@ -39,21 +39,41 @@ openvpn --version
 
 :DL_CERT
 echo === TELECHARGEMENT DU CERTIFICAT DE CONNEXION ===
-set "OVPN_DEST=C:\Program Files\OpenVPN\config\install_openvpn.ovpn"
-if not exist "%OVPN_DEST%" (
-	powershell -Command "Invoke-WebRequest -Uri 'http://vpn.ron06.fr/install_openvpn.ovpn' -OutFile '%OVPN_DEST%'"
-	if not exist "%OVPN_DEST%" (
-		echo [ERREUR] Telechargement du certificat d'installation echoue.
-		exit /b 1
-	)
-	start "" "openvpn" --config "%OVPN_DEST%"
+openvpn_cert.bat
+set "OVPN_DEST=C:\Program Files\OpenVPN\config\APIBORNE.ovpn"
+if exist "%OVPN_DEST%" (
+	rem start "" "openvpn" --config "%OVPN_DEST%"
+	openvpn-gui --connect "APIBORNE.ovpn" --silent_connection 1 &
 )
+
 
 echo === POSITIONNE LE RESEAU EN PRIVATE ===
 timeout /t 5 /nobreak >nul
+
+
+echo === POSITIONNE LE RESEAU EN PRIVATE ===
+timeout /t 5 /nobreak >nul
+
+:: Trouver dynamiquement le nom du profil contenant 'OpenVPN'
+for /f "usebackq tokens=*" %%i in (`powershell -NoProfile -Command "Get-NetConnectionProfile | Where-Object { $_.Name -like '*OpenVPN*' } | Select-Object -ExpandProperty Name"`) do (
+    set "VPN_PROFILE_NAME=%%i"
+)
+
+:: Appliquer la modification si un profil correspondant est trouvé
+if defined VPN_PROFILE_NAME (
+    echo [INFO] Changement de "%VPN_PROFILE_NAME%" en réseau privé...
+    powershell -Command "Set-NetConnectionProfile -Name '%VPN_PROFILE_NAME%' -NetworkCategory Private"
+) else (
+    echo [WARN] Aucun profil réseau contenant 'OpenVPN' trouvé.
+)
+
+:: Afficher les profils réseau pour vérification
 powershell -Command "Get-NetConnectionProfile"
-powershell -Command "Set-NetConnectionProfile -Name 'OpenVPN TAP-Windows6' -NetworkCategory Private"
-powershell -Command "Get-NetConnectionProfile"
+
+@REM powershell -Command "Get-NetConnectionProfile"
+@REM powershell -Command "Set-NetConnectionProfile -Name 'OpenVPN TAP-Windows6' -NetworkCategory Private"
+@REM powershell -Command "Set-NetConnectionProfile -Name 'OpenVPN TAP-Windows6' -NetworkCategory Private"
+@REM powershell -Command "Get-NetConnectionProfile"
 
 
 echo === INSTALLATION TERMINEE AVEC SUCCES ===

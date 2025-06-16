@@ -64,8 +64,18 @@ deviceId=`jq '.deviceId' './config.json' | tr -d '"'`
 echo $deviceId
 
 launchSystem() {
-  echo ngrok
 
+  echo install_vnc
+  cd /cygdrive/c/kioskReactor/scriptUtil
+  chmod +x ./install_vnc.bat
+  ./install_vnc.bat 1> install_vnc.log 2> install_vnc.err
+
+  echo install_openvpn
+  cd /cygdrive/c/kioskReactor/scriptUtil
+  chmod +x ./install_openvpn.bat
+  ./install_openvpn.bat 1> install_openvpn.log 2> install_openvpn.err
+
+  echo SafiKiosk
   if [ -d "/cygdrive/C/tools/SafiKioskExe" ]; then
   cd /cygdrive/C/tools/SafiKioskExe
   if [ -f "./SafiKiosk.exe" ]; then
@@ -76,8 +86,7 @@ launchSystem() {
   else
     echo "Directory /cygdrive/C/tools/SafiKioskExe does not exist, skipping SafiKiosk.exe launch."
   fi
-#  cd  /cygdrive/c/kioskReactor/programs/jsScripts/icanopee
-#  node icanopeUpdate.js 2>icanopeUpdateError.log
+
   cd  /cygdrive/c/kioskReactor
   ./ngrok config add-authtoken 27Kywp1WpRFQhtoIPZeIRqHg3qP_96QRrV5uQhBE5g1mESYy
 
@@ -89,22 +98,32 @@ launchSystem() {
     echo "deviceId non défini, ngrokCheck ignoré."
   fi
 
-
-  OVPN_DEST="/etc/openvpn/config/install_openvpn.ovpn"
-  openvpn --config "$OVPN_DEST" &
-
-
   echo start vpn
+  openvpn-gui --connect "APIBORNE.ovpn" --silent_connection 1 &
+
+  echo start deamonProcessReadConf
+  cd  /cygdrive/c/kioskReactor/programs/jsScripts/util
+  node localFIleLoader.js &
 
   echo launchSystem
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/lifeCheck
   node lifeCheckRunner.js &
+
+  echo listener
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/keyBoardListener
   node listener.js &
+
+  echo wsServer
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/webSocket
   node wsServer.js &
+
+  echo commandLauncher
   cd /cygdrive/c/kioskReactor/programs/jsScripts/commandsListener
   node commandLauncher.js &
+
+#  echo "InfoSystem Py"
+#  cd /cygdrive/c/kioskReactor/programs/PyScripts/infoSystem
+#  py main.py &
 }
 
 cd /cygdrive/c/kioskReactor/conf/
