@@ -105,6 +105,10 @@ launchSystem() {
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/util
   node localFIleLoader.js &
 
+  echo start deamonProcessReadConf
+  cd /cygdrive/c/kioskReactor/scriptUtil/infoSystem
+  node py main.js
+
   echo launchSystem
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/lifeCheck
   node lifeCheckRunner.js &
