@@ -107,7 +107,7 @@ launchSystem() {
 
   echo start deamonProcessReadConf
   cd /cygdrive/c/kioskReactor/scriptUtil/infoSystem
-  node py main.js
+  py main.js
 
   echo launchSystem
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/lifeCheck
