@@ -1,0 +1,89 @@
+{
+    "UUID": "LuYc5IXn3",
+    "hostname": "delli7",
+    "platform": "Windows",
+    "platform_release": "11",
+    "platform_version": "10.0.26100",
+    "network_interfaces": {
+        "Connexion au r\u00e9seau local 2": {
+            "ip_address": "10.10.2.1",
+            "netmask": "255.255.0.0",
+            "broadcast": null
+        },
+        "Ethernet": {
+            "ip_address": "169.254.88.227",
+            "netmask": "255.255.0.0",
+            "broadcast": null
+        },
+        "vEthernet (Default Switch)": {
+            "ip_address": "172.17.224.1",
+            "netmask": "255.255.240.0",
+            "broadcast": null
+        },
+        "Connexion au r\u00e9seau local* 1": {
+            "ip_address": "169.254.41.230",
+            "netmask": "255.255.0.0",
+            "broadcast": null
+        },
+        "Connexion au r\u00e9seau local* 2": {
+            "ip_address": "169.254.50.179",
+            "netmask": "255.255.0.0",
+            "broadcast": null
+        },
+        "Wi-Fi": {
+            "ip_address": "192.168.1.4",
+            "netmask": "255.255.255.0",
+            "broadcast": null
+        },
+        "Connexion r\u00e9seau Bluetooth": {
+            "ip_address": "169.254.205.54",
+            "netmask": "255.255.0.0",
+            "broadcast": null
+        },
+        "Connexion au r\u00e9seau local": {
+            "ip_address": "169.254.208.224",
+            "netmask": "255.255.0.0",
+            "broadcast": null
+        },
+        "OpenVPN Connect DCO Adapter": {
+            "ip_address": "169.254.23.86",
+            "netmask": "255.255.0.0",
+            "broadcast": null
+        },
+        "Loopback Pseudo-Interface 1": {
+            "ip_address": "127.0.0.1",
+            "netmask": "255.0.0.0",
+            "broadcast": null
+        }
+    },
+    "default_gateway": null,
+    "dns_servers": [
+        "Erreur lors de la lecture du fichier resolv.conf"
+    ],
+    "boot_time": "2025-06-13T18:47:23.920279",
+    "memory_info": {
+        "total": 68388900864,
+        "available": 21321211904,
+        "used": 47067688960,
+        "percent": 68.8
+    },
+    "disk_info": {
+        "total": 1020848500736,
+        "used": 928057430016,
+        "free": 92791070720,
+        "percent": 90.9
+    },
+    "usb_devices": [
+        "Status     Class           FriendlyName                                                                     InstanceId ",
+        "------     -----           ------------                                                                     ---------- ",
+        "OK         USB             USB Root Hub (USB 3.0)                                                           USB\\ROOT...",
+        "OK         Camera          Integrated Webcam                                                                USB\\VID_...",
+        "OK         HIDClass        USB Input Device                                                                 USB\\VID_...",
+        "OK         Bluetooth       Intel(R) Wireless Bluetooth(R)                                                   USB\\VID_...",
+        "OK         USB             USB Root Hub (USB 3.0)                                                           USB\\ROOT...",
+        "OK         USB             USB Composite Device                                                             USB\\VID_...",
+        "OK         CVAULT          Dell ControlVault w/o Fingerprint Sensor                                         USB\\VID_...",
+        "OK         USB             USB Composite Device                                                             USB\\VID_...",
+        "OK         SmartCardReader Microsoft Usbccid Smartcard Reader (WUDF)                                        USB\\VID_..."
+    ]
+}

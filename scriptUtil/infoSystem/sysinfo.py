@@ -95,8 +95,8 @@ def collect_system_info(uuid:str):
     }
     return system_info
 
-def write_to_file(data, filename="system_info.json", json=True):
-    if json:
+def write_to_file(data, filename="system_info.json", jsonType: bool = True):
+    if jsonType:
         with open(filename, 'w') as f:
             json.dump(data, f, indent=4)
     else:

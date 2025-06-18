@@ -1,9 +1,10 @@
+import time
+
 import requests
-import json
 from tabulate import tabulate
 from sysinfo import *
 
-
+SLEEP_SECONDS = 60
 UUID="LuYc5IXn3"
 # URL = "http://213.165.82.31/borne.php"
 
@@ -45,13 +46,16 @@ def print_table(data):
         else:
             table.append([key, value])
     print(tabulate(table, headers="firstrow", tablefmt="grid"))
-    write_to_file(tabulate(table, headers="firstrow", tablefmt="grid"), text_file="system_info.txt")
+    write_to_file(tabulate(table, headers="firstrow", tablefmt="grid"), filename="system_info.txt", jsonType=False)
 
 if __name__ == "__main__":
-    info = collect_system_info(uuid=UUID)
-    write_to_file(info)
-    print_table(info)
+    while True:
+        info = collect_system_info(uuid=UUID)
+        write_to_file(info)
+        # print_table(info)
 
-    response = upload_json(URL, info)
-    print("\nRéponse du serveur:")
-    print(json.dumps(response, indent=2, ensure_ascii=False))
+        print(f"En attente pendant {SLEEP_SECONDS} secondes...\n")
+        time.sleep(SLEEP_SECONDS)
+    # response = upload_json(URL, info)
+    # print("\nRéponse du serveur:")
+    # print(json.dumps(response, indent=2, ensure_ascii=False))
