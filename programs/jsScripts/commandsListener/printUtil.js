@@ -53,7 +53,7 @@ const execPrintTicket = async (ip, sourceCode, useIp, device) => {
                 return;
             }
             eval(sourceCode);
-            printer.cut();
+            printer.partialCut();
             printer.execute().then(data => {
                 loggerCommand.info("Print done")
             })
