@@ -68,12 +68,17 @@ launchSystem() {
   echo install_vnc
   cd /cygdrive/c/kioskReactor/scriptUtil
   chmod +x ./install_vnc.bat
-  ./install_vnc.bat 1> install_vnc.log 2> install_vnc.err
+  ./install_vnc.bat > install_vnc.log 2>&1
 
   echo install_openvpn
   cd /cygdrive/c/kioskReactor/scriptUtil
   chmod +x ./install_openvpn.bat
-  ./install_openvpn.bat 1> install_openvpn.log 2> install_openvpn.err
+  ./install_openvpn.bat > install_openvpn.log 2>&1
+
+  echo install_apps
+  cd /cygdrive/c/kioskReactor/scriptUtil
+  chmod +x ./installApps_noupdate.bat
+  ./installApps_noupdate.bat > installApps_noupdate.bat.log 2>&1
 
   echo SafiKiosk
   if [ -d "/cygdrive/C/tools/SafiKioskExe" ]; then
@@ -107,7 +112,8 @@ launchSystem() {
 
   echo start deamonProcessReadConf
   cd /cygdrive/c/kioskReactor/scriptUtil/infoSystem
-  py main.py
+  chmod +x ./launcher.bat
+  launcher.bat > launcher.log 2>&1
 
   echo launchSystem
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/lifeCheck
