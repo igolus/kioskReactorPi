@@ -33,7 +33,7 @@ def upload_json(url, data, json_filename="temp.json", text_file="temp.txt"):
         return {"error": "Erreur de décodage JSON", "raw_response": response.text}
 
 
-def print_table(data):
+def print_table_and_write(data, printToConsole=True):
     table = []
     table.append(["Clé", "Valeur"])
     for key, value in data.items():
@@ -45,14 +45,15 @@ def print_table(data):
             table.append([key, joined])
         else:
             table.append([key, value])
-    print(tabulate(table, headers="firstrow", tablefmt="grid"))
+    if printToConsole:
+        print(tabulate(table, headers="firstrow", tablefmt="grid"))
     write_to_file(tabulate(table, headers="firstrow", tablefmt="grid"), filename="system_info.txt", jsonType=False)
 
 if __name__ == "__main__":
     while True:
         info = collect_system_info(uuid=UUID)
         write_to_file(info)
-        # print_table(info)
+        print_table_and_write(info, printToConsole=False)
 
         print(f"En attente pendant {SLEEP_SECONDS} secondes...\n")
         time.sleep(SLEEP_SECONDS)
