@@ -106,14 +106,14 @@ launchSystem() {
   echo start vpn
   openvpn-gui --connect "APIBORNE.ovpn" --silent_connection 1 &
 
-  echo start deamonProcessReadConf
-  cd  /cygdrive/c/kioskReactor/programs/jsScripts/util
-  node localFIleLoader.js &
+#  echo start deamonProcessReadConf
+#  cd  /cygdrive/c/kioskReactor/programs/jsScripts/util
+#  node localFIleLoader.js &
 
-  echo start deamonProcessReadConf
-  cd /cygdrive/c/kioskReactor/scriptUtil/infoSystem
-  chmod +x ./launcher.bat
-  launcher.bat > launcher.log 2>&1
+#  echo start deamonProcessReadConf
+#  cd /cygdrive/c/kioskReactor/scriptUtil/infoSystem
+#  chmod +x ./launcher.bat
+#  launcher.bat > launcher.log 2>&1
 
   echo launchSystem
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/lifeCheck
@@ -131,9 +131,6 @@ launchSystem() {
   cd /cygdrive/c/kioskReactor/programs/jsScripts/commandsListener
   node commandLauncher.js &
 
-#  echo "InfoSystem Py"
-#  cd /cygdrive/c/kioskReactor/programs/PyScripts/infoSystem
-#  py main.py &
 }
 
 cd /cygdrive/c/kioskReactor/conf/
