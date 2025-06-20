@@ -75,10 +75,10 @@ launchSystem() {
   chmod +x ./install_openvpn.bat
   ./install_openvpn.bat > install_openvpn.log 2>&1
 
-  echo install_apps
-  cd /cygdrive/c/kioskReactor/scriptUtil
-  chmod +x ./installApps_noupdate.bat
-  ./installApps_noupdate.bat > installApps_noupdate.bat.log 2>&1
+#  echo install_apps
+#  cd /cygdrive/c/kioskReactor/scriptUtil
+#  chmod +x ./installApps_noupdate.bat
+#  ./installApps_noupdate.bat > installApps_noupdate.bat.log 2>&1
 
   echo SafiKiosk
   if [ -d "/cygdrive/C/tools/SafiKioskExe" ]; then
