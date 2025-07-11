@@ -65,15 +65,20 @@ echo $deviceId
 
 launchSystem() {
 
-  echo install_vnc
-  cd /cygdrive/c/kioskReactor/scriptUtil
-  chmod +x ./install_vnc.bat
-  ./install_vnc.bat > install_vnc.log 2>&1
+#  echo install_vnc
+#  cd /cygdrive/c/kioskReactor/scriptUtil
+#  chmod +x ./install_vnc.bat
+#  ./install_vnc.bat > install_vnc.log 2>&1
+#
+#  echo install_openvpn
+#  cd /cygdrive/c/kioskReactor/scriptUtil
+#  chmod +x ./install_openvpn.bat
+#  ./install_openvpn.bat > install_openvpn.log 2>&1
 
-  echo install_openvpn
+  echo setDefaultPrinter
   cd /cygdrive/c/kioskReactor/scriptUtil
-  chmod +x ./install_openvpn.bat
-  ./install_openvpn.bat > install_openvpn.log 2>&1
+  chmod +x ./SetDefaultPrinter.ps1
+  powershell -ExecutionPolicy Bypass -File SetDefaultPrinter.ps1 1> setDefaultPrinter.log 2> setDefaultPrinter.err
 
 #  echo install_apps
 #  cd /cygdrive/c/kioskReactor/scriptUtil
