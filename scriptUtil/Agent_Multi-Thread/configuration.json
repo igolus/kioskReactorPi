@@ -24,7 +24,11 @@
                 {
                     "/conf/md": "{CONF}",
                     "type": "markdown"
-                }
+                },
+				{
+					"/proxy-ip":   "http://10.10.10.1/ip.php",
+					"type": "proxy"
+				}
             ],
             "whitelist": [
                 "127.0.0.1",
