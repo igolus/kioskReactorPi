@@ -3,5 +3,5 @@ echo "Updating the system"
 
 REM update
 
-call C:\kioskReactor\Update.bat
+start C:\kioskReactor\Update.bat
 call C:\kioskReactor\Reboot.bat
