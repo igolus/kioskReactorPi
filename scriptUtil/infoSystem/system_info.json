@@ -31,7 +31,7 @@
             "broadcast": null
         },
         "Wi-Fi": {
-            "ip_address": "192.168.1.4",
+            "ip_address": "172.16.16.120",
             "netmask": "255.255.255.0",
             "broadcast": null
         },
@@ -60,18 +60,18 @@
     "dns_servers": [
         "Erreur lors de la lecture du fichier resolv.conf"
     ],
-    "boot_time": "2025-06-13T18:47:23.920279",
+    "boot_time": "2025-06-13T18:47:25.558657",
     "memory_info": {
         "total": 68388900864,
-        "available": 21321211904,
-        "used": 47067688960,
-        "percent": 68.8
+        "available": 22901186560,
+        "used": 45487714304,
+        "percent": 66.5
     },
     "disk_info": {
         "total": 1020848500736,
-        "used": 928057430016,
-        "free": 92791070720,
-        "percent": 90.9
+        "used": 930399883264,
+        "free": 90448617472,
+        "percent": 91.1
     },
     "usb_devices": [
         "Status     Class           FriendlyName                                                                     InstanceId ",
@@ -79,9 +79,15 @@
         "OK         USB             USB Root Hub (USB 3.0)                                                           USB\\ROOT...",
         "OK         Camera          Integrated Webcam                                                                USB\\VID_...",
         "OK         HIDClass        USB Input Device                                                                 USB\\VID_...",
+        "OK         SmartCardReader Microsoft Usbccid Smartcard Reader (WUDF)                                        USB\\VID_...",
+        "OK         HIDClass        USB Input Device                                                                 USB\\VID_...",
+        "OK         HIDClass        USB Input Device                                                                 USB\\VID_...",
+        "OK         USB             Generic SuperSpeed USB Hub                                                       USB\\VID_...",
         "OK         Bluetooth       Intel(R) Wireless Bluetooth(R)                                                   USB\\VID_...",
         "OK         USB             USB Root Hub (USB 3.0)                                                           USB\\ROOT...",
         "OK         USB             USB Composite Device                                                             USB\\VID_...",
+        "OK         USB             USB Composite Device                                                             USB\\VID_...",
+        "OK         USB             Generic USB Hub                                                                  USB\\VID_...",
         "OK         CVAULT          Dell ControlVault w/o Fingerprint Sensor                                         USB\\VID_...",
         "OK         USB             USB Composite Device                                                             USB\\VID_...",
         "OK         SmartCardReader Microsoft Usbccid Smartcard Reader (WUDF)                                        USB\\VID_..."

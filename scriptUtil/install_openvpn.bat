@@ -72,7 +72,11 @@ powershell -Command "Get-NetConnectionProfile"
 
 @REM powershell -Command "Get-NetConnectionProfile"
 @REM powershell -Command "Set-NetConnectionProfile -Name 'OpenVPN TAP-Windows6' -NetworkCategory Private"
-@REM powershell -Command "Set-NetConnectionProfile -Name 'OpenVPN TAP-Windows6' -NetworkCategory Private"
+@REM powershell -Command "Set-NetConnectionProfile -Name 'OpenVPN Data Channel Offload' -NetworkCategory Private"
+@REM powershell -Command "Set-NetConnectionProfile -Name 'Réseau 3' -NetworkCategory Private"
+
+
+
 @REM powershell -Command "Get-NetConnectionProfile"
 
 

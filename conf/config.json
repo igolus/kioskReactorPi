@@ -1,5 +1,6 @@
 {
   "urlWsLocal": "ws://localhost:8080",
   "windows": "true",
-  "deviceId": "i3GYyHbRr"
+  "comPort":   "COM3",
+  "deviceId": "qnpHL1Qm4"
 }
