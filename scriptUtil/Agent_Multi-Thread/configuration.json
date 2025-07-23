@@ -1,0 +1,161 @@
+{
+    "vars": {
+        "name": "test"
+    },
+    "config": {
+        "vars_files": [
+            "c:\\kioskReactor\\conf\\device.json"
+        ],
+        "web": {
+            "port": 4000,
+            "web": [
+                {
+                    "/cmd": "{COMMAND}",
+                    "type": "cmd"
+                },
+                {
+                    "/conf": "{CONF}",
+                    "type": "html"
+                },
+                {
+                    "/conf/json": "{CONF}",
+                    "type": "json"
+                },
+                {
+                    "/conf/md": "{CONF}",
+                    "type": "markdown"
+                },
+				{
+					"/proxy-ip":   "http://10.10.10.1/ip.php",
+					"type": "proxy"
+				}
+            ],
+            "whitelist": [
+                "127.0.0.1",
+                "10.10.2.0/24",
+                "10.10.10.0/24"
+            ]
+        },
+        "mqtt": {
+            "server": "vpn.apiborne.com",
+            "port": 5883,
+            "ssl": true,
+            "topic_cmd": [
+                "apiborne/{name}/cmd"
+            ]
+        },
+        "command": {
+            "type": "bat",
+            "path": ".\\_command_list_apiborne",
+            "cmd_list": [
+                "Reboot",
+                "Shutdown",
+                "Update",
+                "Vpn-on",
+                "Vpn-off"
+            ],
+            "mqtt_topic_response": "apiborne/{name}/cmd_response"
+        }
+    },
+    "Tasks": {
+        "keep-alive": {
+            "interval": 300,
+            "info": {
+                "os": "os_info",
+                "hdd": "disk_info",
+                "mem": "mem_info",
+                "network": "nw_info",
+                "usb": "usb_info"
+            },
+            "urls": {
+                "apiborne": "http://crt.apiborne.com/keep-alive.php?name={name}"
+            },
+            "sortie": {
+                "fichier": [
+                    {
+                        "actif": "y",
+                        "chemin": "sysinfo_{name}.html",
+                        "mode": "html"
+                    }
+                ],
+                "mqtt": {
+                    "actif": "y",
+                    "topics": [
+                        "apiborne/{name}/keep-alive"
+                    ]
+                },
+                "web": [
+                    {
+                        "/keep-alive": "{JSON}",
+                        "type": "html"
+                    },
+                    {
+                        "/keep-alive/json": "{JSON}",
+                        "type": "json"
+                    },
+                    {
+                        "/keep-alive/md": "{JSON}",
+                        "type": "markdown"
+                    },
+                    {
+                        "/keep-alive/html": "sysinfo_{name}.html",
+                        "type": "file"
+                    }
+                ]
+            }
+        },
+        "debug": {
+            "interval": 60,
+            "systeme": {
+                "cpu": "cpu_usage:all",
+                "mem": "mem_usage:all",
+                "mem_chrome": "mem_usage:chrome"
+            },
+            "ping": {
+                "openvpn": "10.10.10.1",
+                "google": "8.8.8.8"
+            },
+            "urls": {
+                "easydoct": "https://www.easydoct.com/Images/easydoct.png",
+                "apiborne": "http://crt.apiborne.com/ip.php"
+            },
+            "sortie": {
+                "fichier": [
+                    {
+                        "actif": "y",
+                        "chemin": "debug_{name}_{year}{month}{day}.log",
+                        "mode": "log"
+                    }
+                ],
+                "mqtt": {
+                    "actif": "y",
+                    "topics": [
+                        "apiborne/{name}/log"
+                    ]
+                },
+                "web": [
+                    {
+                        "/debug": "{JSON}",
+                        "type": "html"
+                    },
+                    {
+                        "/debug/json": "{JSON}",
+                        "type": "json"
+                    },
+                    {
+                        "/debug/md": "{JSON}",
+                        "type": "markdown"
+                    },
+                    {
+                        "/debug/html": "debug_{name}_{year}{month}{day}.log",
+                        "type": "file"
+                    },
+                    {
+                        "/debug/vega": "debug_{name}_{year}{month}{day}.log",
+                        "type": "vega"
+                    }
+                ]
+            }
+        }
+    }
+}
