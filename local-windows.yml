@@ -15,6 +15,12 @@
     - name: Copy script file kill.bat
       command: "cp kill.bat /cygdrive/c/kioskReactor"
 
+    - name: Copy script file update.bat
+      command: "cp update.bat /cygdrive/c/kioskReactor"
+
+    - name: Copy script file update.sh
+      command: "cp update.sh /cygdrive/c/kioskReactor"
+
     - name: Copy ngrok
       command: "cp winutil/ngrok.exe /cygdrive/c/kioskReactor"
       ignore_errors: yes
