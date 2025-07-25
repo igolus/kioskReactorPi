@@ -1,4 +1,4 @@
 @echo off
 echo "Shutdown the system"
 
-start shutdown  -f -t 0
+start shutdown /s /f /t 0

@@ -1,4 +1,4 @@
 @echo off
 echo "Rebooting the system"
 
-start shutdown -r -t 0 -f
+start shutdown /r /f /t 0
