@@ -1,4 +1,4 @@
-@echo off
+@echo on
 setlocal
 
 :: Vérifie qu'un paramètre URL est passé
@@ -46,7 +46,6 @@ start "" "%CHROME_PATH%" ^
  --overscroll-history-navigation=0 ^
  --disable-infobars ^
  --remote-debugging-port=%REMOTE_PORT% ^
- --remote-debugging-address=0.0.0.0 ^
  --user-data-dir="%USER_DATA_DIR%" ^
  --allow-file-access-from-files ^
  --disk-cache-dir=null ^
@@ -86,4 +85,7 @@ echo ============================================
 echo Accedez a : http://localhost:%REMOTE_PORT%/json
 echo ou depuis un autre PC : http://IP_DE_CET_ORDINATEUR:%REMOTE_PORT%/json
 echo.
+pause
+netsh interface portproxy delete v4tov4 listenport=9222 listenaddress=0.0.0.0
+taskkill /F /IM Chrome.exe /T
 

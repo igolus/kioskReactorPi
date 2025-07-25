@@ -159,7 +159,7 @@ launchBrowser() {
   echo launchBrowser
   cd /cygdrive/c/kioskReactor/scriptUtil/chrome
   chmod +x ./chromeKioskRemoteDebugger.bat
-  ./chromeKioskRemoteDebugger.bat $url &
+  ./chromeKioskRemoteDebugger.bat $url
 }
 
 cd /cygdrive/c/kioskReactor/programs/jsScripts/init
