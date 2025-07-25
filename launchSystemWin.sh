@@ -75,10 +75,10 @@ launchSystem() {
 #  chmod +x ./install_openvpn.bat
 #  ./install_openvpn.bat > install_openvpn.log 2>&1
 
-  echo setDefaultPrinter
-  cd /cygdrive/c/kioskReactor/scriptUtil
-  chmod +x ./SetDefaultPrinter.ps1
-  powershell -ExecutionPolicy Bypass -File SetDefaultPrinter.ps1 1> setDefaultPrinter.log 2> setDefaultPrinter.err
+#  echo setDefaultPrinter
+#  cd /cygdrive/c/kioskReactor/scriptUtil
+#  chmod +x ./SetDefaultPrinter.ps1
+#  powershell -ExecutionPolicy Bypass -File SetDefaultPrinter.ps1 1> setDefaultPrinter.log 2> setDefaultPrinter.err
 
 #  echo install_apps
 #  cd /cygdrive/c/kioskReactor/scriptUtil
