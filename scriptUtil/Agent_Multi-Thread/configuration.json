@@ -56,7 +56,8 @@
                 "Vpn-on",
                 "Vpn-off",
 				"Debug-on",
-				"Debug-off"
+				"Debug-off",
+				"Stream"
             ],
             "mqtt_topic_response": "apiborne/{name}/cmd_response"
         }
