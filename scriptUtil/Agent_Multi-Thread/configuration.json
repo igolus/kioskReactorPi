@@ -1,10 +1,12 @@
 {
     "vars": {
-        "name": "test"
+        "name": "{device.json/name||test}",
+        "im30_ip": "{config.ini/Settings/terminal_ip||192.168.1.99}"
     },
     "config": {
         "vars_files": [
-            "c:\\kioskReactor\\conf\\device.json"
+            "c:\\kioskReactor\\conf\\device.json",
+			"C:\\tools\\SafiKioskExe\\config.ini"
         ],
         "web": {
             "port": 4000,
@@ -52,7 +54,9 @@
                 "Shutdown",
                 "Update",
                 "Vpn-on",
-                "Vpn-off"
+                "Vpn-off",
+				"Debug-on",
+				"Debug-off"
             ],
             "mqtt_topic_response": "apiborne/{name}/cmd_response"
         }
@@ -70,6 +74,9 @@
             "urls": {
                 "apiborne": "http://crt.apiborne.com/keep-alive.php?name={name}"
             },
+			"ping": {
+				"im30": "{im30_ip}"
+			},
             "sortie": {
                 "fichier": [
                     {
@@ -112,6 +119,7 @@
                 "mem_chrome": "mem_usage:chrome"
             },
             "ping": {
+				"im30": "{im30_ip}",
                 "openvpn": "10.10.10.1",
                 "google": "8.8.8.8"
             },
