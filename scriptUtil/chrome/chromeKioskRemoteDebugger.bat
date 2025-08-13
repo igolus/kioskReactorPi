@@ -24,8 +24,9 @@ if not exist "%CHROME_PATH%" (
     exit /b 2
 )
 
-
-netsh interface portproxy delete v4tov4 listenport=9222 listenaddress=0.0.0.0
+:: Libere tous les proxy pour être sur qu'aucun ne va bloquer le demarrage de chrome
+c:\windows\system32\netsh interface portproxy reset
+:: netsh interface portproxy delete v4tov4 listenport=9222 listenaddress=0.0.0.0
 
 cls
 :: Lancer Chrome en mode debug
@@ -46,27 +47,33 @@ start "" "%CHROME_PATH%" ^
  --overscroll-history-navigation=0 ^
  --disable-infobars ^
  --remote-debugging-port=%REMOTE_PORT% ^
+ --remote-debugging-address=127.0.0.1 ^
  --user-data-dir="%USER_DATA_DIR%" ^
  --allow-file-access-from-files ^
  --disk-cache-dir=null ^
  "%URL%"
 
-:: Attente de quelques secondes pour que Chrome ouvre le port
-echo.
-echo Attente de l'initialisation de Chrome...
-timeout /t 15 /nobreak > nul
-netsh interface portproxy add v4tov4 listenport=9222 connectaddress=127.0.0.1 connectport=9222 listenaddress=0.0.0.0
 
-:: Vérifie si le port est bien ouvert
-echo.
-echo Vérification que le port %REMOTE_PORT% est actif...
-netstat -ano | findstr ":%REMOTE_PORT%" > nul
-if errorlevel 1 (
-    echo.
-    echo ERREUR : Chrome n'a pas ouvert le port %REMOTE_PORT%. Debug impossible.
-    echo Vérifiez si un pare-feu ou un antivirus bloque l'ouverture du port.
-    exit /b 3
-)
+REM Desactivation car :
+REM     - l'utilisation du port 9222 peut créer un conflit
+REM     - Il n'est pas prudent d'exposer sur toutes les interfaces
+REM
+:: :: Attente de quelques secondes pour que Chrome ouvre le port
+:: echo.
+:: echo Attente de l'initialisation de Chrome...
+:: timeout /t 15 /nobreak > nul
+:: netsh interface portproxy add v4tov4 listenport=9222 connectaddress=127.0.0.1 connectport=9222 listenaddress=0.0.0.0
+:: 
+:: :: Vérifie si le port est bien ouvert
+:: echo.
+:: echo Vérification que le port %REMOTE_PORT% est actif...
+:: netstat -ano | findstr ":%REMOTE_PORT%" > nul
+:: if errorlevel 1 (
+::     echo.
+::     echo ERREUR : Chrome n'a pas ouvert le port %REMOTE_PORT%. Debug impossible.
+::     echo Vérifiez si un pare-feu ou un antivirus bloque l'ouverture du port.
+::     exit /b 3
+:: )
 
 cls
 echo ============================================
