@@ -26,7 +26,6 @@ if not exist "%CHROME_PATH%" (
 
 :: Libere tous les proxy pour être sur qu'aucun ne va bloquer le demarrage de chrome
 c:\windows\system32\netsh interface portproxy reset
-:: netsh interface portproxy delete v4tov4 listenport=9222 listenaddress=0.0.0.0
 
 cls
 :: Lancer Chrome en mode debug
@@ -52,47 +51,4 @@ start "" "%CHROME_PATH%" ^
  --allow-file-access-from-files ^
  --disk-cache-dir=null ^
  "%URL%"
-
-
-REM Desactivation car :
-REM     - l'utilisation du port 9222 peut créer un conflit
-REM     - Il n'est pas prudent d'exposer sur toutes les interfaces
-REM
-:: :: Attente de quelques secondes pour que Chrome ouvre le port
-:: echo.
-:: echo Attente de l'initialisation de Chrome...
-:: timeout /t 15 /nobreak > nul
-:: netsh interface portproxy add v4tov4 listenport=9222 connectaddress=127.0.0.1 connectport=9222 listenaddress=0.0.0.0
-:: 
-:: :: Vérifie si le port est bien ouvert
-:: echo.
-:: echo Vérification que le port %REMOTE_PORT% est actif...
-:: netstat -ano | findstr ":%REMOTE_PORT%" > nul
-:: if errorlevel 1 (
-::     echo.
-::     echo ERREUR : Chrome n'a pas ouvert le port %REMOTE_PORT%. Debug impossible.
-::     echo Vérifiez si un pare-feu ou un antivirus bloque l'ouverture du port.
-::     exit /b 3
-:: )
-
-cls
-echo ============================================
-echo  Chrome started with following configuration:
-echo ============================================
-echo    * Kiosk Mode
-echo    * No-Caching
-echo    * Developer Profile (temporaire)
-echo    * Disabled TouchHistory
-echo    * Disabled Web-Security
-echo    * Allowed XHR Localfile Access
-echo    * Remote-Debug Port : %REMOTE_PORT%
-echo ============================================
-ipconfig | findstr "IPv4"
-echo ============================================
-echo Accedez a : http://localhost:%REMOTE_PORT%/json
-echo ou depuis un autre PC : http://IP_DE_CET_ORDINATEUR:%REMOTE_PORT%/json
-echo.
-pause
-netsh interface portproxy delete v4tov4 listenport=9222 listenaddress=0.0.0.0
-taskkill /F /IM Chrome.exe /T
 
