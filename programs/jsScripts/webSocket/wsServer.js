@@ -25,16 +25,29 @@ getCurrentDevice().then(device => {
         return;
     }
 
-    listenToEvents(device.id, (event) => {
-        //checkData(dataJson)
-        if (checkData(event)) {
-            broadCastMessage(wsSocket, event)
-            triggerWebHook(wsSocket, event, currentProject.webHookEventUrl)
-        }
-    })
-    listenToCommands(device.id, (command) => {
-        broadCastMessage(wsSocket, command);
-    })
+    try {
+        listenToEvents(device.id, (event) => {
+            //checkData(dataJson)
+            if (checkData(event)) {
+                broadCastMessage(wsSocket, event)
+                triggerWebHook(wsSocket, event, currentProject.webHookEventUrl)
+            }
+        })
+
+    }
+    catch (err) {
+        loggerWs.error("Error listening to events: " + err);
+    }
+
+    try {
+        listenToCommands(device.id, (command) => {
+            broadCastMessage(wsSocket, command);
+        })
+    }
+    catch (err) {
+        loggerWs.error("Error listening to commands: " + err);
+    }
+
 })
 
 

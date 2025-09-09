@@ -3,9 +3,9 @@ ps -W | awk '/chrome.exe/,NF=1' | xargs kill -f
 ps -W | awk '/node.exe/,NF=1' | xargs kill -f
 ps -W | awk '/node/,NF=1' | xargs kill -f
 
-cd /cygdrive/c/kioskReactor/scriptUtil/Agent_Multi-Thread
-chmod +x ./killer.bat
-./killer.bat
+#cd /cygdrive/c/kioskReactor/scriptUtil/Agent_Multi-Thread
+#chmod +x ./killer.bat
+#./killer.bat
 
 git config --global http.sslVerify false
 ansible-pull -U https://github.com/igolus/rocketKioskPi.git local-windows.yml
