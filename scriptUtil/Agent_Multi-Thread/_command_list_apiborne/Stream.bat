@@ -4,5 +4,4 @@ echo "Test du streaming"
 
 ipconfig
 
-ping 10.10.10.1
-
+ping -n 10 10.10.10.1

@@ -1,36 +1,40 @@
 {
     "vars": {
+        "version": "{version.json/version||-}",
         "name": "{device.json/name||test}",
-        "im30_ip": "{config.ini/Settings/terminal_ip||192.168.1.99}"
+        "im30_ip": "{config.ini/Settings/terminal_ip||192.168.1.99}",
+        "logs_dir": "c:\\kioskReactor\\logs"
     },
     "config": {
         "vars_files": [
+			"c:\\kioskReactor\\version.json",
             "c:\\kioskReactor\\conf\\device.json",
-			"C:\\tools\\SafiKioskExe\\config.ini"
+            "c:\\tools\\SafiKioskExe\\config.ini"
         ],
         "web": {
             "port": 4000,
-            "web": [
-                {
+            "web": [{
                     "/cmd": "{COMMAND}",
                     "type": "cmd"
-                },
-                {
+                }, {
                     "/conf": "{CONF}",
                     "type": "html"
-                },
-                {
+                }, {
                     "/conf/json": "{CONF}",
                     "type": "json"
-                },
-                {
+                }, {
                     "/conf/md": "{CONF}",
                     "type": "markdown"
-                },
-				{
-					"/proxy-ip":   "http://10.10.10.1/ip.php",
-					"type": "proxy"
-				}
+                }, {
+                    "/logs/kiosk": "c:\\kioskReactor\\logs\\",
+                    "type": "file"
+                }, {
+                    "/logs/safi": "c:\\tools\\SafiKioskExe\\logs\\",
+                    "type": "file"
+                }, {
+                    "/proxy-ip": "http://10.10.10.1/ip.php",
+                    "type": "proxy"
+                }
             ],
             "whitelist": [
                 "127.0.0.1",
@@ -40,7 +44,7 @@
         },
         "mqtt": {
             "server": "vpn.apiborne.com",
-            "port": 5883,
+            "port": [5883, 80],
             "ssl": true,
             "topic_cmd": [
                 "apiborne/{name}/cmd"
@@ -55,9 +59,9 @@
                 "Update",
                 "Vpn-on",
                 "Vpn-off",
-				"Debug-on",
-				"Debug-off",
-				"Stream"
+                "Debug-on",
+                "Debug-off",
+                "Stream"
             ],
             "mqtt_topic_response": "apiborne/{name}/cmd_response"
         }
@@ -66,23 +70,25 @@
         "keep-alive": {
             "interval": 300,
             "info": {
+                "version": "{version}",
+                "name": "{name}",
                 "os": "os_info",
                 "hdd": "disk_info",
                 "mem": "mem_info",
                 "network": "nw_info",
-                "usb": "usb_info"
+                "usb": "usb_info",
+                "printer": "spooler_info"
             },
             "urls": {
-                "apiborne": "http://crt.apiborne.com/keep-alive.php?name={name}"
+                "apiborne": "http://10.10.10.1/keep-alive.php?name={name}"
             },
-			"ping": {
-				"im30": "{im30_ip}"
-			},
+            "ping": {
+                "im30": "{im30_ip}"
+            },
             "sortie": {
-                "fichier": [
-                    {
+                "fichier": [{
                         "actif": "y",
-                        "chemin": "sysinfo_{name}.html",
+                        "chemin": "{logs_dir}\\sysinfo_{name}.html",
                         "mode": "html"
                     }
                 ],
@@ -92,21 +98,17 @@
                         "apiborne/{name}/keep-alive"
                     ]
                 },
-                "web": [
-                    {
+                "web": [{
                         "/keep-alive": "{JSON}",
                         "type": "html"
-                    },
-                    {
+                    }, {
                         "/keep-alive/json": "{JSON}",
                         "type": "json"
-                    },
-                    {
+                    }, {
                         "/keep-alive/md": "{JSON}",
                         "type": "markdown"
-                    },
-                    {
-                        "/keep-alive/html": "sysinfo_{name}.html",
+                    }, {
+                        "/keep-alive/html": "{logs_dir}\\sysinfo_{name}.html",
                         "type": "file"
                     }
                 ]
@@ -114,25 +116,28 @@
         },
         "debug": {
             "interval": 60,
+            "info": {
+                "version": "{version}",
+                "name": "{name}"
+            },
             "systeme": {
                 "cpu": "cpu_usage:all",
                 "mem": "mem_usage:all",
                 "mem_chrome": "mem_usage:chrome"
             },
             "ping": {
-				"im30": "{im30_ip}",
+                "im30": "{im30_ip}",
                 "openvpn": "10.10.10.1",
                 "google": "8.8.8.8"
             },
             "urls": {
                 "easydoct": "https://www.easydoct.com/Images/easydoct.png",
-                "apiborne": "http://crt.apiborne.com/ip.php"
+                "apiborne": "http://10.10.10.1/keep-alive.php?name={name}"
             },
             "sortie": {
-                "fichier": [
-                    {
+                "fichier": [{
                         "actif": "y",
-                        "chemin": "debug_{name}_{year}{month}{day}.log",
+                        "chemin": "{logs_dir}\\{year}\\{month}\\{day}\\debug_{name}.log",
                         "mode": "log"
                     }
                 ],
@@ -142,29 +147,70 @@
                         "apiborne/{name}/log"
                     ]
                 },
-                "web": [
-                    {
+                "web": [{
                         "/debug": "{JSON}",
                         "type": "html"
-                    },
-                    {
+                    }, {
                         "/debug/json": "{JSON}",
                         "type": "json"
-                    },
-                    {
+                    }, {
                         "/debug/md": "{JSON}",
                         "type": "markdown"
-                    },
-                    {
-                        "/debug/html": "debug_{name}_{year}{month}{day}.log",
-                        "type": "file"
-                    },
-                    {
-                        "/debug/vega": "debug_{name}_{year}{month}{day}.log",
+                    }, {
+                        "/debug/vega": "{logs_dir}\\{year}\\{month}\\{day}\\debug_{name}.log",
                         "type": "vega"
                     }
                 ]
             }
-        }
+        },
+		"sensors": {
+			"interval": 5,
+			"info": {
+				"version": "{version}",
+				"name": "{name}"
+			},
+			"capteurs": {
+				"printer": {
+					"type": "spooler_info",
+					"hooks": [
+						"ws://127.0.0.1:8080",
+						"mqtt://apiborne/{name}/sensors",
+						"http://10.10.10.1/bornes/api/is_tag.php?name={name}&tag_name=Printer&tag_comment=Défaut constaté sur l'imprimante&chk_value=[capteur]"
+					]
+				},
+				"im30": {
+					"type": "ping",
+					"ip": "{im30_ip}",
+					"hooks": [
+						"ws://127.0.0.1:8080",
+						"mqtt://apiborne/{name}/sensors",
+						"http://10.10.10.1/bornes/api/is_tag.php?name={name}&tag_name=IM30&tag_comment=Défaut constaté sur l'IM30&chk_value=[capteur]"
+					]
+				}
+			},
+			"sortie": {
+				"fichier": [{
+						"actif": "n",
+						"chemin": "{logs_dir}\\{year}\\{month}\\{day}\\sensors_{name}.log",
+						"mode": "log"
+					}
+				],
+				"mqtt": {
+					"actif": "n",
+					"topics": ["apiborne/{name}/sensors"]
+				},
+				"web": [{
+						"/sensors": "{JSON}",
+						"type": "html"
+					}, {
+						"/sensors/json": "{JSON}",
+						"type": "json"
+					}, {
+						"/sensors/md": "{JSON}",
+						"type": "markdown"
+					}
+				]
+			}
+		}
     }
 }
