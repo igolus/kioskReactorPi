@@ -12,6 +12,7 @@ if exist "%service_newexe%" (
     call "%~dp0service-stop.bat"
     copy /Y "%service_newexe%" "%service_exe%"
     del "%service_newexe%"
+	call "%~dp0reset_acl.bat"
 )
 
 :: Verifie si besoin d'installer nssm
