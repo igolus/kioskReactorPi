@@ -33,7 +33,7 @@ if exist "%service_newexe%" (
 where nssm >nul 2>&1
 if %errorlevel% neq 0 (
 	echo Installation de nssm
-	winget install nssm
+	winget install --accept-source-agreements --accept-package-agreements --silent nssm
 )
 
 
