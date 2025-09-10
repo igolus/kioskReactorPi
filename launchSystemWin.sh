@@ -143,10 +143,9 @@ creditl=`echo $credit | sed 's/\\r//g'`
 minimalCreditToLock=-2000
 
 launchBrowser() {
-  #wait-for-ws
-	#echo $url
-	cd '/cygdrive/C/Program Files/Google/Chrome/Application'
-	./chrome.exe --kiosk --use-fake-ui-for-media-stream --disable-session-crashed-bubble --no-first-run --fast --fast-start --password-store=basic --disable-features=TouchpadOverscrollHistoryNavigation --disable-features=TranslateUI --noerrdialogs --incognito --disable-pinch --overscroll-history-navigation=0 --disable-infobars --remote-debugging-port=9222 $url &
+	cd /cygdrive/c/kioskReactor/scriptUtil/chrome
+	chmod +x ./chromeKioskRemoteDebugger.bat
+	./chromeKioskRemoteDebugger.bat $url &
 }
 
 cd /cygdrive/c/kioskReactor/programs/jsScripts/init
