@@ -1,4 +1,4 @@
-@echo off
+@echo on
 setlocal EnableExtensions EnableDelayedExpansion
 
 set service_name=Agent-mt

@@ -1,8 +1,9 @@
-@echo off
+@echo on
 
 :: Exécuter le script bash
 call c:\cygwin64\bin\bash.exe C:\kioskReactor\update.sh
 
+echo update camera
 
 cd c:\kioskReactorPi\scriptUtil\Camera\
 call c:\kioskReactorPi\scriptUtil\Camera\service-install.bat
