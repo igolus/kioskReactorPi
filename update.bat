@@ -1,4 +1,4 @@
-@echo on
+@echo off
 
 :: Exécuter le script bash
 call c:\cygwin64\bin\bash.exe C:\kioskReactor\update.sh

@@ -1,4 +1,4 @@
-@echo on
+@echo off
 setlocal EnableExtensions EnableDelayedExpansion
 
 set service_name=camera
