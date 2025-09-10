@@ -38,7 +38,7 @@ if %errorlevel% neq 0 (
 
 
 :: Vérifie si le service existe déjà
-sc query "%service_name%" >nul 2>&1
+sc query "%service_name%"
 if %errorlevel% neq 0 (
     echo Installation du service "%service_name%"...
     nssm install "%service_name%" "%service_exe%"
