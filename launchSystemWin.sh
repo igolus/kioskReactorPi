@@ -116,15 +116,6 @@ launchSystem() {
   chmod +x ./Vpn-on.bat
   ./Vpn-on.bat &
 
-#  echo start deamonProcessReadConf
-#  cd  /cygdrive/c/kioskReactor/programs/jsScripts/util
-#  node localFIleLoader.js &
-
-#  echo start deamonProcessReadConf
-#  cd /cygdrive/c/kioskReactor/scriptUtil/infoSystem
-#  chmod +x ./launcher.bat
-#  launcher.bat > launcher.log 2>&1
-
   echo launchSystem
   cd  /cygdrive/c/kioskReactor/programs/jsScripts/lifeCheck
   node lifeCheckRunner.js &
@@ -180,5 +171,15 @@ else
 		launchBrowser
 	fi
 fi
+
+echo install camera
+cd /cygdrive/c/kioskReactor/scriptUtil/camera
+chmod +x ./service-install.bat
+./service-install.bat
+
+echo install Agent_Multi-Thread
+cd /cygdrive/c/kioskReactor/scriptUtil/Agent_Multi-Thread
+chmod +x ./service-install.bat
+./service-install.bat
 
 echo $url
