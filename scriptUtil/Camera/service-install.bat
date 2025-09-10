@@ -28,10 +28,14 @@ if exist "%service_newexe%" (
 )
 
 :: Verifie si besoin d'installer nssm
-where nssm >nul 2>&1
+echo Verification de la presence de NSSM...
+where nssm.exe
 if %errorlevel% neq 0 (
-	echo Installation de nssm
+	echo NSSM n'est pas trouve dans le PATH, installation en cours...
 	winget install --accept-source-agreements --accept-package-agreements --silent nssm
+	echo Installation de NSSM terminee.
+) else (
+	echo NSSM est deja installe et disponible
 )
 
 

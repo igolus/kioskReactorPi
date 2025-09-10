@@ -108,10 +108,6 @@ launchSystem() {
     echo "deviceId non défini, ngrokCheck ignoré."
   fi
 
-  echo start Agent_Multi-Thread
-  cd /cygdrive/c/kioskReactor/scriptUtil/Agent_Multi-Thread 
-  chmod +x ./launcher.bat
-  ./launcher.bat &
   cd /cygdrive/c/kioskReactor/scriptUtil/Agent_Multi-Thread/_command_list_apiborne
   chmod +x ./Vpn-on.bat
   ./Vpn-on.bat &
