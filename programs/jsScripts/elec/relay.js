@@ -1,25 +1,41 @@
 const conf = require('../../../conf/config.json');
 var SerialPort;
-var serialportInstance;
+var serialportInstance = null;
 const {loggerCommand} = require("../util/loggerUtil");
 
 try {
     sportData = require("serialport");
     SerialPort = sportData.SerialPort;
-    serialportInstance = new SerialPort({ path: conf.comPort, baudRate: 9600 }, function (err) {
-        if (err) {
-            loggerCommand.error('Error open serialport:', err.message);
-        }
-    });
+    if (conf.comPort) {
+        serialportInstance = new SerialPort({ path: conf.comPort, baudRate: 9600 }, function (err) {
+            if (err) {
+                loggerCommand.error('Error open serialport:', err.message);
+                serialportInstance = null;
+            } else {
+                loggerCommand.info('Serial port opened successfully on ' + conf.comPort);
+            }
+        });
+    } else {
+        loggerCommand.warn('No comPort configured in config.json');
+    }
 }
 catch (error) {
-    loggerCommand.error('unbale to create serialport:', error.message);
+    loggerCommand.error('Unable to create serialport:', error.message);
+    serialportInstance = null;
 }
 
 
 function turnRelayOff() {
     try {
-        serialportInstance.write('AT+CH1=0');
+        if (!serialportInstance) {
+            loggerCommand.error('Serial port not initialized - cannot turn relay off');
+            return;
+        }
+        serialportInstance.write('AT+CH1=0', (err) => {
+            if (err) {
+                loggerCommand.error('Error writing to serial port:', err.message);
+            }
+        });
     }
     catch (error) {
         console.log(error)
@@ -29,11 +45,19 @@ function turnRelayOff() {
 
 function turnRelayOn() {
     try {
-        serialportInstance.write('AT+CH1=1');
+        if (!serialportInstance) {
+            loggerCommand.error('Serial port not initialized - cannot turn relay on');
+            return;
+        }
+        serialportInstance.write('AT+CH1=1', (err) => {
+            if (err) {
+                loggerCommand.error('Error writing to serial port:', err.message);
+            }
+        });
     }
     catch (error) {
         console.log(error)
-        loggerCommand.error('Error turnRelayOff:', error.message);
+        loggerCommand.error('Error turnRelayOn:', error.message);
     }
 }
 
