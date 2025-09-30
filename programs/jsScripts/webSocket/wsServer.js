@@ -12,6 +12,7 @@ const {commandTypeReboot, commandTypeOpenUrl, commandTypeUpdate,
     internalCommandTypeCancelSnap, internalCommandTypeInactivity, commandTypeDeployWebSite, commandTypeNGrok,
     commandTypePrintFromUrl, commandTypeOpenRelay, commandTypeCloseRelay,
     commandTypeSsh, commandTypeUploadLogs, commandTypeUploadDmpLogs,
+    commandTypeMqttEvent, commandTypeMqttFunctionalError
 } = require("./commandTypes");
 const {listenToEvents, listenToCommands} = require("../dbUtil/eventsUtil");
 require('../util/healthChecker')
@@ -55,7 +56,8 @@ const allCommands = [commandTypeOpenUrl, commandTypeReboot, commandTypeUpdate,
     commandTypePrintTicket, commandTypeSpeak, internalCommandTypePlayMp3,
     internalCommandTypeSnap, internalCommandTypeCancelSnap, internalCommandTypeInactivity,
     commandTypeDeployWebSite, commandTypeNGrok, commandTypeSsh, commandTypePrintFromUrl,
-    commandTypeOpenRelay, commandTypeCloseRelay, commandTypeUploadLogs, commandTypeUploadDmpLogs]
+    commandTypeOpenRelay, commandTypeCloseRelay, commandTypeUploadLogs, commandTypeUploadDmpLogs,
+    commandTypeMqttEvent, commandTypeMqttFunctionalError]
 
 const noParamCommands = [commandTypeReboot, internalCommandTypeInactivity,
     internalCommandTypeSnap, internalCommandTypeCancelSnap, commandTypeDeployWebSite,
@@ -139,7 +141,10 @@ wsSocket.on('connection', function connection(ws) {
         try {
             dataJson = JSON.parse(data.toString());
             loggerWs.info("dataJson " + JSON.stringify(dataJson));
-            if (!checkData(dataJson)) {
+            if (dataJson && dataJson.eventType === "QR_CODE"){
+                goodMessage = true;
+            }
+            else if (!checkData(dataJson)) {
                 loggerWs.error("Bad format message");
                 goodMessage = false;
             }
