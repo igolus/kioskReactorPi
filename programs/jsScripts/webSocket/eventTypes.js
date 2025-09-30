@@ -9,7 +9,7 @@ function buildEventJson(eventType, eventValue, eventContext) {
 }
 
 module.exports = {
-    eventTypeQrCode: "qrcode",
+    eventTypeQrCode: "QR_CODE",
     eventTypeSnapReady :"snapready",
     eventTypeInactivity :"inactivity",
     eventTypePrintFromUrl :"printfromurl",
