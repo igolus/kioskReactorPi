@@ -50,5 +50,8 @@ start "" "%CHROME_PATH%" ^
  --user-data-dir="%USER_DATA_DIR%" ^
  --allow-file-access-from-files ^
  --disk-cache-dir=null ^
+  --ignore-certificate-errors ^
+  --ignore-ssl-errors ^
+  --allow-insecure-localhost ^
  "%URL%"
 
