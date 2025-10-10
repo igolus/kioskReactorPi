@@ -21,10 +21,15 @@ const {readConfig, writeDeviceAndProjectConfig, writeConfig} = require("../util/
 const wsSocket =new WebSocket({
     server: server,
 });
+
+// Initialize Firebase listeners in a non-blocking way
 getCurrentDevice().then(device => {
     if (!device) {
+        loggerWs.warn("Device not found - running in offline mode");
         return;
     }
+
+    loggerWs.info("Device loaded successfully: " + device.id);
 
     try {
         listenToEvents(device.id, (event) => {
@@ -34,7 +39,7 @@ getCurrentDevice().then(device => {
                 triggerWebHook(wsSocket, event, currentProject.webHookEventUrl)
             }
         })
-
+        loggerWs.info("Firebase event listener initialized");
     }
     catch (err) {
         loggerWs.error("Error listening to events: " + err);
@@ -44,11 +49,15 @@ getCurrentDevice().then(device => {
         listenToCommands(device.id, (command) => {
             broadCastMessage(wsSocket, command);
         })
+        loggerWs.info("Firebase command listener initialized");
     }
     catch (err) {
         loggerWs.error("Error listening to commands: " + err);
     }
 
+}).catch(err => {
+    loggerWs.error("Failed to load device from Firebase (offline mode): " + err.message);
+    loggerWs.info("WebSocket server will continue running without Firebase integration");
 })
 
 
@@ -104,29 +113,35 @@ function broadCastMessage(ws, message) {
 }
 
 function triggerWebHook(ws, dataJson, webHookUrl) {
-    if (webHookUrl) {
-        const headers = {
-            'Content-Type': 'application/json',
-            'deviceId': config.deviceId,
-            'Authorization': currentProject.authKey
-        }
-        loggerWs.info('Sending data to ' + webHookUrl);
-        loggerWs.info('data ' + JSON.stringify(dataJson, null, 2));
-        axios.post(webHookUrl, dataJson, {
-            headers: headers
-        })
-            .then(response => {
-                loggerWs.info("Reponse webhook " + JSON.stringify(response.data));
-                let dataResp = response.data;
-                if (dataResp && Array.isArray(response.data)) {
-                    dataResp.forEach(item => broadCastMessage(ws, item))
-                }
-            })
-            .catch(error => {
-                loggerWs.error('Unable to trigger webhook', error);
-            });
+    if (!webHookUrl) {
+        return;
     }
 
+    if (!currentProject) {
+        loggerWs.warn('Cannot trigger webhook - project configuration not loaded yet');
+        return;
+    }
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'deviceId': config.deviceId,
+        'Authorization': currentProject.authKey
+    }
+    loggerWs.info('Sending data to ' + webHookUrl);
+    loggerWs.info('data ' + JSON.stringify(dataJson, null, 2));
+    axios.post(webHookUrl, dataJson, {
+        headers: headers
+    })
+        .then(response => {
+            loggerWs.info("Reponse webhook " + JSON.stringify(response.data));
+            let dataResp = response.data;
+            if (dataResp && Array.isArray(response.data)) {
+                dataResp.forEach(item => broadCastMessage(ws, item))
+            }
+        })
+        .catch(error => {
+            loggerWs.error('Unable to trigger webhook', error);
+        });
 }
 
 
@@ -181,10 +196,31 @@ wsSocket.on('connection', function connection(ws) {
 
 // let isLite = myArgs.length > 0 && myArgs[0].toLowerCase() === 'lite';
 
+// Start WebSocket server immediately, then load Firebase data asynchronously
 (async () => {
-    device = await getCurrentDevice();
-    currentProject = await getCurrentProject(device)
+    // Start server first - non-blocking
     server.listen(8080);
+    loggerWs.info("WebSocket server started on port 8080");
+
+    try {
+        // Load device and project data asynchronously
+        device = await getCurrentDevice();
+        if (device) {
+            loggerWs.info("Device configuration loaded");
+            currentProject = await getCurrentProject(device);
+            if (currentProject) {
+                loggerWs.info("Project configuration loaded");
+            } else {
+                loggerWs.warn("Project configuration not found");
+            }
+        } else {
+            loggerWs.warn("Device configuration not found - running in offline mode");
+        }
+    } catch (err) {
+        loggerWs.error("Error loading configuration from Firebase: " + err.message);
+        loggerWs.info("Server continues in offline mode");
+    }
+
     // let conf = readConfig();
     // conf.wsInit = 1;
     // await writeConfig(conf);
