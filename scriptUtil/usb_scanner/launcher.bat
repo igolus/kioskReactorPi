@@ -30,6 +30,8 @@ if exist "%service_newexe%" (
 	)
 )
 
+REM Pause de 5 seconde pour laisser l'Agent demarrer en priorité
+timeout /t 5 /nobreak >nul
 
 
 REM Demarrage de l'application

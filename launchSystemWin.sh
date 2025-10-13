@@ -65,26 +65,6 @@ echo $deviceId
 
 launchSystem() {
 
-#  echo install_vnc
-#  cd /cygdrive/c/kioskReactor/scriptUtil
-#  chmod +x ./install_vnc.bat
-#  ./install_vnc.bat > install_vnc.log 2>&1
-#
-#  echo install_openvpn
-#  cd /cygdrive/c/kioskReactor/scriptUtil
-#  chmod +x ./install_openvpn.bat
-#  ./install_openvpn.bat > install_openvpn.log 2>&1
-
-#  echo setDefaultPrinter
-#  cd /cygdrive/c/kioskReactor/scriptUtil
-#  chmod +x ./SetDefaultPrinter.ps1
-#  powershell -ExecutionPolicy Bypass -File SetDefaultPrinter.ps1 1> setDefaultPrinter.log 2> setDefaultPrinter.err
-
-#  echo install_apps
-#  cd /cygdrive/c/kioskReactor/scriptUtil
-#  chmod +x ./installApps_noupdate.bat
-#  ./installApps_noupdate.bat > installApps_noupdate.bat.log 2>&1
-
   echo SafiKiosk
   if [ -d "/cygdrive/C/tools/SafiKioskExe" ]; then
   cd /cygdrive/C/tools/SafiKioskExe
@@ -166,15 +146,5 @@ else
 		launchBrowser
 	fi
 fi
-
-echo install camera
-cd /cygdrive/c/kioskReactor/scriptUtil/camera
-chmod +x ./service-install.bat
-./service-install.bat
-
-echo install Agent_Multi-Thread
-cd /cygdrive/c/kioskReactor/scriptUtil/Agent_Multi-Thread
-chmod +x ./service-install.bat
-./service-install.bat
 
 echo $url

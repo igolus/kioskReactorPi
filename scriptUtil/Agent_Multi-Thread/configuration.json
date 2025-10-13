@@ -93,7 +93,7 @@
                     }
                 ],
                 "mqtt": {
-                    "actif": "y",
+                    "actif": "n",
                     "topics": [
                         "apiborne/{name}/keep-alive"
                     ]
