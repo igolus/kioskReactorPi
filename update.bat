@@ -9,7 +9,7 @@ REM -----------------------
 REM Check les installations de service
 REM ----------------------------------
 cd c:\kioskReactor\scriptUtil\
-services-install.bat
+call services-install.bat
 REM ----------------------------------
 
 

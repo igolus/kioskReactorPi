@@ -7,7 +7,7 @@
     },
     "config": {
         "vars_files": [
-			"c:\\kioskReactor\\version.json",
+			"c:\\kioskReactor\\scriptUtil\\version.json",
             "c:\\kioskReactor\\conf\\device.json",
             "c:\\tools\\SafiKioskExe\\config.ini"
         ],

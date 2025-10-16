@@ -108,6 +108,10 @@ launchSystem() {
   cd /cygdrive/c/kioskReactor/programs/jsScripts/commandsListener
   node commandLauncher.js &
 
+  echo services-install
+  cd /cygdrive/c/kioskReactor/scriptUtil
+  ./services-install.bat &
+
 }
 
 cd /cygdrive/c/kioskReactor/conf/
