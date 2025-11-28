@@ -7,9 +7,10 @@
     },
     "config": {
         "vars_files": [
-			"c:\\kioskReactor\\scriptUtil\\version.json",
+			"C:\\kioskReactor\\scriptUtil\\version.json",
             "c:\\kioskReactor\\conf\\device.json",
-            "c:\\tools\\SafiKioskExe\\config.ini"
+            "c:\\tools\\SafiKioskExe\\config.ini",
+			"C:\\kioskReactor\\conf\\sensitive.json"
         ],
         "web": {
             "port": 4000,
@@ -32,7 +33,7 @@
                     "/logs/safi": "c:\\tools\\SafiKioskExe\\logs\\",
                     "type": "file"
                 }, {
-                    "/proxy-ip": "http://10.10.10.1/ip.php",
+                    "/proxy/proxy-ip": "http://10.10.10.1",
                     "type": "proxy"
                 }
             ],
@@ -115,7 +116,7 @@
             }
         },
         "debug": {
-            "interval": 60,
+            "interval": 600,
             "info": {
                 "version": "{version}",
                 "name": "{name}"
@@ -174,8 +175,9 @@
 					"type": "spooler_info",
 					"hooks": [
 						"ws://127.0.0.1:8080",
+						"https://us-central1-totemsystem-5889b.cloudfunctions.net/deviceEventService/events/{sensitive.json/api_key}/printer/[0/status]/{device.json/id}",
 						"mqtt://apiborne/{name}/sensors",
-						"http://10.10.10.1/bornes/api/is_tag.php?name={name}&tag_name=Printer&tag_comment=Défaut constaté sur l'imprimante&chk_value=[capteur]"
+						"http://10.10.10.1/bornes/api/is_tag.php?name={name}&tag_name=Printer&tag_comment=Défaut constaté sur l'imprimante&chk_value=[capteur]&status=[0/status_str]"
 					]
 				},
 				"im30": {
@@ -183,8 +185,9 @@
 					"ip": "{im30_ip}",
 					"hooks": [
 						"ws://127.0.0.1:8080",
+						"https://us-central1-totemsystem-5889b.cloudfunctions.net/deviceEventService/events/{sensitive.json/api_key}/IM30/[0/status]/{device.json/id}",
 						"mqtt://apiborne/{name}/sensors",
-						"http://10.10.10.1/bornes/api/is_tag.php?name={name}&tag_name=IM30&tag_comment=Défaut constaté sur l'IM30&chk_value=[capteur]"
+						"http://10.10.10.1/bornes/api/is_tag.php?name={name}&tag_name=IM30&tag_comment=Défaut constaté sur l'IM30&chk_value=[capteur]&chk_value=[0/ping]"
 					]
 				}
 			},
@@ -199,16 +202,11 @@
 					"actif": "n",
 					"topics": ["apiborne/{name}/sensors"]
 				},
-				"web": [{
-						"/sensors": "{JSON}",
-						"type": "html"
-					}, {
-						"/sensors/json": "{JSON}",
-						"type": "json"
-					}, {
-						"/sensors/md": "{JSON}",
-						"type": "markdown"
-					}
+				"web": [
+					{"/sensors": "{JSON}",	"type": "html"},
+					{"/sensors/json": "{JSON}",	"type": "json"},
+					{"/sensors/md": "{JSON}", "type": "markdown"},
+					{"/proxy/reset-imp": "https://us-central1-totemsystem-5889b.cloudfunctions.net/deviceEventService/events/{sensitive.json/api_key}/printer/[0]true/{device.json/id}", "type": "proxy"}
 				]
 			}
 		}
