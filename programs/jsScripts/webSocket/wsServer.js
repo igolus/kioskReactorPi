@@ -161,6 +161,7 @@ wsSocket.on('connection', function connection(ws) {
             }
             else if (!checkData(dataJson)) {
                 loggerWs.error("Bad format message");
+                loggerWs.info("dataJson:" + JSON.stringify(dataJson));
                 goodMessage = false;
             }
         }

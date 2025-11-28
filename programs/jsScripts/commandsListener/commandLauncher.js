@@ -258,46 +258,134 @@ function onEvent(dataJSON, ws, device, project) {
 
 console.log("START")
 
+// Helper function to load configuration with retry and graceful degradation
+async function loadConfiguration(maxAttempts = 5) {
+    let lastError = null;
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+            loggerCommand.info(`Attempting to load device configuration (attempt ${attempt}/${maxAttempts})`);
+            const device = await getCurrentDevice();
+
+            if (!device) {
+                loggerCommand.warn(`Device configuration not found (attempt ${attempt}/${maxAttempts})`);
+                if (attempt < maxAttempts) {
+                    await delay(5000 * attempt); // Increasing delay
+                    continue;
+                }
+                throw new Error("Device configuration not found after all retries");
+            }
+
+            loggerCommand.info("Device configuration loaded successfully: " + device.id);
+
+            try {
+                const project = await getCurrentProject(device);
+                if (project) {
+                    loggerCommand.info("Project configuration loaded successfully");
+                } else {
+                    loggerCommand.warn("Project configuration not found - running with device config only");
+                }
+                return { device, project };
+            } catch (projectError) {
+                loggerCommand.warn("Failed to load project configuration: " + projectError.message);
+                loggerCommand.info("Continuing with device configuration only");
+                return { device, project: null };
+            }
+
+        } catch (error) {
+            lastError = error;
+            loggerCommand.error(`Failed to load configuration (attempt ${attempt}/${maxAttempts}): ${error.message}`);
+
+            if (attempt < maxAttempts) {
+                const delayMs = 5000 * attempt;
+                loggerCommand.info(`Retrying in ${delayMs}ms...`);
+                await delay(delayMs);
+            }
+        }
+    }
+
+    // All attempts failed
+    loggerCommand.error("CRITICAL: Unable to load device configuration after all attempts");
+    loggerCommand.error("Last error: " + (lastError ? lastError.message : "unknown"));
+    loggerCommand.info("System will continue in degraded mode - some features may not work");
+
+    // Return minimal configuration to allow system to continue
+    return {
+        device: {
+            id: conf.deviceId || "unknown",
+            lite: true,  // Force lite mode if can't connect to Firebase
+            offline: true  // Flag to indicate offline mode
+        },
+        project: null
+    };
+}
+
 if (process.argv.length > 2 && process.argv[2] === "local") {
     (async () => {
-        device = await getCurrentDevice();
-        project = await getCurrentProject(device)
-        await startSeverAndConfigureListening(onEvent, device, project);
+        try {
+            const config = await loadConfiguration();
+            device = config.device;
+            project = config.project;
+            await startSeverAndConfigureListening(onEvent, device, project);
+        } catch (err) {
+            loggerCommand.error("Fatal error during local startup: " + err.message);
+            process.exit(1);
+        }
     })();
 }
 else {
     (async () => {
-        let init = false;
-        device = await getCurrentDevice();
-        project = await getCurrentProject(device);
-        console.log(JSON.stringify(device))
-        if (device.lite) {
-            await startSeverAndConfigureListening(onEvent, device, project);
-        }
-        else {
-            while (!init) {
-                try {
-                    // const resChrome = await axios.get(conf.windows ? localChromeDebuggerServerJsonCheckWin : localChromeDebuggerServerJsonCheck);
-                    const resChrome = await axios.get("http://127.0.0.1:9222/json");
-                    const data = resChrome.data;
-                    if (data.length > 0) {
-                        const firstTab = data[0];
-                        const wsUrl = firstTab.webSocketDebuggerUrl;
-                        wsChromeSocket = new WebSocket(wsUrl);
-                        loggerCommand.info("wsChromeSocket opened " + wsUrl)
-                        init = true;
-                        await startSeverAndConfigureListening(onEvent, device, project);
-                    } else {
-                        loggerCommand.info("No tabs open " + resp.data)
+        try {
+            // Load configuration with retry logic
+            const config = await loadConfiguration();
+            device = config.device;
+            project = config.project;
+
+            console.log(JSON.stringify(device))
+
+            if (device.lite || device.offline) {
+                loggerCommand.info("Starting in lite/offline mode - no Chrome automation");
+                await startSeverAndConfigureListening(onEvent, device, project);
+            }
+            else {
+                let init = false;
+                loggerCommand.info("Starting in full mode - waiting for Chrome to be available");
+
+                while (!init) {
+                    try {
+                        // const resChrome = await axios.get(conf.windows ? localChromeDebuggerServerJsonCheckWin : localChromeDebuggerServerJsonCheck);
+                        const resChrome = await axios.get("http://127.0.0.1:9222/json");
+                        const data = resChrome.data;
+                        if (data.length > 0) {
+                            const firstTab = data[0];
+                            const wsUrl = firstTab.webSocketDebuggerUrl;
+                            wsChromeSocket = new WebSocket(wsUrl);
+                            loggerCommand.info("wsChromeSocket opened " + wsUrl)
+                            init = true;
+                            await startSeverAndConfigureListening(onEvent, device, project);
+                        } else {
+                            loggerCommand.info("No tabs open in Chrome")
+                        }
+                    } catch (err) {
+                        loggerCommand.info("Unable to communicate with Chrome, retrying...");
                     }
-                } catch (err) {
-                    loggerCommand.info("Unable to communicate with chrome", err);
-                    //return;
+                    await delay(1000)
                 }
-                await delay(1000)
+            }
+        } catch (err) {
+            loggerCommand.error("Fatal error during startup: " + err.message);
+            loggerCommand.error(err.stack);
+            // Don't exit - let system continue in degraded mode
+            loggerCommand.info("Attempting to continue in emergency mode...");
+            try {
+                device = { id: conf.deviceId || "unknown", lite: true, offline: true, emergency: true };
+                project = null;
+                await startSeverAndConfigureListening(onEvent, device, project);
+            } catch (emergencyErr) {
+                loggerCommand.error("Emergency mode also failed: " + emergencyErr.message);
+                process.exit(1);
             }
         }
-
     })();
 }
 

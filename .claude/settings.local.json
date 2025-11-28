@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "Bash(dir \"C:\\gitClone\\kioskReactorPi\\programs\\jsScripts\\node_modules\\node-thermal-printer\" /b)",
+      "Bash(dir \"C:\\gitClone\\kioskReactorPi\\programs\\jsScripts\\commandsListener\\node_modules\\node-thermal-printer\" /b)",
+      "Bash(dir \"C:\\gitClone\\kioskReactorPi\\node_modules\\node-thermal-printer\" /b)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ],
     "deny": [],
     "ask": []
