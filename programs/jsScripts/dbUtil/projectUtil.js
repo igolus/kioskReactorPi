@@ -1,6 +1,6 @@
 const {fireBaseDb} = require("./firebaseUtil");
 const { projectsCollection, brandsCollection} = require("./collectionsNames");
-const { saveProjectCache, loadProjectCache } = require('../util/configCache');
+const { saveProjectCache, loadProjectCache, loadProjectCacheFallback } = require('../util/configCache');
 
 // Retry helper with exponential backoff
 async function retryWithBackoff(fn, maxRetries = 3, initialDelay = 1000) {
@@ -27,6 +27,16 @@ const getCurrentProject = async (currentDevice, retries = 3, useCache = true) =>
         return null;
     }
 
+    // 1. Check cache first (with TTL validation)
+    if (useCache) {
+        const cachedProject = loadProjectCache();
+        if (cachedProject) {
+            cachedProject.fromCache = true;
+            return cachedProject;
+        }
+    }
+
+    // 2. Cache expired or missing - call Firebase
     try {
         const project = await retryWithBackoff(async () => {
             const doc = await fireBaseDb
@@ -45,12 +55,11 @@ const getCurrentProject = async (currentDevice, retries = 3, useCache = true) =>
 
         return project;
     } catch (error) {
-        // If Firebase is unavailable and cache is enabled, try to load from cache
+        // 3. Firebase unavailable - fallback to cache (ignore TTL)
         if (useCache && (error.code === 'unavailable' || error.code === 'failed-precondition')) {
-            console.log('Firebase unavailable, attempting to load project from cache...');
-            const cachedProject = loadProjectCache();
+            console.log('Firebase unavailable, attempting to load project from cache (fallback)...');
+            const cachedProject = loadProjectCacheFallback();
             if (cachedProject) {
-                console.log('Using cached project configuration');
                 cachedProject.fromCache = true;
                 return cachedProject;
             }

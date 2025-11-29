@@ -6,35 +6,55 @@ const DEVICE_CACHE_FILE = path.join(CACHE_DIR, 'device.cache.json');
 const PROJECT_CACHE_FILE = path.join(CACHE_DIR, 'project.cache.json');
 
 /**
- * Save device configuration to local cache
+ * Save device configuration to local cache with timestamp
  * @param {Object} device - Device configuration object
  */
 function saveDeviceCache(device) {
     if (!device) return;
 
     try {
-        fs.writeFileSync(DEVICE_CACHE_FILE, JSON.stringify(device, null, 2), 'utf8');
+        const cacheData = {
+            timestamp: Date.now(),
+            data: device
+        };
+        fs.writeFileSync(DEVICE_CACHE_FILE, JSON.stringify(cacheData, null, 2), 'utf8');
         console.log('Device configuration cached successfully');
     } catch (error) {
         console.error('Failed to save device cache:', error.message);
     }
 }
 
+// Default TTL: 10 minutes
+const DEFAULT_CACHE_TTL_MS = 10 * 60 * 1000;
+
 /**
  * Load device configuration from local cache
- * @returns {Object|null} - Cached device configuration or null if not found
+ * @param {number} ttlMs - Time to live in milliseconds (default: 5 minutes)
+ * @returns {Object|null} - Cached device configuration or null if not found/expired
  */
-function loadDeviceCache() {
+function loadDeviceCache(ttlMs = DEFAULT_CACHE_TTL_MS) {
     try {
         if (!fs.existsSync(DEVICE_CACHE_FILE)) {
-            console.log('No device cache file found');
             return null;
         }
 
-        const data = fs.readFileSync(DEVICE_CACHE_FILE, 'utf8');
-        const device = JSON.parse(data);
-        console.log('Device configuration loaded from cache');
-        return device;
+        const fileContent = fs.readFileSync(DEVICE_CACHE_FILE, 'utf8');
+        const cacheData = JSON.parse(fileContent);
+
+        // Handle old format (no timestamp) - treat as expired
+        if (!cacheData.timestamp || !cacheData.data) {
+            return cacheData; // Return old format data, let caller decide
+        }
+
+        // Check if cache is still valid
+        const age = Date.now() - cacheData.timestamp;
+        if (age > ttlMs) {
+            console.log(`Device cache expired (age: ${Math.round(age / 1000)}s)`);
+            return null;
+        }
+
+        console.log(`Device configuration loaded from cache (age: ${Math.round(age / 1000)}s)`);
+        return cacheData.data;
     } catch (error) {
         console.error('Failed to load device cache:', error.message);
         return null;
@@ -42,14 +62,45 @@ function loadDeviceCache() {
 }
 
 /**
- * Save project configuration to local cache
+ * Load device configuration from cache ignoring TTL (for fallback when Firebase is down)
+ * @returns {Object|null} - Cached device configuration or null if not found
+ */
+function loadDeviceCacheFallback() {
+    try {
+        if (!fs.existsSync(DEVICE_CACHE_FILE)) {
+            return null;
+        }
+
+        const fileContent = fs.readFileSync(DEVICE_CACHE_FILE, 'utf8');
+        const cacheData = JSON.parse(fileContent);
+
+        // Handle old format (no timestamp)
+        if (!cacheData.timestamp || !cacheData.data) {
+            console.log('Device configuration loaded from cache (fallback, old format)');
+            return cacheData;
+        }
+
+        console.log('Device configuration loaded from cache (fallback)');
+        return cacheData.data;
+    } catch (error) {
+        console.error('Failed to load device cache fallback:', error.message);
+        return null;
+    }
+}
+
+/**
+ * Save project configuration to local cache with timestamp
  * @param {Object} project - Project configuration object
  */
 function saveProjectCache(project) {
     if (!project) return;
 
     try {
-        fs.writeFileSync(PROJECT_CACHE_FILE, JSON.stringify(project, null, 2), 'utf8');
+        const cacheData = {
+            timestamp: Date.now(),
+            data: project
+        };
+        fs.writeFileSync(PROJECT_CACHE_FILE, JSON.stringify(cacheData, null, 2), 'utf8');
         console.log('Project configuration cached successfully');
     } catch (error) {
         console.error('Failed to save project cache:', error.message);
@@ -58,21 +109,61 @@ function saveProjectCache(project) {
 
 /**
  * Load project configuration from local cache
- * @returns {Object|null} - Cached project configuration or null if not found
+ * @param {number} ttlMs - Time to live in milliseconds (default: 5 minutes)
+ * @returns {Object|null} - Cached project configuration or null if not found/expired
  */
-function loadProjectCache() {
+function loadProjectCache(ttlMs = DEFAULT_CACHE_TTL_MS) {
     try {
         if (!fs.existsSync(PROJECT_CACHE_FILE)) {
-            console.log('No project cache file found');
             return null;
         }
 
-        const data = fs.readFileSync(PROJECT_CACHE_FILE, 'utf8');
-        const project = JSON.parse(data);
-        console.log('Project configuration loaded from cache');
-        return project;
+        const fileContent = fs.readFileSync(PROJECT_CACHE_FILE, 'utf8');
+        const cacheData = JSON.parse(fileContent);
+
+        // Handle old format (no timestamp)
+        if (!cacheData.timestamp || !cacheData.data) {
+            return cacheData;
+        }
+
+        // Check if cache is still valid
+        const age = Date.now() - cacheData.timestamp;
+        if (age > ttlMs) {
+            console.log(`Project cache expired (age: ${Math.round(age / 1000)}s)`);
+            return null;
+        }
+
+        console.log(`Project configuration loaded from cache (age: ${Math.round(age / 1000)}s)`);
+        return cacheData.data;
     } catch (error) {
         console.error('Failed to load project cache:', error.message);
+        return null;
+    }
+}
+
+/**
+ * Load project configuration from cache ignoring TTL (for fallback when Firebase is down)
+ * @returns {Object|null} - Cached project configuration or null if not found
+ */
+function loadProjectCacheFallback() {
+    try {
+        if (!fs.existsSync(PROJECT_CACHE_FILE)) {
+            return null;
+        }
+
+        const fileContent = fs.readFileSync(PROJECT_CACHE_FILE, 'utf8');
+        const cacheData = JSON.parse(fileContent);
+
+        // Handle old format (no timestamp)
+        if (!cacheData.timestamp || !cacheData.data) {
+            console.log('Project configuration loaded from cache (fallback, old format)');
+            return cacheData;
+        }
+
+        console.log('Project configuration loaded from cache (fallback)');
+        return cacheData.data;
+    } catch (error) {
+        console.error('Failed to load project cache fallback:', error.message);
         return null;
     }
 }
@@ -97,7 +188,9 @@ function clearCache() {
 module.exports = {
     saveDeviceCache,
     loadDeviceCache,
+    loadDeviceCacheFallback,
     saveProjectCache,
     loadProjectCache,
+    loadProjectCacheFallback,
     clearCache
 };

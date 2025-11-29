@@ -2,7 +2,7 @@ const {fireBaseDb} = require("./firebaseUtil");
 const { devicesCollection, billingCollection, brandsCollection, versionCollection, icaCollection} = require("./collectionsNames");
 const config = require('../../../conf/config.json');
 const moment = require("moment");
-const { saveDeviceCache, loadDeviceCache } = require('../util/configCache');
+const { saveDeviceCache, loadDeviceCache, loadDeviceCacheFallback } = require('../util/configCache');
 
 // Retry helper with exponential backoff
 async function retryWithBackoff(fn, maxRetries = 3, initialDelay = 1000) {
@@ -39,6 +39,16 @@ const createDeviceIdDb = async (deviceId, lite) => {
 }
 
 const getCurrentDevice = async (retries = 3, useCache = true) => {
+    // 1. Check cache first (with TTL validation)
+    if (useCache) {
+        const cachedDevice = loadDeviceCache();
+        if (cachedDevice) {
+            cachedDevice.fromCache = true;
+            return cachedDevice;
+        }
+    }
+
+    // 2. Cache expired or missing - call Firebase
     try {
         const device = await retryWithBackoff(async () => {
             const doc = await fireBaseDb
@@ -56,12 +66,11 @@ const getCurrentDevice = async (retries = 3, useCache = true) => {
 
         return device;
     } catch (error) {
-        // If Firebase is unavailable and cache is enabled, try to load from cache
+        // 3. Firebase unavailable - fallback to cache (ignore TTL)
         if (useCache && (error.code === 'unavailable' || error.code === 'failed-precondition')) {
-            console.log('Firebase unavailable, attempting to load device from cache...');
-            const cachedDevice = loadDeviceCache();
+            console.log('Firebase unavailable, attempting to load device from cache (fallback)...');
+            const cachedDevice = loadDeviceCacheFallback();
             if (cachedDevice) {
-                console.log('Using cached device configuration');
                 cachedDevice.fromCache = true;
                 return cachedDevice;
             }
