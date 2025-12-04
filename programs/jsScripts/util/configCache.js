@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { loggerCommand } = require('./loggerUtil');
 
 const CACHE_DIR = path.join(__dirname, '../../../conf');
 const DEVICE_CACHE_FILE = path.join(CACHE_DIR, 'device.cache.json');
@@ -18,9 +19,8 @@ function saveDeviceCache(device) {
             data: device
         };
         fs.writeFileSync(DEVICE_CACHE_FILE, JSON.stringify(cacheData, null, 2), 'utf8');
-        console.log('Device configuration cached successfully');
     } catch (error) {
-        console.error('Failed to save device cache:', error.message);
+        loggerCommand.error('Failed to save device cache: ' + error.message);
     }
 }
 
@@ -49,14 +49,12 @@ function loadDeviceCache(ttlMs = DEFAULT_CACHE_TTL_MS) {
         // Check if cache is still valid
         const age = Date.now() - cacheData.timestamp;
         if (age > ttlMs) {
-            console.log(`Device cache expired (age: ${Math.round(age / 1000)}s)`);
             return null;
         }
 
-        console.log(`Device configuration loaded from cache (age: ${Math.round(age / 1000)}s)`);
         return cacheData.data;
     } catch (error) {
-        console.error('Failed to load device cache:', error.message);
+        loggerCommand.error('Failed to load device cache: ' + error.message);
         return null;
     }
 }
@@ -76,14 +74,12 @@ function loadDeviceCacheFallback() {
 
         // Handle old format (no timestamp)
         if (!cacheData.timestamp || !cacheData.data) {
-            console.log('Device configuration loaded from cache (fallback, old format)');
             return cacheData;
         }
 
-        console.log('Device configuration loaded from cache (fallback)');
         return cacheData.data;
     } catch (error) {
-        console.error('Failed to load device cache fallback:', error.message);
+        loggerCommand.error('Failed to load device cache fallback: ' + error.message);
         return null;
     }
 }
@@ -101,9 +97,8 @@ function saveProjectCache(project) {
             data: project
         };
         fs.writeFileSync(PROJECT_CACHE_FILE, JSON.stringify(cacheData, null, 2), 'utf8');
-        console.log('Project configuration cached successfully');
     } catch (error) {
-        console.error('Failed to save project cache:', error.message);
+        loggerCommand.error('Failed to save project cache: ' + error.message);
     }
 }
 
@@ -129,14 +124,12 @@ function loadProjectCache(ttlMs = DEFAULT_CACHE_TTL_MS) {
         // Check if cache is still valid
         const age = Date.now() - cacheData.timestamp;
         if (age > ttlMs) {
-            console.log(`Project cache expired (age: ${Math.round(age / 1000)}s)`);
             return null;
         }
 
-        console.log(`Project configuration loaded from cache (age: ${Math.round(age / 1000)}s)`);
         return cacheData.data;
     } catch (error) {
-        console.error('Failed to load project cache:', error.message);
+        loggerCommand.error('Failed to load project cache: ' + error.message);
         return null;
     }
 }
@@ -156,14 +149,12 @@ function loadProjectCacheFallback() {
 
         // Handle old format (no timestamp)
         if (!cacheData.timestamp || !cacheData.data) {
-            console.log('Project configuration loaded from cache (fallback, old format)');
             return cacheData;
         }
 
-        console.log('Project configuration loaded from cache (fallback)');
         return cacheData.data;
     } catch (error) {
-        console.error('Failed to load project cache fallback:', error.message);
+        loggerCommand.error('Failed to load project cache fallback: ' + error.message);
         return null;
     }
 }
@@ -179,9 +170,8 @@ function clearCache() {
         if (fs.existsSync(PROJECT_CACHE_FILE)) {
             fs.unlinkSync(PROJECT_CACHE_FILE);
         }
-        console.log('Cache cleared successfully');
     } catch (error) {
-        console.error('Failed to clear cache:', error.message);
+        loggerCommand.error('Failed to clear cache: ' + error.message);
     }
 }
 
