@@ -206,7 +206,7 @@
 					{"/sensors": "{JSON}",	"type": "html"},
 					{"/sensors/json": "{JSON}",	"type": "json"},
 					{"/sensors/md": "{JSON}", "type": "markdown"},
-					{"/proxy/reset-imp": "https://us-central1-totemsystem-5889b.cloudfunctions.net/deviceEventService/events/{sensitive.json/api_key}/printer/[0]true/{device.json/id}", "type": "proxy"}
+					{"/proxy/reset-imp": "https://us-central1-totemsystem-5889b.cloudfunctions.net/deviceEventService/events/{sensitive.json/api_key}/printer/0x00000000/{device.json/id}", "type": "proxy"}
 				]
 			}
 		}
