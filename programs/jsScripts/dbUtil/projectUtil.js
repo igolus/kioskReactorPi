@@ -2,6 +2,9 @@ const {fireBaseDb} = require("./firebaseUtil");
 const { projectsCollection, brandsCollection} = require("./collectionsNames");
 const { saveProjectCache, loadProjectCache, loadProjectCacheFallback } = require('../util/configCache');
 
+// Track if initial load has been done (first call always goes to Firebase)
+let initialProjectLoadDone = false;
+
 // Retry helper with exponential backoff
 async function retryWithBackoff(fn, maxRetries = 3, initialDelay = 1000) {
     for (let attempt = 0; attempt < maxRetries; attempt++) {
@@ -27,8 +30,8 @@ const getCurrentProject = async (currentDevice, retries = 3, useCache = true) =>
         return null;
     }
 
-    // 1. Check cache first (with TTL validation)
-    if (useCache) {
+    // 1. Check cache first (with TTL validation) - but only after initial load
+    if (useCache && initialProjectLoadDone) {
         const cachedProject = loadProjectCache();
         if (cachedProject) {
             cachedProject.fromCache = true;
@@ -36,7 +39,7 @@ const getCurrentProject = async (currentDevice, retries = 3, useCache = true) =>
         }
     }
 
-    // 2. Cache expired or missing - call Firebase
+    // 2. Cache expired/missing or first call - fetch from Firebase
     try {
         const project = await retryWithBackoff(async () => {
             const doc = await fireBaseDb
@@ -51,6 +54,7 @@ const getCurrentProject = async (currentDevice, retries = 3, useCache = true) =>
         // Save to cache if successfully loaded
         if (project) {
             saveProjectCache(project);
+            initialProjectLoadDone = true;
         }
 
         return project;
@@ -61,6 +65,7 @@ const getCurrentProject = async (currentDevice, retries = 3, useCache = true) =>
             const cachedProject = loadProjectCacheFallback();
             if (cachedProject) {
                 cachedProject.fromCache = true;
+                initialProjectLoadDone = true;
                 return cachedProject;
             }
         }

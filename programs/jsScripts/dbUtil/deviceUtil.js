@@ -4,6 +4,9 @@ const config = require('../../../conf/config.json');
 const moment = require("moment");
 const { saveDeviceCache, loadDeviceCache, loadDeviceCacheFallback } = require('../util/configCache');
 
+// Track if initial load has been done (first call always goes to Firebase)
+let initialDeviceLoadDone = false;
+
 // Retry helper with exponential backoff
 async function retryWithBackoff(fn, maxRetries = 3, initialDelay = 1000) {
     for (let attempt = 0; attempt < maxRetries; attempt++) {
@@ -39,8 +42,8 @@ const createDeviceIdDb = async (deviceId, lite) => {
 }
 
 const getCurrentDevice = async (retries = 3, useCache = true) => {
-    // 1. Check cache first (with TTL validation)
-    if (useCache) {
+    // 1. Check cache first (with TTL validation) - but only after initial load
+    if (useCache && initialDeviceLoadDone) {
         const cachedDevice = loadDeviceCache();
         if (cachedDevice) {
             cachedDevice.fromCache = true;
@@ -48,7 +51,7 @@ const getCurrentDevice = async (retries = 3, useCache = true) => {
         }
     }
 
-    // 2. Cache expired or missing - call Firebase
+    // 2. Cache expired/missing or first call - fetch from Firebase
     try {
         const device = await retryWithBackoff(async () => {
             const doc = await fireBaseDb
@@ -62,6 +65,7 @@ const getCurrentDevice = async (retries = 3, useCache = true) => {
         // Save to cache if successfully loaded
         if (device) {
             saveDeviceCache(device);
+            initialDeviceLoadDone = true;
         }
 
         return device;
@@ -72,6 +76,7 @@ const getCurrentDevice = async (retries = 3, useCache = true) => {
             const cachedDevice = loadDeviceCacheFallback();
             if (cachedDevice) {
                 cachedDevice.fromCache = true;
+                initialDeviceLoadDone = true;
                 return cachedDevice;
             }
         }
