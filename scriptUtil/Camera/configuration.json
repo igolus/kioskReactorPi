@@ -4,7 +4,7 @@
       "allowed_ips": [
         "127.0.0.1",
         "10.10.2.0/24",
-		"192.168.1.0/24"
+		    "192.168.1.0/24"
       ]
   },
   "relais":{
@@ -13,17 +13,22 @@
   "camera": {
     "camera_index": 0,
     "cam_timeout": 30,
+    "streaming_downscaling_factor": 0.75,
+    "gpu": true,
     "camera_rotation": 90,
     "settings": {
-      "focus": 794,
       "width": 1600,
       "height": 1200,
       "fps": 12,
-      "backend": "DSHOW"
+      "backend": "DSHOW",
+      "focus": 794,
+      "brightness": -1,
+      "contrast": -1,
+      "saturation": -1,
+      "zoom": -1
     },
     "ratio_b/w": 40,
 	"lighting_correction": "",
-    "lighting_correction_after": "",
     "lighting_correction_all": "equalized clahe sharp unsharp binarized",
     "detection": {
       "detect_blurry": {
@@ -37,7 +42,11 @@
       },
       "detect_document": {
         "active": true, 
-        "pixels_number": 700000
+        "pixels_number": 300000
+      },
+      "detect_exposure": {
+        "active": true,
+        "listalgo": "VRNCB"
       },
       "detect_barcodes": {
         "active": false,
@@ -46,7 +55,7 @@
       "detect_ocr": {
         "active": false,
         "path": "C:\\Program Files\\Tesseract-OCR\\tesseract.exe",
-		"upscaling": 0.5
+		"upscaling": 1.0
       }
     },
     "capture": {
@@ -55,7 +64,8 @@
       "filename_pattern": null,
       "capture_quality": 95,
       "capture_cropped": true,
-      "capture_perspective": true
+      "capture_perspective": true,
+      "capture_rotation": false
     }
   }
 }
