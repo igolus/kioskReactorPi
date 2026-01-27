@@ -77,16 +77,16 @@ launchSystem() {
     echo "Directory /cygdrive/C/tools/SafiKioskExe does not exist, skipping SafiKiosk.exe launch."
   fi
 
-  cd  /cygdrive/c/kioskReactor
-  ./ngrok config add-authtoken 27Kywp1WpRFQhtoIPZeIRqHg3qP_96QRrV5uQhBE5g1mESYy
-
-  echo ngrokChecker
-  if [ -n "$deviceId" ] && [ "$deviceId" != "null" ]; then
-    cd /cygdrive/c/kioskReactor/programs/jsScripts/ngrokCheck
-    node checker.js &
-  else
-    echo "deviceId non défini, ngrokCheck ignoré."
-  fi
+#  cd  /cygdrive/c/kioskReactor
+#  ./ngrok config add-authtoken 27Kywp1WpRFQhtoIPZeIRqHg3qP_96QRrV5uQhBE5g1mESYy
+#
+#  echo ngrokChecker
+#  if [ -n "$deviceId" ] && [ "$deviceId" != "null" ]; then
+#    cd /cygdrive/c/kioskReactor/programs/jsScripts/ngrokCheck
+#    node checker.js &
+#  else
+#    echo "deviceId non défini, ngrokCheck ignoré."
+#  fi
 
   cd /cygdrive/c/kioskReactor/scriptUtil/Agent_Multi-Thread/_command_list_apiborne
   chmod +x ./Vpn-on.bat
