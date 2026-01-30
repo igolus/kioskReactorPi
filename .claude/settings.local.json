@@ -9,7 +9,9 @@
       "Bash(dir \"C:\\gitClone\\kioskReactorPi\\node_modules\\node-thermal-printer\" /b)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(cat:*)",
+      "Bash(xargs cat:*)"
     ],
     "deny": [],
     "ask": []

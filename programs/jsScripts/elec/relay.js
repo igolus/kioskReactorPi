@@ -17,9 +17,9 @@ try {
         });
 
         // Handle async errors to prevent process crash
-        serialportInstance.on('error', function(err) {
-            loggerCommand.error('Serial port error:', err.message);
-        });
+        // serialportInstance.on('error', function(err) {
+        //     loggerCommand.error('Serial port error:', err.message);
+        // });
     } else {
         loggerCommand.warn('No comPort configured in config.json');
     }

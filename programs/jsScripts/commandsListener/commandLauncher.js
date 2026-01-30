@@ -68,7 +68,11 @@ function chromeNavigate(openUrl) {
             }
         }
         loggerCommand.info("Change url " + openUrl);
-        wsChromeSocket.send(JSON.stringify(dataChangeUrl))
+        try {
+            wsChromeSocket.send(JSON.stringify(dataChangeUrl));
+        } catch (err) {
+            loggerCommand.error("Failed to send to Chrome: " + err.message);
+        }
     }
 }
 
@@ -232,9 +236,13 @@ function onEvent(dataJSON, ws, device, project) {
 
     const textSpeak = getSpeakCommand(dataJSON);
     if (textSpeak) {
-        speak(textSpeak, ws, project).then(() => {
-            console.log("Speak");
-        });
+        speak(textSpeak, ws, project)
+            .then(() => {
+                loggerCommand.info("Speak completed");
+            })
+            .catch((err) => {
+                loggerCommand.error("Speak failed: " + err.message);
+            });
     }
 
     const printUrl = getPrintFromUrlCommand(dataJSON);
@@ -360,6 +368,12 @@ else {
                             const firstTab = data[0];
                             const wsUrl = firstTab.webSocketDebuggerUrl;
                             wsChromeSocket = new WebSocket(wsUrl);
+                            wsChromeSocket.on('error', (err) => {
+                                loggerCommand.error("Chrome WebSocket error: " + err.message);
+                            });
+                            wsChromeSocket.on('close', () => {
+                                loggerCommand.info("Chrome WebSocket closed");
+                            });
                             loggerCommand.info("wsChromeSocket opened " + wsUrl)
                             init = true;
                             await startSeverAndConfigureListening(onEvent, device, project);

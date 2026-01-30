@@ -20,10 +20,18 @@ async function startSeverAndConfigureListening(callBackData, device, project) {
             });
 
 
+            wsLocalSocket.on('error', (err) => {
+                loggerCommand.error("WebSocket local error: " + err.message);
+            });
+
             wsLocalSocket.on("message", function incoming(data) {
                 loggerCommand.info("Ws local get message " + data);
-                const dataJSON = JSON.parse(data.toString())
-                callBackData(dataJSON, wsLocalSocket, device, project)
+                try {
+                    const dataJSON = JSON.parse(data.toString());
+                    callBackData(dataJSON, wsLocalSocket, device, project);
+                } catch (err) {
+                    loggerCommand.error("Failed to parse or process message: " + err.message);
+                }
             });
 
             wsLocalSocket.onerror = function (error) {

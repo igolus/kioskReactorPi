@@ -55,26 +55,31 @@ var ipDefined = "";
             .where('alive', '==', false)
             .where('id', '==', conf.deviceId)
 
-        queryEvent.onSnapshot(querySnapshot => {
-            querySnapshot.docChanges().forEach(async (change) => {
-                try {
-                    const doc = await fireBaseDb
-                        .collection(brandsCollection)
-                        .doc(device.brandId)
-                        .collection(deviceHealthCollection)
-                        .doc(device.id)
+        queryEvent.onSnapshot(
+            querySnapshot => {
+                querySnapshot.docChanges().forEach(async (change) => {
+                    try {
+                        const doc = await fireBaseDb
+                            .collection(brandsCollection)
+                            .doc(device.brandId)
+                            .collection(deviceHealthCollection)
+                            .doc(device.id)
 
-                    let deviceHealth = change.doc.data();
-                    await doc.set({
-                        ...deviceHealth,
-                        alive: true,
-                        ip: ipDefined,
-                    });
-                } catch (err) {
-                    loggerCommand.error(err)
-                }
-            })
-        })
+                        let deviceHealth = change.doc.data();
+                        await doc.set({
+                            ...deviceHealth,
+                            alive: true,
+                            ip: ipDefined,
+                        });
+                    } catch (err) {
+                        loggerCommand.error(err)
+                    }
+                })
+            },
+            err => {
+                loggerCommand.error("Health checker Firestore listener error: " + err.message);
+            }
+        )
     }
     catch (err) {
         loggerCommand.error(err)

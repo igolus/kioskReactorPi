@@ -50,6 +50,10 @@ function sendSignal(brand, dataJson, device) {
     }
     sendSignal(brand, dataJson, device);
     setInterval(function() {
-        sendSignal(brand, dataJson, device);
+        try {
+            sendSignal(brand, dataJson, device);
+        } catch (err) {
+            loggerCommand.error("Error in life check interval: " + err.message);
+        }
     }, intervalMs);
 })();

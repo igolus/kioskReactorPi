@@ -13,22 +13,21 @@ const listenToCommands = (deviceId, triggerCallBack) => {
             if (change.type !== 'added') {
                 return;
             }
-            let event = change.doc.data();
-            loggerWs.info("Detecting change doc command" + JSON.stringify(change.doc.data()))
-            if (change.type === 'added') {
-               let orderDoc = await
-                    fireBaseDb
-                        .collection(devicesCollection).doc(deviceId)
-                        .collection(commandsCollection)
-                        .doc(change.doc.id);
-                await orderDoc.set({...event, processed: true})
-                loggerWs.info("triggerCallBack command")
-                triggerCallBack(event);
-
-                // await fireBaseDb.collection(devicesCollection).doc(deviceId)
-                //     .collection(commandsCollection)
-                //     .doc(change.doc.id)
-                //     .delete();
+            try {
+                let event = change.doc.data();
+                loggerWs.info("Detecting change doc command" + JSON.stringify(change.doc.data()))
+                if (change.type === 'added') {
+                   let orderDoc = await
+                        fireBaseDb
+                            .collection(devicesCollection).doc(deviceId)
+                            .collection(commandsCollection)
+                            .doc(change.doc.id);
+                    await orderDoc.set({...event, processed: true})
+                    loggerWs.info("triggerCallBack command")
+                    triggerCallBack(event);
+                }
+            } catch (err) {
+                loggerWs.error(`Error processing command: ${err.message}`, err);
             }
         });
     }, err => {
@@ -47,17 +46,21 @@ const listenToEvents = (deviceId, triggerCallBack) => {
             if (change.type !== 'added') {
                 return;
             }
-            let event = change.doc.data();
-            loggerWs.info("Detecting change doc event" + JSON.stringify(change.doc.data()))
-            if (change.type === 'added') {
-                let orderDoc = await
-                    fireBaseDb
-                        .collection(devicesCollection).doc(deviceId)
-                        .collection(eventsCollection)
-                        .doc(change.doc.id);
-                await orderDoc.set({...event, processed: true})
-                loggerWs.info("triggerCallBack event")
-                triggerCallBack(event);
+            try {
+                let event = change.doc.data();
+                loggerWs.info("Detecting change doc event" + JSON.stringify(change.doc.data()))
+                if (change.type === 'added') {
+                    let orderDoc = await
+                        fireBaseDb
+                            .collection(devicesCollection).doc(deviceId)
+                            .collection(eventsCollection)
+                            .doc(change.doc.id);
+                    await orderDoc.set({...event, processed: true})
+                    loggerWs.info("triggerCallBack event")
+                    triggerCallBack(event);
+                }
+            } catch (err) {
+                loggerWs.error(`Error processing event: ${err.message}`, err);
             }
         });
     }, err => {

@@ -16,6 +16,10 @@ const restartEpsonService = () => {
 
     loggerCommand.info(`Stopping ${serviceName}...`);
     exec(`net stop "${serviceName}"`, (errStop, stdoutStop, stderrStop) => {
+        if (errStop) {
+            loggerCommand.warn("Service stop warning: " + errStop.message);
+            // Continue anyway - service might not be running
+        }
         // Attendre 1 seconde que le service soit bien arrêté
         setTimeout(() => {
             loggerCommand.info(`Starting ${serviceName}...`);
@@ -25,6 +29,7 @@ const restartEpsonService = () => {
                 } else {
                     loggerCommand.info("EPSON service restarted successfully");
                 }
+                isRestartingService = false;
             });
         }, 1000);
     });

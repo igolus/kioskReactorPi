@@ -33,10 +33,15 @@ getCurrentDevice().then(device => {
 
     try {
         listenToEvents(device.id, (event) => {
-            //checkData(dataJson)
-            if (checkData(event)) {
-                broadCastMessage(wsSocket, event)
-                triggerWebHook(wsSocket, event, currentProject.webHookEventUrl)
+            try {
+                if (checkData(event)) {
+                    broadCastMessage(wsSocket, event)
+                    if (currentProject) {
+                        triggerWebHook(wsSocket, event, currentProject.webHookEventUrl)
+                    }
+                }
+            } catch (err) {
+                loggerWs.error("Error processing event in listener: " + err.message);
             }
         })
         loggerWs.info("Firebase event listener initialized");
@@ -47,7 +52,11 @@ getCurrentDevice().then(device => {
 
     try {
         listenToCommands(device.id, (command) => {
-            broadCastMessage(wsSocket, command);
+            try {
+                broadCastMessage(wsSocket, command);
+            } catch (err) {
+                loggerWs.error("Error broadcasting command: " + err.message);
+            }
         })
         loggerWs.info("Firebase command listener initialized");
     }
@@ -136,7 +145,13 @@ function triggerWebHook(ws, dataJson, webHookUrl) {
             loggerWs.info("Reponse webhook " + JSON.stringify(response.data));
             let dataResp = response.data;
             if (dataResp && Array.isArray(response.data)) {
-                dataResp.forEach(item => broadCastMessage(ws, item))
+                dataResp.forEach(item => {
+                    try {
+                        broadCastMessage(ws, item);
+                    } catch (err) {
+                        loggerWs.error("Error broadcasting webhook response: " + err.message);
+                    }
+                })
             }
         })
         .catch(error => {

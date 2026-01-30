@@ -59,6 +59,31 @@ wait-for-ws() {
     done
 }
 
+# Wrapper function to run a service with crash detection and auto-restart
+run_service() {
+    local service_name=$1
+    local service_dir=$2
+    local service_script=$3
+
+    while true; do
+        echo "$(date '+%Y-%m-%d %H:%M:%S') - Starting $service_name..."
+
+        cd "$service_dir"
+        node "$service_script"
+        exit_code=$?
+
+        # Service crashed
+        echo "$(date '+%Y-%m-%d %H:%M:%S') - ERROR: $service_name crashed with exit code $exit_code"
+
+        # Send MQTT notification with JSON payload
+        curl -s "http://127.0.0.1:4000/mqtt/publish?topic=programCrash&message={\"name\":\"$service_name\"}" || true
+
+        # Wait before restarting
+        echo "$(date '+%Y-%m-%d %H:%M:%S') - Restarting $service_name in 5 seconds..."
+        sleep 5
+    done
+}
+
 cd /cygdrive/c/kioskReactor/conf/
 deviceId=`jq '.deviceId' './config.json' | tr -d '"'`
 echo $deviceId
@@ -93,20 +118,16 @@ launchSystem() {
   ./Vpn-on.bat &
 
   echo launchSystem
-  cd  /cygdrive/c/kioskReactor/programs/jsScripts/lifeCheck
-  node lifeCheckRunner.js &
+  run_service "lifeCheckRunner" "/cygdrive/c/kioskReactor/programs/jsScripts/lifeCheck" "lifeCheckRunner.js" &
 
   echo listener
-  cd  /cygdrive/c/kioskReactor/programs/jsScripts/keyBoardListener
-  node listener.js &
+  run_service "listener" "/cygdrive/c/kioskReactor/programs/jsScripts/keyBoardListener" "listener.js" &
 
   echo wsServer
-  cd  /cygdrive/c/kioskReactor/programs/jsScripts/webSocket
-  node wsServer.js &
+  run_service "wsServer" "/cygdrive/c/kioskReactor/programs/jsScripts/webSocket" "wsServer.js" &
 
   echo commandLauncher
-  cd /cygdrive/c/kioskReactor/programs/jsScripts/commandsListener
-  node commandLauncher.js &
+  run_service "commandLauncher" "/cygdrive/c/kioskReactor/programs/jsScripts/commandsListener" "commandLauncher.js" &
 
   echo services-install
   cd /cygdrive/c/kioskReactor/scriptUtil

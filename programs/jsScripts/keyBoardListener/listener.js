@@ -3,7 +3,14 @@ const {loggerCommand, loggerWs} = require("../util/loggerUtil");
 const {sendEvent} = require("../CommandSender/SendEventUtil");
 const {buildEventJson, eventTypeQrCode} = require("../webSocket/eventTypes");
 
-const v = new GlobalKeyboardListener();
+let v;
+try {
+    v = new GlobalKeyboardListener();
+} catch (err) {
+    loggerCommand.error("Failed to initialize keyboard listener: " + err.message);
+    process.exit(1);
+}
+
 let buffer = "";
 v.addListener(function (e, down) {
     if (e.rawKey._nameRaw == "VK_RETURN" && e.state == "UP") {
