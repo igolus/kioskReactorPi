@@ -1,0 +1,39 @@
+---
+- hosts: localhost
+  vars:
+    kiosk_dir: /home/pi/kioskReactor
+
+  tasks:
+    - name: Create kioskReactor dir if not exists
+      file:
+        path: "{{ kiosk_dir }}"
+        state: directory
+
+    - name: Copy launchSystemPi.sh
+      copy:
+        src: launchSystemPi.sh
+        dest: "{{ kiosk_dir }}/launchSystemPi.sh"
+        mode: '0755'
+
+    - name: Copy killSystemPi.sh
+      copy:
+        src: killSystemPi.sh
+        dest: "{{ kiosk_dir }}/killSystemPi.sh"
+        mode: '0755'
+
+    - name: Copy updatePi.sh
+      copy:
+        src: updatePi.sh
+        dest: "{{ kiosk_dir }}/updatePi.sh"
+        mode: '0755'
+
+    - name: rsync programs
+      command: "rsync -avz ./programs {{ kiosk_dir }}/"
+
+    - name: Create conf dir if not exists
+      file:
+        path: "{{ kiosk_dir }}/conf"
+        state: directory
+
+    - name: rsync conf (only if missing)
+      command: "rsync --ignore-existing -avz ./confPi/ {{ kiosk_dir }}/conf/"
