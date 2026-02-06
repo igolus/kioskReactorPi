@@ -37,3 +37,4 @@
 
     - name: rsync conf (only if missing)
       command: "rsync --ignore-existing -avz ./confPi/ {{ kiosk_dir }}/conf/"
+      ignore_errors: yes
