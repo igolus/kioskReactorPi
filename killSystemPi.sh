@@ -1,3 +1,8 @@
-echo "Killing all node processes..."
-killall -9 node && echo "Node processes killed" || echo "No node processes found"
+#!/bin/bash
+echo "Killing all kioskReactor services..."
+
+pkill -f "launchSystemPi.sh" 2>/dev/null
+sleep 1
+killall -9 node 2>/dev/null
+
 echo "Done."
