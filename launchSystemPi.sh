@@ -74,8 +74,8 @@ cd $HOME/kioskReactor/conf/
 deviceId=$(jq '.deviceId' './config.json' | tr -d '"')
 echo $deviceId
 launchSystem() {
-  # echo "wsServer"
-  # run_service "wsServer" "$HOME/kioskReactor/programs/jsScripts/webSocket" "wsServer.js" &
+  echo "wsServer"
+  run_service "wsServer" "$HOME/kioskReactor/programs/jsScripts/webSocket" "wsServer.js" &
   echo "commandLauncher"
   run_service "commandLauncher" "$HOME/kioskReactor/programs/jsScripts/commandsListener" "commandLauncher.js" &
 }
