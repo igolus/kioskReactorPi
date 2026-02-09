@@ -106,3 +106,5 @@ cd ~/kioskReactor/conf/
 
 cd ~/kioskReactor/programs/jsScripts/init
 node startupInit.js
+
+launchSystem
