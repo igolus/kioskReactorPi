@@ -39,7 +39,6 @@ const restartEpsonService = () => {
 const execPrintTicket = async (ip, sourceCode, useIp, device) => {
     try {
         loggerCommand.info("execPrintTicket start")
-        loggerCommand.info(sourceCode)
         let printer;
         if (device.usbDevice && !useIp) {
             printer = new ThermalPrinter({
