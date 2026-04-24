@@ -7,35 +7,18 @@
     },
     "config": {
         "vars_files": [
-			"C:\\kioskReactor\\scriptUtil\\version.json",
-            "c:\\kioskReactor\\conf\\device.json",
             "c:\\tools\\SafiKioskExe\\config.ini",
+            "c:\\kioskReactor\\conf\\device.json",
+			"C:\\kioskReactor\\scriptUtil\\version.json",
 			"C:\\kioskReactor\\conf\\sensitive.json"
         ],
         "web": {
             "port": 4000,
-            "web": [{
-                    "/cmd": "{COMMAND}",
-                    "type": "cmd"
-                }, {
-                    "/conf": "{CONF}",
-                    "type": "html"
-                }, {
-                    "/conf/json": "{CONF}",
-                    "type": "json"
-                }, {
-                    "/conf/md": "{CONF}",
-                    "type": "markdown"
-                }, {
-                    "/logs/kiosk": "c:\\kioskReactor\\logs\\",
-                    "type": "file"
-                }, {
-                    "/logs/safi": "c:\\tools\\SafiKioskExe\\logs\\",
-                    "type": "file"
-                }, {
-                    "/proxy/proxy-ip": "http://10.10.10.1",
-                    "type": "proxy"
-                }
+            "web": [{ "/cmd": "{COMMAND}", "type": "cmd" },
+					{ "/conf": "{CONF}", "type": "html" },
+					{ "/logs/kiosk": "c:\\kioskReactor\\logs\\", "type": "file" },
+					{ "/logs/safi": "c:\\tools\\SafiKioskExe\\logs\\", "type": "file" },
+					{ "/proxy/proxy-ip": "http://10.10.10.1", "type": "proxy" }
             ],
             "whitelist": [
                 "127.0.0.1",
@@ -58,6 +41,8 @@
                 "Reboot",
                 "Shutdown",
                 "Update",
+				"Update-scripts",
+				"Services-restart",
                 "Vpn-on",
                 "Vpn-off",
                 "Debug-on",
@@ -65,7 +50,15 @@
                 "Stream"
             ],
             "mqtt_topic_response": "apiborne/{name}/cmd_response"
-        }
+        },
+		"ntp": {
+			"serversNTP"     : ["0.pool.ntp.org", "1.pool.ntp.org", "2.pool.ntp.org"],
+			"serversHTTP"    : ["https://www.google.com", "https://www.cloudflare.com"],
+			"force_ipv4"     : true,
+			"interval"       : 86400,
+			"retry_interval" : 300,
+			"timeout"        : 5
+		}
     },
     "Tasks": {
         "keep-alive": {
@@ -99,24 +92,15 @@
                         "apiborne/{name}/keep-alive"
                     ]
                 },
-                "web": [{
-                        "/keep-alive": "{JSON}",
-                        "type": "html"
-                    }, {
-                        "/keep-alive/json": "{JSON}",
-                        "type": "json"
-                    }, {
-                        "/keep-alive/md": "{JSON}",
-                        "type": "markdown"
-                    }, {
-                        "/keep-alive/html": "{logs_dir}\\sysinfo_{name}.html",
-                        "type": "file"
-                    }
+                "web": [{"/keep-alive": "{JSON}", "type": "html" },
+			            {"/keep-alive/json": "{JSON}", "type": "json" },
+						{"/keep-alive/md": "{JSON}", "type": "markdown" },
+						{"/keep-alive/html": "{logs_dir}\\sysinfo_{name}.html", "type": "file" }
                 ]
             }
         },
         "debug": {
-            "interval": 600,
+            "interval": 60,
             "info": {
                 "version": "{version}",
                 "name": "{name}"
@@ -132,7 +116,6 @@
                 "google": "8.8.8.8"
             },
             "urls": {
-                "easydoct": "https://www.easydoct.com/Images/easydoct.png",
                 "apiborne": "http://10.10.10.1/keep-alive.php?name={name}"
             },
             "sortie": {
@@ -148,19 +131,8 @@
                         "apiborne/{name}/log"
                     ]
                 },
-                "web": [{
-                        "/debug": "{JSON}",
-                        "type": "html"
-                    }, {
-                        "/debug/json": "{JSON}",
-                        "type": "json"
-                    }, {
-                        "/debug/md": "{JSON}",
-                        "type": "markdown"
-                    }, {
-                        "/debug/vega": "{logs_dir}\\{year}\\{month}\\{day}\\debug_{name}.log",
-                        "type": "vega"
-                    }
+                "web": [{"/debug": "{JSON}",  "type": "html" },
+         				{"/debug/vega": "{logs_dir}\\{year}\\{month}\\{day}\\debug_{name}.log", "type": "vega" }
                 ]
             }
         },
@@ -205,10 +177,30 @@
 				"web": [
 					{"/sensors": "{JSON}",	"type": "html"},
 					{"/sensors/json": "{JSON}",	"type": "json"},
-					{"/sensors/md": "{JSON}", "type": "markdown"},
 					{"/proxy/reset-imp": "https://us-central1-totemsystem-5889b.cloudfunctions.net/deviceEventService/events/{sensitive.json/api_key}/printer/0x00000000/{device.json/id}", "type": "proxy"}
 				]
 			}
+		},
+		"HORAIRES": {
+			"horaires": {
+				"screen_off_semaine": {
+					"type": "veille",
+					"time": "19:00|1-5",
+					"methode": "SendMessageW",
+					"wake_time": "07:30|1-5",
+					"hooks": [
+						"mqtt://apiborne/{name}/horaires"
+					]
+				},
+				"screen_on_secure": {
+					"type": "reveille",
+					"time": "07:45|1-5",
+					"methode": "SendMessageW",
+					"hooks": [
+						"mqtt://apiborne/{name}/horaires"
+					]
+				}
+			}
 		}
-    }
+	}
 }

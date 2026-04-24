@@ -37,9 +37,6 @@ REM      --config ...   => Fichier de configuration
 
 REM === Test de l'existence du fichier de configuration spécifique ===
 set "CONFIG=configuration.json"
-if exist "configuration_site.json" (
-    set "CONFIG=configuration_site.json"
-)
 
 REM start "" "%service_exe%" --minimize --config "%CONFIG%"
 call "%service_exe%" --minimize --config "%CONFIG%"
