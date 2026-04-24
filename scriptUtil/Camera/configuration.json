@@ -1,71 +1,77 @@
 {
-  "webserver": {
-      "port": 4001,
-      "allowed_ips": [
-        "127.0.0.1",
-        "10.10.2.0/24",
-		    "192.168.1.0/24"
-      ]
-  },
-  "relais":{
-    "port": "COM3"
-  },
-  "camera": {
-    "camera_index": 0,
-    "cam_timeout": 30,
-    "streaming_downscaling_factor": 0.75,
-    "gpu": true,
-    "camera_rotation": 90,
-    "settings": {
-      "width": 1600,
-      "height": 1200,
-      "fps": 12,
-      "backend": "DSHOW",
-      "focus": 794,
-      "brightness": -1,
-      "contrast": -1,
-      "saturation": -1,
-      "zoom": -1
+    "webserver": {
+        "port": 4001,
+        "allowed_ips": [
+            "127.0.0.1",
+            "10.10.2.0/24"
+        ]
     },
-    "ratio_b/w": 40,
-	"lighting_correction": "",
-    "lighting_correction_all": "equalized clahe sharp unsharp binarized",
-    "detection": {
-      "detect_blurry": {
-        "active": false,
-        "method": "hybrid",
-        "score_min": 200,
-        "score_max": 600,
-        "method_all":    "laplacian|sobel|hybrid",
-        "score_min_all": "   290   | 290 | 290  ",
-        "score_max_all": "   450   | 450 | 600  "
-      },
-      "detect_document": {
-        "active": true, 
-        "pixels_number": 300000
-      },
-      "detect_exposure": {
-        "active": true,
-        "listalgo": "VRNCB"
-      },
-      "detect_barcodes": {
-        "active": false,
-        "upscaling": 1
-      },
-      "detect_ocr": {
-        "active": false,
-        "path": "C:\\Program Files\\Tesseract-OCR\\tesseract.exe",
-		"upscaling": 1.0
-      }
+    "relais": {
+        "port": "COM3"
     },
-    "capture": {
-      "b64_image": true,
-      "save_dir": "./captures",
-      "filename_pattern": null,
-      "capture_quality": 95,
-      "capture_cropped": true,
-      "capture_perspective": true,
-      "capture_rotation": false
+    "camera": {
+        "camera_index": 0,
+        "cam_timeout": 3600,
+        "streaming_downscaling_factor": 0.75,
+        "gpu": true,
+        "camera_rotation": 90,
+        "settings": {
+            "width": 1600,
+            "height": 1200,
+            "fps": 12,
+            "backend": "DSHOW",
+            "focus": 794,
+            "brightness": -1,
+            "contrast": -1,
+            "saturation": -1,
+            "zoom": -1
+        },
+        "ratio_b/w": 40,
+        "lighting_correction": "",
+        "lighting_correction_all": "equalized clahe sharp unsharp binarized",
+        "detection": {
+            "detect_blurry": {
+                "active": false,
+                "method": "hybrid",
+                "score_min": 200,
+                "score_max": 600,
+                "method_all": "laplacian|sobel|hybrid",
+                "score_min_all": "   290   | 290 | 290  ",
+                "score_max_all": "   450   | 450 | 600  "
+            },
+            "detect_document": {
+                "active": true,
+                "pixels_number": 300000
+            },
+            "detect_exposure": {
+                "active": true,
+                "listalgo": "VRNCB",
+                "gama_auto": true
+            },
+            "detect_zoom": {
+                "active": false,
+                "delay": 250,
+                "anti_osc": 3000,
+                "marge": 10
+            },
+            "detect_barcodes": {
+                "active": false,
+                "upscaling": 1
+            },
+            "detect_ocr": {
+                "active": false,
+                "path": "C:\\Program Files\\Tesseract-OCR\\tesseract.exe",
+                "upscaling": 1.0
+            }
+        },
+        "capture": {
+            "b64_image": true,
+            "save_dir": "./captures",
+            "filename_pattern": null,
+            "capture_quality": 95,
+            "capture_cropped": true,
+            "capture_perspective": true,
+            "capture_rotation": "ocr"
+        }
     }
-  }
 }
