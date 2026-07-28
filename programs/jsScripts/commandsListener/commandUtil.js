@@ -7,18 +7,21 @@ function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
 }
 
+// Une seule connexion vivante à la fois : on attend la fermeture de la socket
+// courante avant d'en recréer une, sinon plusieurs sockets restent ouvertes et
+// chaque commande (ex: printticket) est traitée plusieurs fois.
 async function startSeverAndConfigureListening(callBackData, device, project) {
-    let init = false;
     loggerCommand.info("Connecting to webSocket: " + config.urlWsLocal);
-    while (!init) {
-        try {
+
+    return new Promise(resolve => {
+        function connect() {
             const wsLocalSocket = new WebSocket(config.urlWsLocal);
 
             wsLocalSocket.on('open', function open() {
                 loggerCommand.info("wsLocalSocket opened on " + config.urlWsLocal);
                 wsLocalSocket.send('');
+                resolve();
             });
-
 
             wsLocalSocket.on('error', (err) => {
                 loggerCommand.error("WebSocket local error: " + err.message);
@@ -34,24 +37,14 @@ async function startSeverAndConfigureListening(callBackData, device, project) {
                 }
             });
 
-            wsLocalSocket.onerror = function (error) {
-                loggerCommand.info("no web socket local");
-                loggerCommand.info(error);
-            };
-
-            wsLocalSocket.onopen = function (error) {
-                loggerCommand.info("Web socket local opened");
-                init=true;
-            };
-
-            //init=true;
-            await delay(1000)
+            wsLocalSocket.on('close', () => {
+                loggerCommand.info("wsLocalSocket closed, reconnecting in 1s...");
+                setTimeout(connect, 1000);
+            });
         }
-        catch (err) {
-            loggerCommand.error(err);
-        }
-    }
 
+        connect();
+    });
 }
 
 module.exports = {
