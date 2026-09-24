@@ -135,6 +135,57 @@ launchSystem() {
 
 }
 
+# Lance les programmes supplementaires declares dans conf/extraPrograms.json
+# Format attendu (tableau d'objets) :
+# [
+#   { "name": "monProgramme", "folder": "/cygdrive/c/tools/monProg", "command": "./monProg.exe --option" }
+# ]
+# "folder" est optionnel. Si le fichier est absent ou invalide, rien n'est lance et le script continue.
+launchExtraPrograms() {
+  local extraFile="/cygdrive/c/kioskReactor/conf/extraPrograms.json"
+
+  if [ ! -f "$extraFile" ]; then
+    echo "extraPrograms: $extraFile absent, aucun programme supplementaire."
+    return 0
+  fi
+
+  if ! jq -e 'type == "array"' "$extraFile" > /dev/null 2>&1; then
+    echo "extraPrograms: $extraFile invalide (JSON incorrect ou pas un tableau), ignore."
+    return 0
+  fi
+
+  local count
+  count=$(jq 'length' "$extraFile" 2>/dev/null || echo 0)
+  echo "extraPrograms: $count programme(s) a lancer."
+
+  local i=0
+  while [ "$i" -lt "$count" ]; do
+    local name folder command
+    name=$(jq -r ".[$i].name // \"extra-$i\"" "$extraFile" 2>/dev/null | tr -d '\r')
+    folder=$(jq -r ".[$i].folder // \"\"" "$extraFile" 2>/dev/null | tr -d '\r')
+    command=$(jq -r ".[$i].command // \"\"" "$extraFile" 2>/dev/null | tr -d '\r')
+    i=$((i+1))
+
+    if [ -z "$command" ]; then
+      echo "extraPrograms: [$name] pas de \"command\", ignore."
+      continue
+    fi
+
+    if [ -n "$folder" ] && [ ! -d "$folder" ]; then
+      echo "extraPrograms: [$name] dossier introuvable ($folder), ignore."
+      continue
+    fi
+
+    echo "extraPrograms: lancement de [$name] dans '${folder:-.}' : $command"
+    (
+      if [ -n "$folder" ]; then
+        cd "$folder" || exit 1
+      fi
+      eval "$command"
+    ) &
+  done
+}
+
 cd /cygdrive/c/kioskReactor/conf/
 
 minimalCreditToLock=`jq '.minimalCreditToLock' './config.json' | tr -d '"'`
@@ -173,3 +224,5 @@ else
 fi
 
 echo $url
+
+launchExtraPrograms
