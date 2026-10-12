@@ -19,12 +19,14 @@ chmod 777 "$LOG_DIR"
 # Attendre la création du fichier puis modifier ses droits
 chmod 666 "$LOG_FILE"
 
-
-# Supprimer les logs de plus de 5 jours
-find "$LOG_DIR" -name "*.log" -mtime +5 -exec rm -f {} \;
-
 # Rediriger toute la sortie (stdout et stderr) vers tee
 exec > >(tee -a "$LOG_FILE") 2>&1
+
+# Purge des logs (15 jours) : PAS ici. L'ancien `find -mtime +5` tournait sous
+# le compte de session, avant la remise au propre des ACL, et echouait sur les
+# fichiers d'un autre compte. Elle est faite par purgeLogs.sh, appele depuis
+# scriptUtil\services-install.bat (eleve admin, juste apres reset_acl.bat et
+# avant la reinstallation des services qui ecrivent dans logs/).
 
 
 ONLINE=1
@@ -45,17 +47,43 @@ done
 
 echo "Online !!!"
 
-wait-for-ws() {
-	echo "wait-for-ws"
-	cd /cygdrive/c/kioskReactor/conf/
-    wsInit=`jq '.wsInit' './config.json' | tr -d '"'`
-	wsInitl=`echo $wsInit | sed 's/\\r//g'`
-	echo wsInitl
-    while [ $wsInitl == 0 ]
-    do
-       wsInit=`jq '.wsInit' './config.json' | tr -d '"'`
-	   wsInitl=`echo $wsInit | sed 's/\\r//g'`
-       echo "Waiting forweb socket..."
+# Retient le lancement de Chrome tant que le serveur WebSocket (wsServer.js,
+# port 8080) n'ecoute pas.
+#
+# POURQUOI : le script kioskReactorJs charge par la page ouvre son socket UNE
+# seule fois, au chargement. Au boot, Chrome chargeait la page ~4 s AVANT que
+# wsServer.js n'ecoute (borne 113, 2026-10-12 : page a 12:36:45, serveur a
+# 12:36:49) : connexion refusee, jamais retentee, plus aucune impression ni
+# voix de la journee jusqu'a un rechargement depuis l'admin. La page sait
+# desormais se reconnecter (shellWsWatchdog cote borne), ce garde-fou evite en
+# plus de partir d'emblee sur un socket mort.
+#
+# Remplace l'ancien wait-for-ws, qui attendait un `wsInit` dans config.json que
+# wsServer.js n'ecrit plus (ligne en commentaire) et qui n'etait jamais appele.
+#
+# Test du port par curl : code de sortie 7 = connexion refusee (rien n'ecoute).
+# Tout autre code (28 timeout, 52 reponse vide, 0) = le port repond ; le
+# serveur http sous-jacent n'a pas de handler de requete, curl peut donc
+# attendre jusqu'a --max-time, ce qui n'est pas un echec. Borne a 90 s : une
+# borne ne doit jamais rester sans navigateur, meme si le serveur WS est en
+# panne — la page se reconnectera seule quand il reviendra.
+WS_PORT_WAIT_MAX_SECONDS=90
+
+wait-for-ws-port() {
+    local waited=0
+    echo "wait-for-ws-port: attente du serveur WebSocket sur 127.0.0.1:8080..."
+    while true; do
+        curl -s -o /dev/null --max-time 2 http://127.0.0.1:8080/
+        if [ $? -ne 7 ]; then
+            echo "$(date '+%Y-%m-%d %H:%M:%S') - wait-for-ws-port: port 8080 ouvert apres ${waited}s"
+            return 0
+        fi
+        if [ $waited -ge $WS_PORT_WAIT_MAX_SECONDS ]; then
+            echo "$(date '+%Y-%m-%d %H:%M:%S') - WARNING: wait-for-ws-port: port 8080 toujours ferme apres ${waited}s, lancement du navigateur quand meme"
+            return 1
+        fi
+        sleep 1
+        waited=$((waited+1))
     done
 }
 
@@ -90,6 +118,14 @@ echo $deviceId
 
 launchSystem() {
 
+  # VPN en PREMIER : les services lances ensuite (lifeCheck, wsServer,
+  # commandLauncher) et le navigateur ont besoin du reseau du site des leur
+  # demarrage — le lancer apres eux leur faisait rater leurs premiers appels.
+  echo Vpn
+  cd /cygdrive/c/kioskReactor/scriptUtil/Agent_Multi-Thread/_command_list_apiborne
+  chmod +x ./Vpn-on.bat
+  ./Vpn-on.bat &
+
   echo SafiKiosk
   if [ -d "/cygdrive/C/tools/SafiKioskExe" ]; then
   cd /cygdrive/C/tools/SafiKioskExe
@@ -112,10 +148,6 @@ launchSystem() {
 #  else
 #    echo "deviceId non défini, ngrokCheck ignoré."
 #  fi
-
-  cd /cygdrive/c/kioskReactor/scriptUtil/Agent_Multi-Thread/_command_list_apiborne
-  chmod +x ./Vpn-on.bat
-  ./Vpn-on.bat &
 
   echo launchSystem
   run_service "lifeCheckRunner" "/cygdrive/c/kioskReactor/programs/jsScripts/lifeCheck" "lifeCheckRunner.js" &
@@ -210,15 +242,19 @@ node startupInit.js
 if [ $credit == "null" -o $blockWhenInsufficientCredit == "false" ]; then
 	url=https://us-central1-totemsystem-5889b.cloudfunctions.net/homePage/$deviceId
 	launchSystem
+	# Chrome seulement une fois le WS du shell joignable (cf. wait-for-ws-port).
+	wait-for-ws-port
 	launchBrowser
 else
 	echo "else"
 	if (( $creditl < $minimalCreditToLock )); then
+		# Page "sans credit" locale : aucun service lance, rien a attendre.
 		url=file:///C:/kioskReactor/programs/pages/nocredit.html
 		launchBrowser
 	else
 		url=https://us-central1-totemsystem-5889b.cloudfunctions.net/homePage/$deviceId
 		launchSystem
+		wait-for-ws-port
 		launchBrowser
 	fi
 fi

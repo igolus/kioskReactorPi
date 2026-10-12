@@ -207,7 +207,11 @@ Relay control in `programs/jsScripts/elec/relay.js`:
 Winston-based logging throughout codebase (`util/loggerUtil.js`):
 - Daily rotating log files in `logs/` directory
 - Log format: `log-YYYY-MM-DD.log`
-- Windows launch script auto-cleans logs older than 5 days
+- Windows: logs older than 15 days are purged by `purgeLogs.sh`, called from
+  `scriptUtil\services-install.bat` (mirror repo only, folder excluded from sync)
+  right after `reset_acl.bat` and before the nssm services are (re)installed —
+  elevated, fresh ACLs, writers stopped. Never touches today's log nor the ACLs.
+  `bash purgeLogs.sh --dry-run` shows what would be deleted
 - Each service has its own logger: `loggerCommand`, `loggerWs`, etc.
 
 ## Testing

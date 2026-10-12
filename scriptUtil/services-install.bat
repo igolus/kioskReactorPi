@@ -20,6 +20,14 @@ cd Agent_Multi-Thread
 call reset_acl.bat
 cd ..
 
+REM Purge des logs (C:\kioskReactor\logs, 15 jours) : ICI et pas dans
+REM launchSystemWin.sh. On est eleve (admin), les ACL viennent d'etre
+REM remises au propre par reset_acl.bat, et les services nssm qui ecrivent
+REM dans ce dossier ne sont pas encore (re)installes. Le script ne touche
+REM jamais au log du jour ni aux ACL (cf. C:\kioskReactor\purgeLogs.sh).
+REM ---------------------------------------------------------------------
+call c:\cygwin64\bin\bash.exe C:\kioskReactor\purgeLogs.sh
+
 REM Procede a tous les service-install.bat pour chaque projet
 REM --------------------------------------------------------- 
 cd Agent_Multi-Thread
