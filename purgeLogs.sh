@@ -7,8 +7,9 @@
 # la synchro) a chaque boot et apres chaque update, ELEVE en administrateur,
 # juste APRES reset_acl.bat qui remet les ACL de C:\kioskReactor\logs au propre
 # et juste AVANT la (re)installation des services nssm qui ecrivent dans ce
-# dossier (Agent-mt.log, camera.log, usb_scanner). C'est le seul moment ou l'on
-# a a la fois les droits, des ACL saines et des ecrivains a l'arret.
+# dossier (Agent-mt.log, camera.log, usb_scanner). Ces services sont deja
+# actifs au boot (services Windows) : leurs fichiers, en ecriture permanente,
+# ont un mtime du jour et ne sont jamais candidats — aucun conflit.
 # Utilisable aussi a la main :
 #
 #   bash purgeLogs.sh                 # purge, 15 jours
@@ -17,8 +18,15 @@
 #   LOG_RETENTION_DAYS=7 bash purgeLogs.sh
 #
 # ROBUSTESSE — ce script ne doit JAMAIS :
-#   - casser le boot : aucun `set -e`, toute erreur est journalisee et on
-#     continue ; code de sortie 0 sauf refus de purger (garde-fou, code 2) ;
+#   - SORTIR SUR UNE ERREUR : aucun `set -e`, aucun `set -u`, chaque fichier
+#     est traite dans sa propre fonction dont l'echec est journalise puis
+#     ignore — la passe va toujours au bout et rend la main au .bat avec le
+#     code 0 (2 seulement pour un refus de purger, cf. garde-fous) ;
+#   - BLOQUER le .bat appelant : il se relance lui-meme sous `timeout` (120 s,
+#     PURGE_LOGS_MAX_SECONDS) ; s'il se bloque (fichier verrouille, disque en
+#     souffrance), il est tue, l'abandon est journalise, et services-install
+#     continue. Chaque appel externe susceptible de pendre (attrib) a aussi
+#     son propre timeout court ;
 #   - purger un autre dossier que celui des logs : le chemin est resolu puis
 #     verifie (doit se terminer par kioskReactor/logs), vide ou inexistant =
 #     refus ;
@@ -39,15 +47,37 @@
 # invisible des ACL : chaque suppression est donc tentee en 2 temps, rm puis
 # attrib -R + rm. Un echec est journalise, jamais fatal.
 
+# Explicite, au cas ou l'appelant aurait lance `bash -e`/`-u` : une erreur
+# ne doit jamais faire sortir ce script.
+set +e
+set +u
+
 LOG_DIR="${LOG_DIR:-/cygdrive/c/kioskReactor/logs}"
 RETENTION_DAYS="${LOG_RETENTION_DAYS:-15}"
 LOCK_STALE_MINUTES=10
+PURGE_MAX_SECONDS="${PURGE_LOGS_MAX_SECONDS:-120}"
 DRY_RUN=0
 VERBOSE=0
 
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - purgeLogs: $*"
 }
+
+# --- Duree bornee ---------------------------------------------------------------
+# Premiere invocation : on se relance sous `timeout` et on attend. Si la purge
+# depasse PURGE_MAX_SECONDS, elle est tuee (TERM puis KILL 10 s apres), on le
+# journalise, et on rend la main avec 0 : le .bat appelant n'est jamais bloque.
+# Sans `timeout` disponible (coreutils absent), on tourne sans borne.
+if [ -z "$PURGE_LOGS_CHILD" ] && command -v timeout >/dev/null 2>&1; then
+    case "$PURGE_MAX_SECONDS" in ''|*[!0-9]*) PURGE_MAX_SECONDS=120 ;; esac
+    PURGE_LOGS_CHILD=1 timeout -k 10 "$PURGE_MAX_SECONDS" bash "$0" "$@"
+    rc=$?
+    if [ $rc -eq 124 ] || [ $rc -eq 137 ]; then
+        log "ABANDON : purge interrompue apres ${PURGE_MAX_SECONDS}s (bloquee ?), on rend la main"
+        exit 0
+    fi
+    exit $rc
+fi
 
 usage() {
     echo "usage: purgeLogs.sh [--dry-run] [--verbose] [--days N] [--dir CHEMIN]"
@@ -84,12 +114,15 @@ fi
 
 # Chemin RESOLU (liens, `..`) : c'est lui qu'on verifie et qu'on purge.
 RESOLVED_DIR=$(cd "$LOG_DIR" 2>/dev/null && pwd -P)
+# Insensible a la casse : Windows peut rendre `KioskReactor`.
+shopt -s nocasematch
 case "$RESOLVED_DIR" in
     */kioskReactor/logs) ;;
     *)
         log "REFUS : '$RESOLVED_DIR' n'est pas un dossier kioskReactor/logs"
         exit 2 ;;
 esac
+shopt -u nocasematch
 LOG_DIR="$RESOLVED_DIR"
 
 # --- Verrou -------------------------------------------------------------------
@@ -117,7 +150,10 @@ if [ -z "$TODAY_EPOCH" ]; then
     exit 0
 fi
 # Un fichier date du jour J est supprime si J < aujourd'hui - retention.
-CUTOFF_EPOCH=$((TODAY_EPOCH - RETENTION_DAYS * 86400))
+# En jours CALENDAIRES (date -d "... -N days") : le calcul en secondes se
+# decale d'une heure aux changements d'heure. Repli arithmetique si date refuse.
+CUTOFF_EPOCH=$(date -d "$TODAY -${RETENTION_DAYS} days" +%s 2>/dev/null)
+case "$CUTOFF_EPOCH" in ''|*[!0-9]*) CUTOFF_EPOCH=$((TODAY_EPOCH - RETENTION_DAYS * 86400)) ;; esac
 TODAY_LOG="log-$TODAY.log"
 
 log "dossier=$LOG_DIR retention=${RETENTION_DAYS}j limite=$(date -d "@$CUTOFF_EPOCH" +%F)$([ $DRY_RUN -eq 1 ] && echo ' (DRY-RUN)')"
@@ -140,7 +176,11 @@ delete_file() {
     local wpath
     wpath=$(to_windows_path "$f")
     if [ -n "$wpath" ] && command -v cmd >/dev/null 2>&1; then
-        cmd /c attrib -R "$wpath" >/dev/null 2>&1
+        if command -v timeout >/dev/null 2>&1; then
+            timeout 10 cmd /c attrib -R "$wpath" >/dev/null 2>&1
+        else
+            cmd /c attrib -R "$wpath" >/dev/null 2>&1
+        fi
         rm -f -- "$f" 2>/dev/null
     fi
     [ ! -e "$f" ]
@@ -153,16 +193,17 @@ kept=0
 failed=0
 freed_bytes=0
 
-shopt -s nullglob
-for f in "$LOG_DIR"/*.log "$LOG_DIR"/*.log.*; do
-    [ -f "$f" ] || continue
+# Traite UN fichier. Toute sortie anormale (commande externe en echec, valeur
+# inattendue) est absorbee par l'appelant : la boucle continue avec le suivant.
+process_file() {
+    local f="$1" base file_epoch size
     base=$(basename -- "$f")
 
     # Jamais le log du jour : il est ouvert par le tee du lanceur.
     if [ "$base" = "$TODAY_LOG" ]; then
         [ $VERBOSE -eq 1 ] && log "garde (log du jour) $base"
         kept=$((kept+1))
-        continue
+        return 0
     fi
 
     # Age : date du NOM si possible, mtime sinon.
@@ -170,17 +211,17 @@ for f in "$LOG_DIR"/*.log "$LOG_DIR"/*.log.*; do
     if [[ "$base" =~ ^log-([0-9]{4}-[0-9]{2}-[0-9]{2})\.log ]]; then
         file_epoch=$(date -d "${BASH_REMATCH[1]}" +%s 2>/dev/null)
     fi
-    if [ -z "$file_epoch" ]; then
-        file_epoch=$(stat -c %Y -- "$f" 2>/dev/null)
-    fi
-    if [ -z "$file_epoch" ]; then
-        log "age illisible, garde $base"
-        kept=$((kept+1))
-        continue
-    fi
+    case "$file_epoch" in ''|*[!0-9]*) file_epoch=$(stat -c %Y -- "$f" 2>/dev/null) ;; esac
+    case "$file_epoch" in
+        ''|*[!0-9]*)
+            log "age illisible, garde $base"
+            kept=$((kept+1))
+            return 0 ;;
+    esac
 
     if [ "$file_epoch" -lt "$CUTOFF_EPOCH" ]; then
-        size=$(stat -c %s -- "$f" 2>/dev/null || echo 0)
+        size=$(stat -c %s -- "$f" 2>/dev/null)
+        case "$size" in ''|*[!0-9]*) size=0 ;; esac
         if [ $DRY_RUN -eq 1 ]; then
             log "supprimerait $base ($size octets)"
             deleted=$((deleted+1))
@@ -190,13 +231,22 @@ for f in "$LOG_DIR"/*.log "$LOG_DIR"/*.log.*; do
             deleted=$((deleted+1))
             freed_bytes=$((freed_bytes+size))
         else
-            log "ECHEC suppression $base (droits ?) — a verifier a la main"
+            log "ECHEC suppression $base (droits ? fichier ouvert ?) — a verifier a la main"
             failed=$((failed+1))
         fi
     else
         [ $VERBOSE -eq 1 ] && log "garde $base"
         kept=$((kept+1))
     fi
+    return 0
+}
+
+shopt -s nullglob
+for f in "$LOG_DIR"/*.log "$LOG_DIR"/*.log.*; do
+    [ -f "$f" ] || continue
+    # `|| ...` : meme une erreur non prevue dans process_file ne sort pas de
+    # la boucle — on la journalise et on passe au fichier suivant.
+    process_file "$f" || log "erreur inattendue sur $(basename -- "$f"), on continue"
 done
 
 log "termine : $deleted supprime(s) ($((freed_bytes / 1024)) Ko), $kept garde(s), $failed echec(s)"
