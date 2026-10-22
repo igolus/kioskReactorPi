@@ -212,6 +212,14 @@ Winston-based logging throughout codebase (`util/loggerUtil.js`):
   right after `reset_acl.bat` and before the nssm services are (re)installed —
   elevated, fresh ACLs, writers stopped. Never touches today's log nor the ACLs.
   `bash purgeLogs.sh --dry-run` shows what would be deleted
+- Windows: the session account's `%LOCALAPPDATA%\Temp` is cleaned by
+  `cleanTemp.sh`, called at the very start of `launchSystemWin.sh` (before any
+  program starts): PyInstaller `_MEI*` folders (CPSReader, Python services),
+  `*.tmp.node`, `wct*.tmp`/`*.tmp`, `compileCache_*`, plus the electron-updater
+  `%LOCALAPPDATA%\<app>-updater\pending` cache. Only entries older than 60 min
+  are removed (services already running keep their in-use `_MEI`); bounded to
+  120 s, never fails the launch. `bash cleanTemp.sh --dry-run` previews.
+  Deployed by `local-windows.yml` (copied on every run, like launchSystemWin.sh)
 - Each service has its own logger: `loggerCommand`, `loggerWs`, etc.
 
 ## Testing

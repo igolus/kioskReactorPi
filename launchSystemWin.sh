@@ -22,6 +22,18 @@ chmod 666 "$LOG_FILE"
 # Rediriger toute la sortie (stdout et stderr) vers tee
 exec > >(tee -a "$LOG_FILE") 2>&1
 
+# Nettoyage du Temp du compte de session (%LOCALAPPDATA%\Temp : dossiers
+# _MEI de PyInstaller, *.tmp.node, wct*.tmp, cache electron-updater...) AVANT
+# de lancer quoi que ce soit : chaque lancement y laisse des restes jamais
+# effaces et le disque se remplit (2026-10-22). Seules les entrees de plus
+# d'une heure partent — les services deja actifs gardent leur dossier en
+# cours d'usage. Borne a 120 s et ne sort jamais en erreur (cf. cleanTemp.sh).
+if [ -f /cygdrive/c/kioskReactor/cleanTemp.sh ]; then
+  bash /cygdrive/c/kioskReactor/cleanTemp.sh || true
+else
+  echo "cleanTemp.sh absent, nettoyage du Temp ignore"
+fi
+
 # Purge des logs (15 jours) : PAS ici. L'ancien `find -mtime +5` tournait sous
 # le compte de session, avant la remise au propre des ACL, et echouait sur les
 # fichiers d'un autre compte. Elle est faite par purgeLogs.sh, appele depuis
