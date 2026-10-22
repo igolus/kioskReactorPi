@@ -28,10 +28,11 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 # effaces et le disque se remplit (2026-10-22). Seules les entrees de plus
 # d'une heure partent — les services deja actifs gardent leur dossier en
 # cours d'usage. Borne a 120 s et ne sort jamais en erreur (cf. cleanTemp.sh).
-if [ -f /cygdrive/c/kioskReactor/cleanTemp.sh ]; then
-  bash /cygdrive/c/kioskReactor/cleanTemp.sh || true
+# Le script vit dans scriptUtil\ (rsync par local-windows.yml), plus a la racine.
+if [ -f /cygdrive/c/kioskReactor/scriptUtil/cleanTemp.sh ]; then
+  bash /cygdrive/c/kioskReactor/scriptUtil/cleanTemp.sh || true
 else
-  echo "cleanTemp.sh absent, nettoyage du Temp ignore"
+  echo "scriptUtil/cleanTemp.sh absent, nettoyage du Temp ignore"
 fi
 
 # Purge des logs (15 jours) : PAS ici. L'ancien `find -mtime +5` tournait sous
@@ -185,6 +186,9 @@ launchSystem() {
 #   { "name": "monProgramme", "folder": "/cygdrive/c/tools/monProg", "command": "./monProg.exe --option" }
 # ]
 # "folder" est optionnel. Si le fichier est absent ou invalide, rien n'est lance et le script continue.
+# "command" peut etre un nom nu ("CPSReader.exe") : s'il designe un fichier du dossier,
+# le script prefixe "./" lui-meme — bash ne cherche JAMAIS une commande nue dans le
+# dossier courant (seulement dans le PATH), d'ou le "command not found" sans ce prefixe.
 launchExtraPrograms() {
   local extraFile="/cygdrive/c/kioskReactor/conf/extraPrograms.json"
 
@@ -219,6 +223,17 @@ launchExtraPrograms() {
       echo "extraPrograms: [$name] dossier introuvable ($folder), ignore."
       continue
     fi
+
+    # Nom nu sans "/" qui existe dans le dossier -> "./nom" (sinon bash tape le PATH)
+    local firstWord="${command%% *}"
+    case "$firstWord" in
+      */*) ;;
+      *)
+        if [ -f "${folder:-.}/$firstWord" ]; then
+          command="./$command"
+        fi
+        ;;
+    esac
 
     echo "extraPrograms: lancement de [$name] dans '${folder:-.}' : $command"
     (

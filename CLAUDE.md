@@ -208,18 +208,27 @@ Winston-based logging throughout codebase (`util/loggerUtil.js`):
 - Daily rotating log files in `logs/` directory
 - Log format: `log-YYYY-MM-DD.log`
 - Windows: logs older than 15 days are purged by `purgeLogs.sh`, called from
-  `scriptUtil\services-install.bat` (mirror repo only, folder excluded from sync)
+  `scriptUtil\services-install.bat` (scripts versioned in the mono-repo since
+  2026-10-22 and mirrored like the rest; only `scriptUtil`'s `*.exe`/`*.chm`
+  binaries stay in the mirror repo, excluded from sync and from git here)
   right after `reset_acl.bat` and before the nssm services are (re)installed —
   elevated, fresh ACLs, writers stopped. Never touches today's log nor the ACLs.
   `bash purgeLogs.sh --dry-run` shows what would be deleted
 - Windows: the session account's `%LOCALAPPDATA%\Temp` is cleaned by
-  `cleanTemp.sh`, called at the very start of `launchSystemWin.sh` (before any
+  `scriptUtil\cleanTemp.sh`, called at the very start of `launchSystemWin.sh` (before any
   program starts): PyInstaller `_MEI*` folders (CPSReader, Python services),
   `*.tmp.node`, `wct*.tmp`/`*.tmp`, `compileCache_*`, plus the electron-updater
   `%LOCALAPPDATA%\<app>-updater\pending` cache. Only entries older than 60 min
-  are removed (services already running keep their in-use `_MEI`); bounded to
-  120 s, never fails the launch. `bash cleanTemp.sh --dry-run` previews.
-  Deployed by `local-windows.yml` (copied on every run, like launchSystemWin.sh)
+  are removed, and `_MEI*` and `*.tmp.node` only when older than the LAST BOOT
+  (`/proc/uptime`): a `_MEI` belongs to a process of the session (CPSReader,
+  Python services) and a `*.tmp.node` is the native module an Electron app
+  (Agent-mt) extracted from its app.asar at startup — a relaunch without reboot
+  must never remove either from a process still running (2026-10-22: deleting a
+  live `.tmp.node` surfaced as a "JavaScript error" in the Electron service);
+  boot time unknown ⇒ both untouched. Bounded to 120 s, never fails
+  the launch. `bash scriptUtil/cleanTemp.sh --dry-run` previews.
+  Lives in `scriptUtil/` (deployed by the `rsync scriptUtil` task of
+  `local-windows.yml`, like the nssm service scripts)
 - Each service has its own logger: `loggerCommand`, `loggerWs`, etc.
 
 ## Testing
